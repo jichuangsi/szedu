@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>学校后台</title>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="./css/font.css">
+		<link rel="stylesheet" href="./css/xadmin.css">
+		<link rel="stylesheet" href="lib/layui/css/layui.css" media="all" />
+		<script src="./lib/js/jquery.min.js"></script>
+		<script src="./lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="./js/xadmin.js"></script>
+		<script type="text/javascript" src="js/index.js"></script>
+
+	</head>
+	<style>
+		.widths {
+			width: 300px;
+		}
+		
+		#upPwd {
+			display: none;
+			margin-top: 10px;
+		}
+		
+		.site {
+			display: none;
+		}
+	</style>
+
+	<body>
+		<!-- 顶部开始 -->
+		<div class="container">
+			<div class="logo">
+				<a href="./index.html" id="school">后台管理</a>
+			</div>
+			<div class="left_open">
+				<i title="展开左侧栏" class="iconfont">&#xe699;</i>
+			</div>
+			<ul class="layui-nav right" lay-filter="">
+				<li class="layui-nav-item">
+					<a href="javascript:;">admin</a>
+					<dl class="layui-nav-child">
+						<!-- 二级菜单 -->
+						<dd>
+							<a href="javascript:;" onclick="updatePwd()">修改密码</a>
+						</dd>
+						<dd>
+							<a href="./login.html">退出</a>
+						</dd>
+					</dl>
+				</li>
+			</ul>
+		</div>
+		<!-- 顶部结束 -->
+		<!-- 中部开始 -->
+		<!-- 左侧菜单开始 -->
+		<div class="left-nav">
+			<div id="side-nav">
+				<ul id="nav">
+					<!--客户管理-->
+					<li>
+						<a href="javascript:;">
+							<i class="iconfont">&#xe6b8;</i>
+							<cite>资源管理</cite>
+							<i class="iconfont nav_right">&#xe697;</i>
+						</a>
+						<ul class="sub-menu">
+							<li>
+								<a _href="pages/AuditResources.html">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>资源审核</cite>
+								</a>
+							</li>
+							<li>
+								<a _href="pages/ResourceList.html">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>资源管理</cite>
+								</a>
+							</li>
+							<!--<li>
+								<a _href="pages/Category.html">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>资源类别管理</cite>
+								</a>
+							</li>-->
+							<li>
+								<a _href="pages/QuestionBank.html">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>题库管理</cite>
+								</a>
+							</li>
+							<li>
+								<a _href="pages/Knowledge.html">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>标签管理</cite>
+								</a>
+							</li>
+							<!--<li>
+								<a _href="pages/Subject.html">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>科目管理</cite>
+								</a>
+							</li>-->
+							<li>
+								<a _href="pages/ExamManagement.html">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>考试管理</cite>
+								</a>
+							</li>
+							<li>
+								<a _href="pages/Classroom.html">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>课堂管理</cite>
+								</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:;">
+							<i class="iconfont">&#xe6b8;</i>
+							<cite id="setName">账户管理</cite>
+							<i class="iconfont nav_right">&#xe697;</i>
+						</a>
+						<ul class="sub-menu">
+							<li>
+								<!--user/userManagement.html-->
+								<a _href="pages/TeacherAccount.html">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>教师账户管理</cite>
+								</a>
+							</li>
+							<li>
+								<a _href="pages/StudentAccounts.html">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>学生账户管理</cite>
+								</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:;">
+							<i class="iconfont">&#xe6b8;</i>
+							<cite>平台统计</cite>
+							<i class="iconfont nav_right">&#xe697;</i>
+						</a>
+						<ul class="sub-menu">
+							<li>
+								<a _href="pages/TeacherResources.html">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>教师上传资源</cite>
+								</a>
+							</li>
+							<li>
+								<a _href="">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>平台资源统计</cite>
+								</a>
+							</li>
+						</ul>
+					</li>
+
+					<li>
+						<a href="javascript:;">
+							<i class="iconfont">&#xe6b8;</i>
+							<cite>查看日志</cite>
+							<i class="iconfont nav_right">&#xe697;</i>
+						</a>
+						<ul class="sub-menu">
+							<li>
+								<a _href="pages/SystemLog.html">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>系统日志</cite>
+								</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:;">
+							<i class="iconfont">&#xe6b8;</i>
+							<cite>信息发布</cite>
+							<i class="iconfont nav_right">&#xe697;</i>
+						</a>
+						<ul class="sub-menu">
+							<li>
+								<a _href="pages/ InfoCategory.html">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>文章分类</cite>
+								</a>
+							</li>
+							<li>
+								<a _href="pages/CompanyNews.html">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>企业动态</cite>
+								</a>
+							</li>
+							<li>
+								<a _href="pages/News.html">
+									<i class="iconfont">&#xe6a7;</i>
+									<cite>实时新闻</cite>
+								</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- <div class="x-slide_left"></div> -->
+		<!-- 左侧菜单结束 -->
+		<!-- 右侧主体开始 -->
+		<div class="page-content">
+			<div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
+				<ul class="layui-tab-title">
+					<li>我的桌面</li>
+				</ul>
+
+				<div class="layui-tab-content">
+
+					<div class="layui-tab-item layui-show">
+						<div class="x-nav">
+							<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+								<i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+						</div>
+						<iframe src='./welcome.html' frameborder="0" scrolling="yes" class="x-iframe"></iframe>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="page-content-bg"></div>
+
+		<!-- 右侧主体结束 -->
+		<!-- 中部结束 -->
+		<!-- 底部开始 -->
+		<div class="footer">
+			<div class="copyright">Copyright ©2017 All Rights Reserved</div>
+		</div>
+		<!-- 底部结束 -->
+	</body>
+	<script>
+		function updatePwd() {
+			index = layer.open({
+				type: 1,
+				area: ['500px', '350px'],
+				anim: 2,
+				title: '修改密码',
+				maxmin: true,
+				shadeClose: true, //点击遮罩关闭
+				content: $('#upPwd')
+			});
+		}
+	</script>
+	<div id="upPwd" class="layui-fluid">
+		<form class="layui-form" autocomplete="off" lay-filter="test">
+			<div class="layui-form-item">
+				<label class="layui-form-label">新密码：</label>
+				<div class="layui-input-block widths">
+					<input type="hidden" name="userId" />
+					<input type="password" name="newPwd" class="layui-input " lay-verify="pwd">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">确认密码：</label>
+				<div class="layui-input-block widths">
+					<input type="password" name="yesPwd" class="layui-input " lay-verify="pwd">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit lay-filter="update_Pwd">确认修改</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+</html>

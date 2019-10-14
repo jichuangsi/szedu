@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="../css/font.css">
+		<link rel="stylesheet" href="../css/xadmin.css">
+		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all">
+		<script src="../lib/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/xadmin.js"></script>
+		<script type="text/javascript" src="../js/Configuration.js"></script>
+		<script type="text/javascript" src="../js/pagejs/QuestionBank.js"></script>
+	</head>
+	<style type="text/css">
+		#modifyBank {
+			display: none;
+			margin-top: 10px;
+		}
+		
+		#addBank {
+			display: none;
+			margin-top: 10px;
+		}
+	</style>
+
+	<body>
+		<div class="x-nav">
+			<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right;" href="javascript:location.replace(location.href);" title="刷新">
+				<i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+		</div>
+		<div class="x-body">
+			<fieldset class="layui-elem-field layui-field-title ">
+				<legend>题库管理</legend>
+				<div class="layui-field-box">
+					<div class="layui-row">
+						<form class="layui-form layui-col-md12">
+							<div class="layui-input-inline">
+								<input type="text" name="name" placeholder="试题名称" autocomplete="off" class="layui-input">
+							</div>
+							<div class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></div>
+						</form>
+					</div>
+					<table id="demo"></table>
+				</div>
+			</fieldset>
+
+		</div>
+		<script type="text/html" id="operation">
+			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="modifyExam()">修改</span>
+			<span class="layui-btn-sm layui-btn layui-btn layui-btn-danger">删除</span>
+		</script>
+		<script type="text/html" id="AddBank">
+			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="addExcam()">添加</span>
+		</script>
+		<script type="text/html" id="See">
+			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal">查看</span>
+		</script>
+		<script type="text/html" id="download">
+			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal">下载</span>
+		</script>
+		<script>
+			function modifyExam() {
+				index = layer.open({
+					type: 1,
+					area: ['500px', '400px'],
+					anim: 2,
+					title: '试题修改',
+					maxmin: true,
+					shadeClose: true, //点击遮罩关闭
+					content: $('#modifyBank')
+				});
+			}
+
+			function addExcam() {
+				index = layer.open({
+					type: 1,
+					area: ['700px', '100%'],
+					anim: 2,
+					title: '添加试题',
+					maxmin: true,
+					shadeClose: true, //点击遮罩关闭
+					content: $('#addBank')
+				});
+			}
+		</script>
+	</body>
+	<div id="addBank" class="layui-fluid">
+		<div class="layui-tab">
+			<ul class="layui-tab-title">
+				<li class="layui-this">单选题</li>
+				<li>多选题</li>
+				<li>判断题</li>
+			</ul>
+			<div class="layui-tab-content">
+				<div class="layui-tab-item layui-show">
+					<form class="layui-form layui-form-pane" autocomplete="off" lay-filter="">
+						<div class="layui-form-item layui-form-text">
+							<label class="layui-form-label ">试题内容:</label>
+							<div class="layui-input-block">
+								<textarea name="" required lay-verify="required" placeholder="请输入" class="layui-textarea"></textarea>
+							</div>
+						</div>
+						<div class="layui-form-item" pane="">
+							<label class="layui-form-label">选择个数:</label>
+							<div class="layui-input-block">
+								<input type="radio" name="sex" value="1" title="A" lay-filter="sex">
+								<input type="radio" name="sex" value="2" title="B" lay-filter="sex">
+								<input type="radio" name="sex" value="3" title="C" lay-filter="sex">
+								<input type="radio" name="sex" value="4" title="D" lay-filter="sex">
+								<input type="radio" name="sex" value="5" title="E" lay-filter="sex">
+								<input type="radio" name="sex" value="6" title="F" lay-filter="sex">
+							</div>
+						</div>
+						<div id="xx">
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">知识点:</label>
+							<div class="layui-input-block">
+								<input type="text" name="title" required lay-verify="required" placeholder="请输入" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item" pane="">
+							<label class="layui-form-label">正确答案:</label>
+							<div class="layui-input-block" id="answer">
+								<input type="radio" name="q" value="1" title="A">
+								<input type="radio" name="q" value="2" title="B">
+								<input type="radio" name="q" value="3" title="C">
+								<input type="radio" name="q" value="4" title="D">
+								<input type="radio" name="q" value="5" title="E">
+								<input type="radio" name="q" value="6" title="F">
+							</div>
+						</div>
+						<div class="layui-form-item layui-form-text">
+							<label class="layui-form-label">解析:</label>
+							<div class="layui-input-block">
+								<textarea name="" required lay-verify="required" placeholder="请输入" class="layui-textarea"></textarea>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-input-block">
+								<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+								<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+								<button type="button" class="layui-btn" id="load"><i class="layui-icon">&#xe67c;</i>上传附件</button>
+								<div class="layui-form-mid layui-word-aux" id="error"></div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="layui-tab-item">
+					<form class="layui-form layui-form-pane" autocomplete="off" lay-filter="">
+						<div class="layui-form-item layui-form-text">
+							<label class="layui-form-label ">试题内容:</label>
+							<div class="layui-input-block">
+								<textarea name="" required lay-verify="required" placeholder="请输入" class="layui-textarea"></textarea>
+							</div>
+						</div>
+						<div class="layui-form-item" pane="">
+							<label class="layui-form-label">选择个数:</label>
+							<div class="layui-input-block">
+								<input type="radio" name="sex2" value="1" title="A" lay-filter="sex2">
+								<input type="radio" name="sex2" value="2" title="B" lay-filter="sex2">
+								<input type="radio" name="sex2" value="3" title="C" lay-filter="sex2">
+								<input type="radio" name="sex2" value="4" title="D" lay-filter="sex2">
+								<input type="radio" name="sex2" value="5" title="E" lay-filter="sex2">
+								<input type="radio" name="sex2" value="6" title="F" lay-filter="sex2">
+							</div>
+						</div>
+						<div id="dx">
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">知识点:</label>
+							<div class="layui-input-block">
+								<input type="text" name="title" required lay-verify="required" placeholder="请输入" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item" pane="">
+							<label class="layui-form-label">正确答案:</label>
+							<div class="layui-input-block" id="answerChecx">
+								<input type="checkbox" name="q2" value="1" title="A">
+								<input type="checkbox" name="q2" value="2" title="B">
+								<input type="checkbox" name="q2" value="3" title="C">
+								<input type="checkbox" name="q2" value="4" title="D">
+								<input type="checkbox" name="q2" value="5" title="E">
+								<input type="checkbox" name="q2" value="6" title="F">
+							</div>
+						</div>
+						<div class="layui-form-item layui-form-text">
+							<label class="layui-form-label">解析:</label>
+							<div class="layui-input-block">
+								<textarea name="" required lay-verify="required" placeholder="请输入" class="layui-textarea"></textarea>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-input-block">
+								<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+								<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+								<button type="button" class="layui-btn" id="load"><i class="layui-icon">&#xe67c;</i>上传附件</button>
+								<div class="layui-form-mid layui-word-aux" id="error"></div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="layui-tab-item">
+					<form class="layui-form layui-form-pane" autocomplete="off" lay-filter="">
+						<div class="layui-form-item layui-form-text">
+							<label class="layui-form-label ">试题内容:</label>
+							<div class="layui-input-block">
+								<textarea name="" required lay-verify="required" placeholder="请输入" class="layui-textarea"></textarea>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">知识点:</label>
+							<div class="layui-input-block">
+								<input type="text" name="title" required lay-verify="required" placeholder="请输入" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item" pane="">
+							<label class="layui-form-label">答案:</label>
+							<div class="layui-input-block">
+								<input type="radio" name="sexq" value="1" title="正确">
+								<input type="radio" name="sexq" value="2" title="错误">
+							</div>
+						</div>
+						<div class="layui-form-item layui-form-text">
+							<label class="layui-form-label">解析:</label>
+							<div class="layui-input-block">
+								<textarea name="" required lay-verify="required" placeholder="请输入" class="layui-textarea"></textarea>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-input-block">
+								<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+								<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+								<button type="button" class="layui-btn" id="load"><i class="layui-icon">&#xe67c;</i>上传附件</button>
+								<div class="layui-form-mid layui-word-aux" id="error"></div>
+							</div>
+						</div>
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div id="modifyBank" class="layui-fluid">
+		<form class="layui-form" autocomplete="off" lay-filter="">
+			<div class="layui-form-item">
+				<label class="layui-form-label">试题名称</label>
+				<div class="layui-input-block widths">
+					<input type="text" name="title" required lay-verify="required" placeholder="请输入试题名称" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item ">
+				<label class="layui-form-label">关联课程</label>
+				<div class="layui-input-block widths">
+					<select name="city" lay-verify="required">
+						<option value=""></option>
+						<option value="0">电动汽车</option>
+						<option value="1">混合动力汽车</option>
+						<option value="3">传统汽车</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">试题类型</label>
+				<div class="layui-input-block widths">
+					<input type="text" name="title" required lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">试题积分</label>
+				<div class="layui-input-block widths">
+					<input type="text" name="title" required lay-verify="required" placeholder="请输入积分" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+					<button type="button" class="layui-btn" id="load"><i class="layui-icon">&#xe67c;</i>重新导入文件</button>
+					<div class="layui-form-mid layui-word-aux" id="error"></div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="../css/font.css">
+		<link rel="stylesheet" href="../css/xadmin.css">
+		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all">
+		<script src="../lib/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/xadmin.js"></script>
+		<script type="text/javascript" src="../js/Configuration.js"></script>
+		<script type="text/javascript" src="../js/pagejs/StudentAccounts.js"></script>
+	</head>
+	<style type="text/css">
+		#modifyStudent {
+			display: none;
+			margin-top: 10px;
+		}
+		
+		#modifyPwd {
+			display: none;
+			margin-top: 10px;
+		}
+	</style>
+
+	<body>
+		<div class="x-nav">
+			<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right;" href="javascript:location.replace(location.href);" title="刷新">
+				<i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+		</div>
+		<div class="x-body">
+			<div class="layui-row layui-col-space30">
+				<div class="layui-col-md4 ">
+					<fieldset class="layui-elem-field">
+						<legend>录入学生账号</legend>
+						<div class="layui-field-box">
+							<form class="layui-form">
+								<div class="layui-form-item">
+									<label class="layui-form-label">登陆名</label>
+									<div class="layui-input-block widths">
+										<input type="text" name="account" required lay-verify="username" placeholder="请输入数字和字母组合的登录名" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">用户名</label>
+									<div class="layui-input-block widths">
+										<input type="text" name="name" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">手机号</label>
+									<div class="layui-input-block widths">
+										<input type="text" name="phone" required lay-verify="phone" placeholder="请输入手机号" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">性别</label>
+									<div class="layui-input-block widths">
+										<input type="radio" name="sex" value="男" title="男">
+										<input type="radio" name="sex" value="女" title="女">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">就读学校</label>
+									<div class="layui-input-block widths">
+										<input type="text" name="schoolName" required lay-verify="required" placeholder="请输入学校名称" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">密码</label>
+									<div class="layui-input-block widths">
+										<input type="password" name="pwd" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">确认密码</label>
+									<div class="layui-input-block widths">
+										<input type="password" name="savePwd" required lay-verify="required" placeholder="请输入确认密码" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<div class="layui-input-block">
+										<div class="layui-btn" lay-submit lay-filter="formAddDemo">立即提交</div>
+										<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+										<button type="button" class="layui-btn" id="load"><i class="layui-icon">&#xe67c;</i>导入文件</button>
+										<div class="layui-form-mid layui-word-aux" id="error"></div>
+									</div>
+									<!--<a href="http://download.jichuangsi.com/template/学生添加列表.xls">新建教师账户模板.xls模板下载</a>-->
+								</div>
+							</form>
+						</div>
+					</fieldset>
+				</div>
+				<div class="layui-col-md8">
+					<fieldset class="layui-elem-field layui-field-title ">
+						<legend>学生管理</legend>
+						<div class="layui-field-box">
+							<div class="layui-row">
+								<form class="layui-form layui-col-md12">
+									<div class="layui-input-inline">
+										<input type="text" name="userName" placeholder="用户名" autocomplete="off" class="layui-input">
+									</div>
+									<div class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></div>
+								</form>
+							</div>
+							<table id="demo" lay-filter="demo"></table>
+						</div>
+					</fieldset>
+				</div>
+			</div>
+		</div>
+		<script>
+			function student() {
+				index = layer.open({
+					type: 1,
+					area: ['500px', '400px'],
+					anim: 2,
+					title: '学生信息修改',
+					maxmin: true,
+					shadeClose: true, //点击遮罩关闭
+					content: $('#modifyStudent')
+				});
+			}
+
+			function Pwd() {
+				index = layer.open({
+					type: 1,
+					area: ['500px', '260px'],
+					anim: 2,
+					title: '密码修改',
+					maxmin: true,
+					shadeClose: true, //点击遮罩关闭
+					content: $('#modifyPwd')
+				});
+			}
+		</script>
+		<script type="text/html" id="operation">
+			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="student()">修改</span>
+			<span class="layui-btn-sm layui-btn layui-btn layui-btn-danger" id="DelStudent">删除</span>
+		</script>
+		<script type="text/html" id="updatePwd">
+			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="Pwd()">修改密码</span>
+		</script>
+	</body>
+	<!--修改密码-->
+	<div id="modifyPwd" class="layui-fluid">
+		<form class="layui-form" autocomplete="off" lay-filter="">
+			<div class="layui-form-item">
+				<label class="layui-form-label">输入新密码</label>
+				<div class="layui-input-block widths">
+					<input type="password" name="pwd" required lay-verify="required" placeholder="请输入新密码" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">确认密码</label>
+				<div class="layui-input-block widths">
+					<input type="password" name="oldPwd" required lay-verify="required" placeholder="请输入确认密码" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<!--修改学生 -->
+	<div id="modifyStudent" class="layui-fluid">
+		<form class="layui-form" autocomplete="off" lay-filter="test">
+			<div class="layui-form-item">
+				<label class="layui-form-label">用户名</label>
+				<div class="layui-input-block widths">
+					<input name="id" type="hidden" />
+					<input type="text" name="name" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">手机号</label>
+				<div class="layui-input-block widths">
+					<input type="text" name="phone" required lay-verify="phone" placeholder="请输入" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">就读学校</label>
+				<div class="layui-input-block widths">
+					<input type="text" name="schoolName" required lay-verify="number" placeholder="" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit lay-filter="formModifyDemo">立即提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+</html>

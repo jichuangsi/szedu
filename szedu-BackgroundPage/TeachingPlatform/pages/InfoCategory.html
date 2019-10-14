@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>信息分类</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="../css/font.css">
+		<link rel="stylesheet" href="../css/xadmin.css">
+		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all">
+		<script src="../lib/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/xadmin.js"></script>
+		<script type="text/javascript" src="../js/Configuration.js"></script>
+		<script type="text/javascript" src="../js/pagejs/InfoCategor.js" ></script>
+	</head>
+	<style type="text/css">
+		#modifyCategory {
+			display: none;
+			margin-top: 10px;
+		}
+	</style>
+
+	<body>
+		<div class="x-nav">
+			<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right;" href="javascript:location.replace(location.href);" title="刷新">
+				<i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+		</div>
+		<div class="x-body">
+			<div class="layui-row layui-col-space30">
+				<div class="layui-col-md4 ">
+					<fieldset class="layui-elem-field">
+						<legend>新建分类</legend>
+						<div class="layui-field-box">
+							<form class="layui-form" action="">
+								<div class="layui-form-item">
+									<label class="layui-form-label">分类</label>
+									<div class="layui-input-block widths">
+										<input type="text" name="title" required lay-verify="required" placeholder="请输入分类名称" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<div class="layui-input-block">
+										<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+										<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</fieldset>
+				</div>
+				<div class="layui-col-md8">
+					<fieldset class="layui-elem-field layui-field-title ">
+						<legend>分类列表管理</legend>
+						<div class="layui-field-box">
+							<table id="demo"></table>
+						</div>
+					</fieldset>
+				</div>
+				<script type="text/html" id="operation">
+					<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="teacher()">修改</span>
+					<span class="layui-btn-sm layui-btn layui-btn layui-btn-danger">删除</span>
+				</script>
+				<script>
+					function teacher() {
+						index = layer.open({
+							type: 1,
+							area: ['500px', '300px'],
+							anim: 2,
+							title: '分类修改',
+							maxmin: true,
+							shadeClose: true, //点击遮罩关闭
+							content: $('#modifyCategory')
+						});
+					}
+				</script>
+			</div>
+		</div>
+	</body>
+	<div id="modifyCategory" class="layui-fluid">
+		<form class="layui-form" autocomplete="off" lay-filter="">
+			<div class="layui-form-item">
+				<label class="layui-form-label">分类</label>
+				<div class="layui-input-block widths">
+					<input type="text" name="title" required lay-verify="required" placeholder="请输入分类名称" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+</html>
