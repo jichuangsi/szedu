@@ -38,7 +38,7 @@ public class Swagger2 {
 	public Docket createRestApi() {
 		return new Docket(DocumentationType.SWAGGER_2).enable(enableSwagger).apiInfo(apiInfo()).select()
 				// 为当前包路径
-				.apis(basePackage("cn.com.szedu.user.controller"))
+				.apis(basePackage("cn.com.szedu.controller"))
 				.paths(PathSelectors.any()).build();
 	}
 
