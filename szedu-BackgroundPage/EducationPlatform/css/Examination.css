@@ -1,0 +1,24 @@
+.exam-rmb {
+	float: left;
+	margin-left: 10px;
+	width: 90%;
+}
+
+.exam-title {
+	font-size: 18px;
+	letter-spacing:1px;
+	line-height: 200%;
+}
+.common_block_title {
+	padding: 5px 15px;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-topright: 5px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+	color: #333333;
+	font-size: 24px;
+	margin: 5px 0 10px 10px;
+	border-left: 5px solid #3d72fe;
+	letter-spacing: 2px;
+	font-weight: normal;
+}

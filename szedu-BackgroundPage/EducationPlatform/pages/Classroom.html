@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>课堂</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../css/index.css" />
+		<link rel="stylesheet" href="../css/Classroom.css" />
+		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
+		<script src="../lib/js/jquery.min.js"></script>
+		<script src="../lib/layui/layui.js" charset="utf-8"></script>
+	</head>
+	<style>
+		.layui-form-select dl dd.layui-this {
+			background-color: #3C94FF;
+		}
+		
+		.layui-tab {
+			margin: 0 0 0 20px;
+		}
+		
+		.layui-unselect {
+			border-radius: 20px 20px;
+		}
+		
+		.rmb-icon-res {
+			margin: 5px 20px 0 60px;
+			color: #ff0000;
+			float: right;
+			/*margin-right: 20px;*/
+			/* position: absolute; */
+			/* top: 166px; */
+			/* left: 186px; */
+		}
+	</style>
+
+	<body>
+		<iframe src="../head.html" frameborder="0" scrolling="no" class="x-iframe"></iframe>
+		<div class="layui-row" style="background-color: #F3F5F7;margin-top: 10px;">
+			<div class="layui-col-md8 layui-col-md-offset2">
+				<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+					<ul class="layui-tab-title">
+						<li>信力达精品课程</li>
+						<li>我的资源</li>
+						<li class="layui-this">公共资源</li>
+						<li>我的课堂</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="layui-row">
+			<div class="layui-col-md8 layui-col-md-offset2">
+				<div class="layui-form" style="margin: 30px auto 20px 20px;">
+					<div class="layui-form-item layui-input-inline">
+						<select name="city" lay-verify="" class="layui-btn-radius">
+							<option value="">上传标签</option>
+							<option value="010">北京</option>
+							<option value="021">上海</option>
+							<option value="0571">杭州</option>
+						</select>
+					</div>
+					<div class="layui-form-item layui-input-inline">
+						<select name="city" lay-verify="" class="layui-btn-radius">
+							<option value="">资料类型</option>
+							<option value="010">北京</option>
+							<option value="021">上海</option>
+							<option value="0571">杭州</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="layui-row layui-tab-content" style="margin: 0 auto 20px 20px;">
+					<div class="rmb-box">
+						<div class="rmb-product">
+							<a href="">
+								<img src="../img/微信图片_20191113143904_WPS图片.png" />
+							</a>
+						</div>
+						<div class="rmb-icon-res"><span><i class="iconfont layui-icon-extendxin1"></i></span></div>
+						<div class="rmb-res-title">
+							电动汽车电池管理系统
+						</div>
+						<ul>
+							<li>上传者:<span class="teacherName"> 王*老师</span></li>
+							<li>资源类型:<span class="teacherName"> 视频资源</span></li>
+							<li>发布时间:<span class="date"> 2019/11/14</span></li>
+							<li>购买量:<span class="cont"> 555526</span></li>
+						</ul>
+						<div class="rmb-res-buy">
+							<span class="layui-badge layui-bg-orange">￥</span>
+							<span>252积分</span>
+							<span class="layui-btn layui-btn-normal  layui-btn-radius">购买资源</span>
+						</div>
+					</div>
+					<div class="rmb-box">
+						<div class="rmb-product">
+							<a href="">
+								<img src="../img/微信图片_20191113143904_WPS图片.png" />
+							</a>
+						</div>
+						<div class="rmb-icon-res"><span><i class="iconfont layui-icon-extendxin1"></i></span></div>
+						<div class="rmb-res-title">
+							电动汽车电池管理系统
+						</div>
+						<ul>
+							<li>上传者:<span class="teacherName"> 王*老师</span></li>
+							<li>资源类型:<span class="teacherName"> 视频资源</span></li>
+							<li>发布时间:<span class="date"> 2019/11/14</span></li>
+							<li>购买量:<span class="cont"> 555526</span></li>
+						</ul>
+						<div class="rmb-res-buy">
+							<span class="layui-badge layui-bg-orange">￥</span>
+							<span>252积分</span>
+							<span class="layui-btn layui-btn-normal  layui-btn-radius">购买资源</span>
+						</div>
+					</div>
+					<div class="rmb-box">
+						<div class="rmb-product">
+							<a href="">
+								<img src="../img/微信图片_20191113143904_WPS图片.png" />
+							</a>
+						</div>
+						<div class="rmb-icon-res"><span><i class="iconfont layui-icon-extendxin1"></i></span></div>
+						<div class="rmb-res-title">
+							电动汽车电池管理系统
+						</div>
+						<ul>
+							<li>上传者:<span class="teacherName"> 王*老师</span></li>
+							<li>资源类型:<span class="teacherName"> 视频资源</span></li>
+							<li>发布时间:<span class="date"> 2019/11/14</span></li>
+							<li>购买量:<span class="cont"> 555526</span></li>
+						</ul>
+						<div class="rmb-res-buy">
+							<span class="layui-badge layui-bg-orange">￥</span>
+							<span>252积分</span>
+							<span class="layui-btn layui-btn-normal  layui-btn-radius">购买资源</span>
+						</div>
+					</div>
+					<div class="rmb-box">
+						<div class="rmb-product">
+							<a href="">
+								<img src="../img/微信图片_20191113143904_WPS图片.png" />
+							</a>
+						</div>
+						<div class="rmb-icon-res"><span><i class="iconfont layui-icon-extendxin1"></i></span></div>
+						<div class="rmb-res-title">
+							电动汽车电池管理系统
+						</div>
+						<ul>
+							<li>上传者:<span class="teacherName"> 王*老师</span></li>
+							<li>资源类型:<span class="teacherName"> 视频资源</span></li>
+							<li>发布时间:<span class="date"> 2019/11/14</span></li>
+							<li>购买量:<span class="cont"> 555526</span></li>
+						</ul>
+						<div class="rmb-res-buy">
+							<span class="layui-badge layui-bg-orange">￥</span>
+							<span>252积分</span>
+							<span class="layui-btn layui-btn-normal  layui-btn-radius">购买资源</span>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<script>
+			layui.use(['element', 'form'], function() {
+				var element = layui.element;
+			});
+		</script>
+	</body>
+
+</html>

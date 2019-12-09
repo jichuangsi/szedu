@@ -1,0 +1,32 @@
+.layui-this{
+	background-color: #3C94FF;
+	color: white !important;
+	border-radius: 10% 10% 0 0;
+}
+.layui-tab-title>li{
+	margin-right: 40px;
+}
+.rmb-box-title{
+	margin: 10px auto 10px 10px;
+}
+.rmb-box-title>span{
+	font-size: 18px;
+}
+.rmb-box-title>ul li{
+	color: #737383;
+	margin: 10px auto;
+}
+
+.common_block_title {
+	padding: 5px 15px;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-topright: 5px;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+	color: #333333;
+	font-size: 16px;
+	margin: 5px 0 10px 10px;
+	border-left: 5px solid #3d72fe;
+	letter-spacing: 2px;
+	font-weight: normal;
+}

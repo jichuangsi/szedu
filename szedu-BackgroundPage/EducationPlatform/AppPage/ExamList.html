@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>考试列表</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../css/app/index.css" />
+		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
+		<script src="../lib/js/jquery.min.js"></script>
+		<script src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/AppJs/ExamList.js"></script>
+	</head>
+	<style>
+		.widths {
+			width: 24%;
+		}
+		
+		.layui-unselect {
+			border-radius: 20px 20px;
+		}
+		
+		.Exam-box {
+			width: 95%;
+			height: 300px;
+			border: 1px solid #333333;
+			margin: 5px;
+		}
+		
+		.Exam-box:hover {
+			box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+			z-index: 20;
+			top: -1px;
+		}
+		
+		.box-pig {
+			width: 100%;
+			text-align: center;
+			height: 140px;
+			border-bottom: solid #cccccc 1px;
+			background: #fff;
+			overflow: hidden;
+		}
+		
+		.box-pig>a img:hover {
+			cursor: pointer;
+			transition: all 0.6s;
+			-webkit-transform: scale(1.1, 1.1)
+		}
+		
+		.box-content {
+			padding: 10px;
+		}
+		
+		.box-content-title {
+			font-size: 1rem;
+			line-height: 1.5rem;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+		
+		.box-content-des {
+			font-size: 0.8rem;
+			color: #737383;
+		}
+		
+		.box-content-des>ul li {
+			line-height: 1rem;
+		}
+		
+		.box-content-btn {
+			text-align: center;
+			margin-top: 6px;
+			font-size: 1rem;
+		}
+	</style>
+
+	<body>
+		<iframe src="../AppPage/header.html" frameborder="0" scrolling="no" class="x-iframe"></iframe>
+		<div class="layui-row" style="margin:20px 10px;">
+			<div class="layui-row layui-form">
+				<div class="layui-form-item  layui-input-inline widths">
+					<select name="city" lay-verify="" class="layui-btn-radius">
+						<option value="">科目</option>
+						<option value="010">北京</option>
+						<option value="021">上海</option>
+						<option value="0571">杭州</option>
+					</select>
+				</div>
+				<div class="layui-form-item  layui-input-inline widths">
+					<select name="city" lay-verify="" class="layui-btn-radius">
+						<option value="">考试类型</option>
+						<option value="010">北京</option>
+						<option value="021">上海</option>
+						<option value="0571">杭州</option>
+					</select>
+				</div>
+				<div class="layui-form-item  layui-input-inline widths">
+					<select name="city" lay-verify="" class="layui-btn-radius ">
+						<option value="">考试时间</option>
+						<option value="010">北京</option>
+						<option value="021">上海</option>
+						<option value="0571">杭州</option>
+					</select>
+				</div>
+				<div class="layui-form-item  layui-input-inline">
+					<span>共12个资源</span>
+				</div>
+			</div>
+		</div>
+		<!--考试列表-->
+		<div class="layui-row" style="margin: 10px;">
+			<div class="layui-col-xs6 layui-col-sm3">
+				<div class="Exam-box">
+					<div class="box-pig">
+						<a href=""><img src="../img/微信图片_20191113143904_WPS图片.png" /></a>
+					</div>
+					<div class="box-content">
+						<div class="box-content-title">
+							<a href="#">汽车维修理论期末考试</a>
+						</div>
+						<div class="box-content-des">
+							<ul>
+								<li><span>科目：</span>汽车</li>
+								<li><span>考试类型：</span>期末考试</li>
+								<li><span>开考时间：</span>2019-12-08 8：30</li>
+								<li><span>考试时长：</span>120分钟</li>
+								<li><span>考试状态：</span>正在考试</li>
+							</ul>
+						</div>
+						<div class="box-content-btn">
+							<div class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius ">进入考试</div>
+							<div class="layui-btn layui-btn-primary layui-btn-sm layui-btn-radius ">查看成绩</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="layui-col-xs6 layui-col-sm3">
+				<div class="Exam-box">
+					<div class="box-pig">
+						<a href=""><img src="../img/微信图片_20191113143904_WPS图片.png" /></a>
+					</div>
+					<div class="box-content">
+						<div class="box-content-title">
+							<a href="#">汽车维修理论期末考试</a>
+						</div>
+						<div class="box-content-des">
+							<ul>
+								<li><span>科目：</span>汽车</li>
+								<li><span>考试类型：</span>期末考试</li>
+								<li><span>开考时间：</span>2019-12-08 8：30</li>
+								<li><span>考试时长：</span>120分钟</li>
+								<li><span>考试状态：</span>正在考试</li>
+							</ul>
+						</div>
+						<div class="box-content-btn">
+							<div class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius ">进入考试</div>
+							<div class="layui-btn layui-btn-primary layui-btn-sm layui-btn-radius ">查看成绩</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="layui-col-xs6 layui-col-sm3">
+				<div class="Exam-box">
+					<div class="box-pig">
+						<a href=""><img src="../img/微信图片_20191113143904_WPS图片.png" /></a>
+					</div>
+					<div class="box-content">
+						<div class="box-content-title">
+							<a href="#">汽车维修理论期末考试</a>
+						</div>
+						<div class="box-content-des">
+							<ul>
+								<li><span>科目：</span>汽车</li>
+								<li><span>考试类型：</span>期末考试</li>
+								<li><span>开考时间：</span>2019-12-08 8：30</li>
+								<li><span>考试时长：</span>120分钟</li>
+								<li><span>考试状态：</span>正在考试</li>
+							</ul>
+						</div>
+						<div class="box-content-btn">
+							<div class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius ">进入考试</div>
+							<div class="layui-btn layui-btn-primary layui-btn-sm layui-btn-radius ">查看成绩</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="layui-col-xs6 layui-col-sm3">
+				<div class="Exam-box">
+					<div class="box-pig">
+						<a href=""><img src="../img/微信图片_20191113143904_WPS图片.png" /></a>
+					</div>
+					<div class="box-content">
+						<div class="box-content-title">
+							<a href="#">汽车维修理论期末考试</a>
+						</div>
+						<div class="box-content-des">
+							<ul>
+								<li><span>科目：</span>汽车</li>
+								<li><span>考试类型：</span>期末考试</li>
+								<li><span>开考时间：</span>2019-12-08 8：30</li>
+								<li><span>考试时长：</span>120分钟</li>
+								<li><span>考试状态：</span>正在考试</li>
+							</ul>
+						</div>
+						<div class="box-content-btn">
+							<div class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius ">进入考试</div>
+							<div class="layui-btn layui-btn-primary layui-btn-sm layui-btn-radius ">查看成绩</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>个人信息</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../css/app/index.css" />
+		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
+		<script src="../lib/js/jquery.min.js"></script>
+		<script src="../lib/layui/layui.js" charset="utf-8"></script>
+	</head>
+	<style>
+		.rmb-img {
+			text-align: center;
+			margin: 20px auto;
+		}
+		
+		.rmb-img>img {
+			width: 4rem;
+			height: 4rem;
+		}
+		.layui-form-item-up {
+			border-bottom: #D2D2D2 1px solid;
+			width: 100%;
+			margin-right: 2%;
+		}
+		
+		.layui-form-label {
+			text-align: left;
+		}
+		
+		.layui-input-block>input,
+		.layui-unselect {
+			border: 0px;
+			text-align: right;
+		}
+		
+	</style>
+
+	<body>
+		<div class="layui-row">
+			<ul class="layui-nav" lay-filter="">
+				<li class="layui-nav-item">
+					<a href="#">信力达</a>
+				</li>
+				<li class="layui-nav-item">
+					<a href="#">智能.互联.引领未来</a>
+				</li>
+				<li class="layui-nav-item" style="float: right;margin-right: 3%;">
+					<i class="layui-icon layui-icon-shrink-right"></i>
+					<dl class="layui-nav-child">
+						<!-- 二级菜单 -->
+						<dd>
+							<a href="">我的收藏</a>
+						</dd>
+						<dd>
+							<a href="">成绩分析</a>
+						</dd>
+						<dd>
+							<a href="">账号与设置</a>
+						</dd>
+						<dd>
+							<a href="">帮助与反馈</a>
+						</dd>
+						<dd>
+							<a href="">退出</a>
+						</dd>
+					</dl>
+				</li>
+
+				<li class="layui-nav-item" style="float: right;">
+					<a href="#">积分：<span>5562</span></a>
+				</li>
+				<li class="layui-nav-item" style="float: right;">
+					<a href="#">王木木<img src="//t.cn/RCzsdCq" class="layui-nav-img"></a>
+				</li>
+			</ul>
+		</div>
+		<div class="layui-row">
+			<div class="layui-col-xs12 layui-col-sm12" style="text-align: center;line-height: 1.5rem;padding-left: 10px;">
+				<i class="layui-icon layui-icon-left" style="float: left;"></i>
+				<span>个人信息</span>
+			</div>
+		</div>
+		<!--信息-->
+		<div class="layui-row" style="padding: 0 10px;">
+			<div class="rmb-img" style="text-align: center;">
+				<img src="../img/home_icon_headportrait_image.png" />
+			</div>
+
+			<form class="layui-form">
+				<div class="layui-form-item layui-form-item-up layui-input-inline">
+					<label class="layui-form-label">真实姓名</label>
+					<div class="layui-input-block">
+						<input type="text" class="layui-input time" name="" value="王木木" />
+					</div>
+				</div>
+				<div class="layui-form-item layui-form-item-up layui-input-inline">
+					<label class="layui-form-label">性别</label>
+					<div class="layui-input-block">
+						<input type="text" class="layui-input time" name="" value="女" />
+					</div>
+				</div>
+				<div class="layui-form-item layui-form-item-up layui-input-inline">
+					<label class="layui-form-label">生日</label>
+					<div class="layui-input-block">
+						<input type="text" class="layui-input time" name="" value="2019-12-03" />
+					</div>
+				</div>
+				<div class="layui-form-item layui-form-item-up layui-input-inline">
+					<label class="layui-form-label">地址</label>
+					<div class="layui-input-block">
+						<input type="text" class="layui-input time" name="" value="云南省昆明市" />
+					</div>
+				</div>
+				<div class="layui-form-item layui-form-item-up layui-input-inline">
+					<label class="layui-form-label">学校名称</label>
+					<div class="layui-input-block">
+						<input type="text" class="layui-input time" name="" value="昆明市职业技术学校" />
+					</div>
+				</div>
+				<div class="layui-form-item layui-form-item-up layui-input-inline">
+					<label class="layui-form-label">专业</label>
+					<div class="layui-input-block">
+						<input type="text" class="layui-input time" name="" value="汽车维修运用" />
+					</div>
+				</div>
+				<div class="layui-form-item layui-form-item-up layui-input-inline">
+					<label class="layui-form-label">所属班级</label>
+					<div class="layui-input-block">
+						<input type="text" class="layui-input time" name="" value="2019（1）班" />
+					</div>
+				</div>
+				<div class="layui-form-item layui-form-item-up layui-input-inline">
+					<label class="layui-form-label">手机号</label>
+					<div class="layui-input-block" style="text-align: right;">
+						<div class="layui-btn layui-btn-primary layui-btn-radius layui-btn-sm">未绑定</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</body>
+
+</html>

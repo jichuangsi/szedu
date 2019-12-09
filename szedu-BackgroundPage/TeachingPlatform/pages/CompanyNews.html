@@ -14,8 +14,9 @@
 		<script src="../lib/js/jquery.min.js"></script>
 		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
 		<script type="text/javascript" src="../js/xadmin.js"></script>
+		<script type="text/javascript" src="../js/util.js"></script>
 		<script type="text/javascript" src="../js/Configuration.js"></script>
-		<script type="text/javascript" src="../js/pagejs/CompanyNews.js" ></script>
+		<script type="text/javascript" src="../js/pagejs/CompanyNews.js"></script>
 	</head>
 	<style type="text/css">
 		#addNew {
@@ -30,7 +31,7 @@
 				<i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
 		</div>
 		<div class="x-body">
-			<table id="demo"></table>
+			<table id="demo" lay-filter="demo"></table>
 		</div>
 		<script>
 			function NewAdd() {
@@ -38,56 +39,59 @@
 					type: 1,
 					area: ['90%', '90%'],
 					anim: 2,
-					title: '教师修改',
+					title: '文章修改',
 					maxmin: true,
 					shadeClose: true, //点击遮罩关闭
 					content: $('#addNew')
 				});
 			}
 		</script>
-		<script type="text/html" id="operation">
+		<!--<script type="text/html" id="operation">
 			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="NewAdd()">添加</span>
-		</script>
+		</script>-->
 		<script type="text/html" id="xq">
-			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" >查看</span>
+			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal">查看</span>
 		</script>
 		<script type="text/html" id="Mnews">
-			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="teacher()">修改</span>
-			<span class="layui-btn-sm layui-btn layui-btn layui-btn-danger">删除</span>
+			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="NewAdd()">修改</span>
+			<span class="layui-btn-sm layui-btn layui-btn layui-btn-danger" id="delNew">删除</span>
 		</script>
 	</body>
 	<div class="layui-fluid" id="addNew">
 		<fieldset class="layui-elem-field">
-			<legend>添加文章</legend>
+			<legend>修改文章</legend>
 			<div class="layui-field-box">
-				<form class="layui-form" action="" autocomplete="off">
+				<form class="layui-form" action="" autocomplete="off" lay-filter="Exam">
 					<div class="layui-form-item">
 						<label class="layui-form-label">标题</label>
 						<div class="layui-input-block widths">
-							<input type="text" name="title" required lay-verify="required" placeholder="请输入标题" class="layui-input">
+							<input type="hidden" name="id" />
+							<input type="hidden" name="authorName" />
+							<input type="text" name="articleTitle" required lay-verify="required" placeholder="请输入标题" class="layui-input">
 						</div>
 					</div>
 					<div class="layui-form-item">
 						<label class="layui-form-label">分类</label>
 						<div class="layui-input-block widths">
-							<input type="text" name="title" required lay-verify="required" placeholder="请选择分类" class="layui-input">
+							<select name="categoryId" lay-verify="required" id="teacher">
+							</select>
 						</div>
 					</div>
 					<div class="layui-form-item">
 						<label class="layui-form-label">时间</label>
 						<div class="layui-input-block widths">
-							<input type="text" name="title" required lay-verify="required" placeholder="请选择时间" class="layui-input time">
+							<input type="text" name="publishTime" required lay-verify="required" placeholder="请选择时间" class="layui-input time">
 						</div>
 					</div>
 					<div class="layui-form-item">
 						<label class="layui-form-label">内容</label>
 						<div class="layui-input-block" style="width: 700px;">
-							<textarea id="demo2" style="display: none;"></textarea>
+							<textarea id="demo2" style="display: none;" name="content"></textarea>
 						</div>
 					</div>
 					<div class="layui-form-item">
 						<div class="layui-input-block">
-							<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+							<button class="layui-btn" lay-submit lay-filter="formModifyDemo">立即提交</button>
 							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 						</div>
 					</div>

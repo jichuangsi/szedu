@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="stylesheet" href="lib/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="css/index.css" />
+		<link rel="stylesheet" href="lib/layui/css/modules/layui-icon-extend/iconfont.css" />
+		<script src="./lib/js/jquery.min.js"></script>
+		<script src="./lib/layui/layui.js" charset="utf-8"></script>
+	</head>
+	<style>
+		body{margin:0; padding:0;}
+	</style>
+
+	<body>
+		<!--第一级导航条-->
+		<div class="layui-row" style="background-color: #F3F5F7;">
+			<div class="layui-col-md8 layui-col-md-offset2 layui-col-sm3">
+				<ul class="nav-ul">
+					<li class="">
+						<a href="">信力达</a>
+					</li>
+					<li class="">
+						<a href="">智能 <span class="layui-badge-dot layui-bg-black"></span> 互联 <span class="layui-badge-dot layui-bg-black"></span> 引领未来</a>
+					</li>
+					<li class="">
+						<a href="">今天是2109年11月11日 星期一</a>
+					</li>
+					<li class="">
+						<a href="">欢迎您回来</a>
+					</li>
+					<li class="">
+						<a href=""><img src="//t.cn/RCzsdCq" class="layui-nav-img">王木木老师</a>
+					</li>
+					<li class="">
+						<a href=""><i class="layui-icon layui-icon-notice"></i><span>(450)</span>条信息</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!--第二级导航条-->
+		<div class="layui-row">
+			<div class="layui-col-md8 layui-col-md-offset2 layui-col-sm3">
+				<ul class="layui-nav">
+					<li class="layui-nav-item layui-this">
+						<a href="">首页</a>
+					</li>
+					<li class="layui-nav-item ">
+						<a href="">课堂</a>
+					</li>
+					<li class="layui-nav-item">
+						<a href="">考试</a>
+					</li>
+					<li class="layui-nav-item">
+						<a href="">教务</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+				<script>
+			layui.use(['element', 'carousel'], function() {
+				var element = layui.element,
+					carousel = layui.carousel;
+				carousel.render({
+					elem: '#test1',
+					width: '100%',
+					arrow: 'always'
+				});
+				$('.rmb-icon-res').click(function() {
+					$(this).css('color', '#999999');
+				})
+				$('.rmb-icon-res').dblclick(function() {
+					$(this).css('color', '#ff0000');
+				})
+			});
+		</script>
+	</body>
+
+</html>

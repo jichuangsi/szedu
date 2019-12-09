@@ -14,6 +14,7 @@
 		<script src="../lib/js/jquery.min.js"></script>
 		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
 		<script type="text/javascript" src="../js/xadmin.js"></script>
+		<script type="text/javascript" src="../js/util.js" ></script>
 		<script type="text/javascript" src="../js/Configuration.js"></script>
 		<script type="text/javascript" src="../js/pagejs/SystemLog.js"></script>
 	</head>
@@ -27,12 +28,12 @@
 			<fieldset class="layui-elem-field">
 				<legend>操作日志</legend>
 				<div class="layui-field-box">
-					<table id="demo"></table>
+					<table id="demo" lay-filter="demo"></table>
 				</div>
 			</fieldset>
 		</div>
 		<script type="text/html" id="operation">
-			<span class="layui-btn-sm layui-btn layui-btn layui-btn-danger">删除</span>
+			<span class="layui-btn-sm layui-btn layui-btn layui-btn-danger" id="DelLog">删除</span>
 		</script>
 	</body>
 

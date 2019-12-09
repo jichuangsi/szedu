@@ -1,54 +1,84 @@
 layui.use(['form', 'table'], function() {
 	var form = layui.form,
 		table = layui.table;
-	
+
 	table.render({
 		elem: '#demo',
 		method: "get",
 		async: false,
-		url: '../json/data.json',
+		url: httpUrl() + '/CourseWare/getCourseWareList',
 		headers: {
 			'accessToken': getToken()
 		},
 		cols: [
 			[{
-					field: 'id',
+					field: 'teacherId',
 					title: '序号',
 					type: 'numbers'
 				}, {
-					field: 'account',
+					field: 'teacherName',
 					title: '上传教师',
-					align:'center'
+					align: 'center'
 				}, {
-					field: 'resources',
+					field: 'resourceName',
 					title: '资源名称',
-					align:'center'
+					align: 'center'
 				},
 				{
-					field: 'reslb',
-					title: '资源类型',
-					align:'center'
+					field: 'describes',
+					title: '资源描述',
+					align: 'center'
+				},
+				{
+					field: 'isCheck',
+					title: '状态',
+					align: 'center',
+					templet: function(d) {
+						if(d.isCheck == 1) {
+							return "待审核"
+						} else if(d.isCheck == 2) {
+							return "已审核"
+						}else if(d.isCheck == 3){
+							return "已审核"
+						}
+					}
 				},
 				{
 					field: 'certification',
 					title: '更改上传积分',
-					toolbar: '#integral',
-					align:'center'
+					align: 'center',
+					templet: function(d) {
+						if(d.isCheck == 1) {
+							return '<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="load()">更改积分</span>'
+						} else if(d.isCheck == 2) {
+							return "审核通过获得"+d.integral+"积分"
+						}else if(d.isCheck == 3){
+							return "审核驳回无法获得积分"
+						}
+					}
 				},
 				{
-					field: 'account',
-					title: '审核',
-					toolbar: '#operation',
-					align:'center'
+					field: 'isCheck',
+					title: '操作状态',
+					align: 'center',
+					templet: function(d) {
+						if(d.isCheck == 1) {
+							return '<span class="layui-btn-sm layui-btn" id="Agree">同意</span><span class="layui-btn-sm layui-btn" id="Reject">驳回</span> '
+						} else if(d.isCheck == 2) {
+							return "同意"
+						} else if(d.isCheck == 3) {
+							return "驳回"
+						}
+					}
 				}
-				
+
 			]
 		],
 		page: true,
 		limit: 10,
 		loading: true,
 		request: {
-			pageName: 'pageIndex',
+			pageName: 'pageNum',
 			limitName: "pageSize"
 		},
 		parseData: function(res) {
@@ -67,5 +97,45 @@ layui.use(['form', 'table'], function() {
 				"data": arr
 			};
 		}
+	});
+
+	table.on('row(demo)', function(data) {
+		var param = data.data;
+		form.val('load', {
+			"resourceId": param.resourceId
+		});
+		$(document).on('click', '#DelTeacher', function() {
+			DelTeacher(param.teacherId);
+		});
+			$(document).on('click', '#Agree', function() {
+			param.isCheck = '2'; //
+			AuditApplications("确认要同意该申请吗", param);
+		});
+		$(document).on('click', '#Reject', function() {
+			param.isCheck = '3'; //不同意
+			AuditApplications('确认要驳回该申请吗', param);
+		});
+	});
+	//审核资源
+	function AuditApplications(msg, param) {
+		layer.confirm(msg, function(index) {
+			var url="/CourseWare/resourceCheck?status="+param.isCheck+"&resourceId="+param.resourceId+"&integral="+param.integral;
+			ajaxGET(url);
+			table.reload('demo');
+			layer.close(index);
+			return false;
+		})
+	}
+	//修改积分
+	form.on('submit(formDemo)',function(data){
+		var param =data.field;
+		if(param.integral<0){
+			param.integral=5;
+		}
+		var url="/CourseWare/updateIntegral?integral="+param.integral+"&resourceId="+param.resourceId;
+		ajaxGET(url);
+		table.reload('demo');
+		layer.close(index);
+		return false;
 	});
 })

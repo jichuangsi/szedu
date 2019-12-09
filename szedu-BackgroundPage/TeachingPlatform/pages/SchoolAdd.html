@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="../css/font.css">
+		<link rel="stylesheet" href="../css/xadmin.css">
+		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all">
+		<script src="../lib/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/xadmin.js"></script>
+		<script type="text/javascript" src="../js/util.js"></script>
+		<script type="text/javascript" src="../js/Configuration.js"></script>
+		<script type="text/javascript" src="../js/pagejs/SchoolAdd.js"></script>
+	</head>
+	<style>
+		.widths {
+			width: 70%;
+		}
+	</style>
+
+	<body>
+		<div class="x-nav">
+			<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right;" href="javascript:location.replace(location.href);" title="刷新">
+				<i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+		</div>
+		<div class="x-body">
+			<div class="layui-row">
+				<!--添加学校-->
+				<div class="layui-col-md6">
+					<fieldset class="layui-elem-field">
+						<legend>学校列表</legend>
+						<div class="layui-field-box">
+							<form class="layui-form">
+								<div class="layui-form-item">
+									<label class="layui-form-label">学校名称</label>
+									<div class="layui-input-block widths">
+										<input type="text" name="schoolName" lay-verify="required" autocomplete="off" placeholder="请输入学校名称" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">地址</label>
+									<div class="layui-input-block widths">
+										<input type="text" name="address" autocomplete="off" placeholder="请输入地址" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">详细地址</label>
+									<div class="layui-input-block widths">
+										<input type="text" name="fullAddress" lay-verify="required" autocomplete="off" placeholder="详细地址" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">校训</label>
+									<div class="layui-input-block widths">
+										<input type="text" name="schoolMotto" autocomplete="off" placeholder="请输入" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">学校类别</label>
+									<div class="layui-input-block widths">
+										<input type="text" name="type" autocomplete="off" placeholder="例:全日制技工学校" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">联系人</label>
+									<div class="layui-input-block widths">
+										<input type="text" name="contacts" lay-verify="required" autocomplete="off" placeholder="请输入联系人" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">联系人职位</label>
+									<div class="layui-input-block widths">
+										<input type="text" name="contactsJob" autocomplete="off" placeholder="例:学校财务室主任" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">联系方式</label>
+									<div class="layui-input-block widths">
+										<input type="text" name="phone" lay-verify="required" autocomplete="off" placeholder="请输入" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">订购日期</label>
+									<div class="layui-input-block widths">
+										<input type="text" name="buyTime" autocomplete="off" placeholder="请选择" class="layui-input time">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">课程权限</label>
+									<div class="layui-input-block widths">
+										<div name="curriculumId" class=" xm-select-demo xmSelect" lay-search="">
+										</div>
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">使用状态</label>
+									<div class="layui-input-block widths">
+										<input type="radio" name="status" value="正常启用" title="正常启用">
+										<input type="radio" name="status" value="暂停" title="暂停" checked>
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">备注</label>
+									<div class="layui-input-block widths">
+										<textarea placeholder="请输入内容" lay-verify="required" name="remarks" class="layui-textarea"></textarea>
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<div class="layui-input-block">
+										<div class="layui-btn" lay-submit lay-filter="formDemo">确认创建</div>
+										<div type="reset" class="layui-btn layui-btn-primary">重置</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</fieldset>
+				</div>
+				<!--学校列表-->
+				<!--<div class="layui-col-md8">
+					<fieldset class="layui-elem-field">
+						<legend>学校列表</legend>
+						<div class="layui-field-box">
+							<table id="demo" lay-filter="demo"></table>
+						</div>
+					</fieldset>
+				</div>-->
+			</div>
+		</div>
+	</body>
+
+</html>

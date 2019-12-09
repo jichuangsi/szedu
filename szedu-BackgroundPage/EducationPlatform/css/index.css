@@ -1,0 +1,355 @@
+@charset "utf-8";
+@import url(../lib/layui/css/layui.css);
+* {
+	margin: 0px;
+	padding: 0px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+form{
+	font-size: 18px;
+}
+a {
+	text-decoration: none;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+body {
+	width: 100%;
+	min-height: 100%;
+}
+
+.x-iframe {
+	width: 100%;
+	/*height: 100%;*/
+	max-height: 121.5px;
+	display: block;
+}
+
+.nav-ul {
+	position: relative;
+	padding: 0 20px;
+	background-color: #F3F5F7;
+	border-radius: 2px;
+	box-sizing: border-box
+}
+
+.layui-btn {
+	font-size: 16px;
+}
+
+.nav-ul li {
+	position: relative;
+	display: inline-block;
+	*display: inline;
+	*zoom: 1;
+	vertical-align: middle;
+	line-height: 60px;
+}
+
+.nav-ul li a {
+	color: #3333333;
+	font-family: "微软雅黑";
+	font-size: 20px;
+	display: block;
+	padding: 0 20px;
+	transition: all .3s;
+	-webkit-transition: all .3s
+}
+
+.nav-ul a span {
+	color: red;
+}
+
+.layui-badge-dot {
+	width: 4px;
+	height: 4px;
+	margin: auto 5px 5px 5px;
+}
+
+.nav-ul li:first-child {
+	width: 100px;
+}
+
+.layui-nav {
+	background-color: transparent;
+}
+
+.layui-nav>.layui-nav-item {
+	margin-right: 100px;
+}
+
+.layui-nav .layui-nav-item a {
+	color: black;
+	font-size: 24px;
+}
+
+.layui-nav .layui-nav-item a:hover,
+.layui-nav .layui-this a {
+	color: #3C93FF;
+}
+
+.layui-fluid {
+	position: relative;
+	margin: 0 auto;
+	padding: 0 0;
+}
+
+.kc {
+	font-family: "微软雅黑";
+	font-size: 24px;
+	color: #333333;
+	margin-left: 10px;
+	line-height: 60px
+}
+
+.kc i {
+	font-size: 24px;
+	margin-right: 10px;
+}
+
+.more {
+	font-size: 14px;
+	line-height: 60px;
+}
+
+.more i {
+	margin-left: 10px;
+	font-size: 10px;
+}
+
+.layui-border {
+	/*border: solid 1px #EFEFEF;*/
+	/*border-right: 1px solid;
+	border-left: 1px solid;*/
+	box-shadow: 2px 3px 5px 0px #aaa;
+}
+
+.layui-box {
+	width: 22%;
+	height: 300px;
+	/*box-shadow: 2px 3px 5px 0px #aaa;*/
+	margin: 0 0px 0 20px;
+	float: left;
+}
+
+.rmb-box {
+	display: block;
+	float: left;
+	margin-right: 1.332%;
+	width: 23%;
+	position: relative;
+	padding: 5px 0;
+	transition: left .2s ease, border .5s, z-index .5s;
+	padding-bottom: 15px;
+	top: 1px;
+	background-color: #fff;
+	border: 1px solid #cccccc;
+	padding-top: 0;
+	min-height: 300px;
+}
+
+.rmb-box:hover {
+	box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+	z-index: 20;
+	top: -1px;
+}
+
+.rmb-product {
+	width: 100%;
+	text-align: center;
+	height: 160px;
+	border-bottom: solid #cccccc 1px;
+	background: #fff;
+	overflow: hidden;
+}
+
+.rmb-product>a>img {
+	max-width: 100%;
+	margin: auto;
+	vertical-align: middle;
+}
+
+.rmb-product>a img:hover {
+	cursor: pointer;
+	transition: all 0.6s;
+	-webkit-transform: scale(1.1, 1.1)
+}
+
+.rmb-icon-product {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	/*border: 1px solid;*/
+	box-shadow: 2px 3px 5px 0px #aaa;
+	text-align: center;
+	line-height: 40px;
+	color: #FFB800;
+	position: absolute;
+	left: 72%;
+	bottom: 135px;
+	background-color: white;
+}
+
+.rmb-icon-product i {
+	font-size: 28px;
+}
+
+.rmb-icon-product:hover {
+	cursor: pointer;
+	transition: all 0.6s;
+	-webkit-transform: scale(1.1, 1.1)
+}
+
+.rmb-product-title {
+	padding: 20px 20px 0 20px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.rmb-product-title a {
+	font-size: 20px;
+}
+
+.rmb-product-res {
+	padding: 20px 20px 20px 20px;
+	font-size: 14px;
+}
+
+.rmb-product-desc {
+	padding: 0 20px 0 20px;
+	overflow: hidden;
+	/*文字超过两行显示冒号*/
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+}
+
+.rmb-product-desc a {
+	color: #888888;
+	font-size: 14px;
+}
+
+.rmb-list {
+	margin-bottom: 20px;
+}
+
+.rmb-list-product {
+	float: left;
+	margin-right: 20px;
+}
+
+.rmb-list-product>a img {
+	width: 56px;
+	height: 56px;
+}
+
+.rmb-list-title span {
+	font-family: "微软雅黑";
+	font-size: 14px;
+	color: #666666;
+}
+
+.list-title {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+}
+
+.rmb-list-date {
+	font-family: "微软雅黑";
+	font-size: 14px;
+	color: #666666;
+	text-align: right;
+}
+
+.rmb-list-more {
+	font: "微软雅黑";
+	font-size: 14px;
+	color: #333333;
+	text-align: right;
+}
+
+.rmb-list-more>span i {
+	font-size: 14px;
+}
+
+
+/*资源*/
+
+.rmb-res-title {
+	padding: 5px 20px 0 20px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.rmb-res-title {
+	font-size: 20px;
+	color: #333333;
+}
+
+.rmb-icon-res {
+	color: #ff0000;
+	position: absolute;
+	top: 166px;
+	left: 186px;
+}
+
+.rmb-icon-res:hover {
+	cursor: pointer;
+	transition: all 0.6s;
+	-webkit-transform: scale(1.1, 1.1)
+}
+
+.rmb-icon-res i {
+	font-size: 20px;
+}
+
+.rmb-res-title+ul {
+	margin: 10px 20px 0 20px;
+	font-size: 14px;
+	color: #888888;
+}
+
+.rmb-res-title+ul li {
+	margin: 5px auto;
+}
+
+.rmb-res-buy {
+	margin: auto 10px auto 20px;
+}
+
+.rmb-res-buy :last-child {
+	margin-left: 10px;
+}
+
+.rmb-content {}
+
+.rmb-content p {
+	font-size: 14px;
+	color: #333333;
+	text-indent: 2Em;
+	letter-spacing: 2px;
+	line-height: 200%;
+}
+
+.rmb-content span {
+	font-size: 24px;
+}
+
+
+/**/
+
+.layui-table-cell {
+	height: 30px;
+}
