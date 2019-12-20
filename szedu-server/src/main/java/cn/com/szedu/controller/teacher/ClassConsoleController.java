@@ -33,6 +33,8 @@ import java.util.List;
 @CrossOrigin
 public class ClassConsoleController {
 
+
+
     @Resource
     private TecherClassService techerClassService;
     @Resource
