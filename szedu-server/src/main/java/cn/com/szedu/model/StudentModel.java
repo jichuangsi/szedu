@@ -14,6 +14,43 @@ public class StudentModel  {
     private String status;
     private String phone;
     private String schoolName;
+    //后加
+    private String schoolId;
+    private String classId;
+    private String studentId;//学号
+    private String specialtity;//专业
+
+    public String getSpecialtity() {
+        return specialtity;
+    }
+
+    public void setSpecialtity(String specialtity) {
+        this.specialtity = specialtity;
+    }
+
+    public String getSchoolId() {
+        return schoolId;
+    }
+
+    public void setSchoolId(String schoolId) {
+        this.schoolId = schoolId;
+    }
+
+    public String getClassId() {
+        return classId;
+    }
+
+    public void setClassId(String classId) {
+        this.classId = classId;
+    }
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
+    }
 
     public String getId() {
         return id;
