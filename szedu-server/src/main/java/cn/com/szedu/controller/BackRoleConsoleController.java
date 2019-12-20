@@ -1,7 +1,7 @@
 package cn.com.szedu.controller;
 
 import cn.com.szedu.model.ResponseModel;
-import cn.com.szedu.model.UrlModel;
+import cn.com.szedu.model.role.UrlModel;
 import cn.com.szedu.model.UserInfoForToken;
 import cn.com.szedu.service.BackRoleUrlService;
 import io.swagger.annotations.Api;

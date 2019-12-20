@@ -52,7 +52,7 @@ public class TreeMenuController {
     @ApiOperation(value = "删除节点信息", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")})
-    @GetMapping("/deleteTreeNode")
+    @PostMapping("/deleteTreeNode")
     public ResponseModel deleteTreeNode(@ModelAttribute UserInfoForToken userInfo, @RequestParam Integer id){
         try {
             menuService.deleteNode(id);

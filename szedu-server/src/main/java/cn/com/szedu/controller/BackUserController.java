@@ -6,6 +6,7 @@ import cn.com.szedu.model.BackUserLoginModel;
 import cn.com.szedu.model.ResponseModel;
 import cn.com.szedu.model.UserInfoForToken;
 import cn.com.szedu.service.BackUserService;
+import cn.com.szedu.service.OpLogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -20,6 +21,9 @@ import javax.annotation.Resource;
 public class BackUserController {
     @Resource
     private BackUserService backUserService;
+
+    @Resource
+    private OpLogService opLogService;
 
     @ApiOperation("后台用户注册")
     @ApiImplicitParams({})
@@ -54,4 +58,22 @@ public class BackUserController {
             return ResponseModel.fail("",e.getMessage());
         }
     }
+
+    @ApiOperation("分页查询行为日志列表")
+    @ApiImplicitParams({})
+    @GetMapping("/getOpLogByNameAndPage")
+    public ResponseModel getOpLogByNameAndPage(@ModelAttribute UserInfoForToken userInfo, @RequestParam int pageNum, @RequestParam int pageSize, @RequestParam(required = false) String name){
+        return ResponseModel.sucess("",opLogService.getOpLogByNameAndPage(pageNum,pageSize,name));
+    }
+
+
+    @ApiOperation(value = "根据id删除行为日志", notes = "")
+    @ApiImplicitParams({})
+    @GetMapping("/deleteOpLog")
+    public ResponseModel deleteOpLog(@ModelAttribute UserInfoForToken userInfo, @RequestParam Integer opId){
+        opLogService.deleteOplog(opId);
+        return ResponseModel.sucessWithEmptyData("");
+    }
+
+
 }

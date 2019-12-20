@@ -1,11 +1,11 @@
 package cn.com.szedu.service;
 
-import cn.com.szedu.entity.UserInfo;
-import cn.com.szedu.exception.BackUserException;
 import cn.com.szedu.exception.UserServiceException;
 import cn.com.szedu.model.*;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public interface UserInfoService {
     void saveTeacher(UserInfoForToken userInfo,TeacherModel model) throws UserServiceException;
@@ -22,4 +22,6 @@ public interface UserInfoService {
     void updateStaffPwd(UserInfoForToken userInfo,String id,String newPwd,String pwd)throws UserServiceException;
     String loginBackUser(BackUserLoginModel model)throws UserServiceException;
     void insertSuperMan() throws UserServiceException;
+    void updateUserIntegral(String userId,String integral)throws UserServiceException;
+    List<TeacherModel> getAllTeacher();
 }

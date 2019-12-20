@@ -1,6 +1,6 @@
-package cn.com.szedu.model;
+package cn.com.szedu.model.role;
 
-import cn.com.szedu.entity.UrlRelation;
+import cn.com.szedu.entity.IntermediateTable.UrlRelation;
 
 import java.util.List;
 

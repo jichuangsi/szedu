@@ -1,6 +1,6 @@
 package cn.com.szedu.repository;
 
-import cn.com.szedu.entity.UrlRelation;
+import cn.com.szedu.entity.IntermediateTable.UrlRelation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

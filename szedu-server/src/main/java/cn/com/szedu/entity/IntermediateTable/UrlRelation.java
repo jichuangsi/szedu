@@ -1,4 +1,4 @@
-package cn.com.szedu.entity;
+package cn.com.szedu.entity.IntermediateTable;
 
 import javax.persistence.*;
 

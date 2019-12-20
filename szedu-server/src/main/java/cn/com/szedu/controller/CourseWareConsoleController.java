@@ -5,12 +5,11 @@ import javax.annotation.Resource;
 import cn.com.szedu.entity.CourseWare;
 import cn.com.szedu.entity.CourseWareShare;
 import cn.com.szedu.exception.CourseWareException;
-import cn.com.szedu.model.ResponseModel;
-import cn.com.szedu.model.ShareElements;
-import cn.com.szedu.model.UserInfoForToken;
+import cn.com.szedu.model.*;
 import cn.com.szedu.service.CourseWareConsoleService;
 import cn.com.szedu.service.CourseWareShareService;
 import cn.com.szedu.service.IUserPositionService;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -70,6 +69,15 @@ public class CourseWareConsoleController {
         return ResponseModel.sucess("",courseWareConsoleService.getCouserWareByTeacherIdAndPage(teacherId,pageNum,pageSize));
     }
 
+    @ApiOperation(value = "统计", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/teacherResourseStatistics")
+    public ResponseModel<PageInfo<UploadResouseModel>> teacherResourseStatistics(@ModelAttribute UserInfoForToken userInfo, @RequestParam int pageNum, @RequestParam int pageSize) {
+        return ResponseModel.sucess("",courseWareConsoleService.teacherResourseStatistics(pageNum,pageSize));
+    }
+
     @ApiOperation(value = "下载附件", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
@@ -83,16 +91,61 @@ public class CourseWareConsoleController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
-    @GetMapping("/deleteAttachment")
+    @PostMapping("/deleteAttachment")
     public ResponseModel deleteAttachment(@ModelAttribute UserInfoForToken userInfo,@RequestParam String fileId) {
         try {
-            courseWareShareService.deleteCourseWareShareByCourseWareId(fileId);
             courseWareConsoleService.deleteCourseWare(fileId);
             return ResponseModel.sucessWithEmptyData("");
         }catch (CourseWareException e){
             return ResponseModel.fail("",e.getMessage());
         }
     }
+    @ApiOperation(value = "查询审核资源列表", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping(value = "/getCourseWareList")
+    public ResponseModel<PageInfo<CourseModel>> getCourseWareList(@ModelAttribute UserInfoForToken userInfo, @RequestParam int pageNum, @RequestParam int pageSize) {
+        return ResponseModel.sucess("",courseWareConsoleService.getCouserWareByPage(pageNum,pageSize));
+    }
+
+    @ApiOperation(value = "资源审核", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping(value = "/resourceCheck")
+    public ResponseModel resourceCheck(@ModelAttribute UserInfoForToken userInfo, @RequestParam String resourceId, @RequestParam String status,@RequestParam String integral){
+        try {
+            courseWareConsoleService.updateIsCheck(resourceId,status,integral);
+            return ResponseModel.sucessWithEmptyData("");
+        }catch (CourseWareException e){
+            return ResponseModel.fail("",e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "积分修改", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping(value = "/updateIntegral")
+    public ResponseModel updateIntegral(@ModelAttribute UserInfoForToken userInfo, @RequestParam String resourceId, @RequestParam Integer integral){
+        try {
+            courseWareConsoleService.updateIntegral(resourceId,integral);
+            return ResponseModel.sucessWithEmptyData("");
+        }catch (CourseWareException e){
+            return ResponseModel.fail("",e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "查询资源列表", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping(value = "/getCourseWareList2")
+    public ResponseModel<PageInfo<CourseModel>> getCourseWareList2(@ModelAttribute UserInfoForToken userInfo,@RequestParam(required = false) String name, @RequestParam int pageNum, @RequestParam int pageSize) {
+        return ResponseModel.sucess("",courseWareConsoleService.getCouserWareByPage2(name,pageNum,pageSize));
+    }
+
 
     /*@ApiOperation(value = "查询年级和班级,课件id", notes = "")
     @ApiImplicitParams({

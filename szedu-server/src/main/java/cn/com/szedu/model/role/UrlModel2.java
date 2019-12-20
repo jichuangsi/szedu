@@ -1,4 +1,4 @@
-package cn.com.szedu.model;
+package cn.com.szedu.model.role;
 
 import java.util.Map;
 

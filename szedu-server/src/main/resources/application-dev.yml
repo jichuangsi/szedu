@@ -2,7 +2,7 @@ custom:
   swagger:
     enable: true #是否启用swagger文档
   log:
-    path: E:/logback/${spring.application.name}/${spring.profiles.active}
+    path: D:/logback/${spring.application.name}/${spring.profiles.active}
   token: 
       userClaim: userInfo
       survivalTime: 7200000
@@ -14,7 +14,7 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/szedu?serverTimezone=GMT%2B8&useSSL=false&characterEncoding=utf-8&allowPublicKeyRetrieval=true
     username: root
-    password: 123456
+    password: root
   jpa:
     show-sql: true
     generate-ddl: true
