@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>个人中心</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../css/index.css" />
+		<link rel="stylesheet" href="../css/personalCenter.css" />
+		<link rel="stylesheet" href="../css/Examination.css" />
+		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
+		<script src="../lib/js/jquery.min.js"></script>
+		<script src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/personalCenter.js"></script>
+	</head>
+	<style>
+		.layui-nav-tree {
+			width: 100%;
+			padding: 0;
+		}
+		
+		.layui-nav-tree .layui-nav-item a:hover {
+			background-color: #277FEA;
+			color: white;
+		}
+		
+		.layui-nav .layui-nav-item a {
+			color: white;
+			font-size: 18px;
+		}
+		
+		.rmb-list-more {
+			font-size: 14px;
+			float: right;
+			color: #333333;
+		}
+		
+		.pic-btn {
+			border-radius: 5px;
+		}
+		.layui-form-item-up{
+			border-bottom: #D2D2D2 1px solid;
+		}
+		.layui-form-label{
+			text-align: left;
+		}
+		.layui-input-block>input{
+			border: 0px;
+		}
+	</style>
+
+	<body>
+		<iframe src="../head.html" frameborder="0" scrolling="no" class="x-iframe"></iframe>
+		<!--个人中心-->
+		<div class="layui-row ">
+			<!--个人中心导航-->
+			<div class="layui-col-md2 layui-col-md-offset2 nav-tap" style="background-color: #3C94FF; height: 100%;">
+				<div class="layui-row" style="margin: 50px 0 0 20px;">
+					<div class="Pic">
+						<img src="../img/home_icon_headportrait_image.png" />
+					</div>
+					<ul>
+						<li>
+							<h1>王木木</h1>
+						</li>
+						<li>
+							学校：<span>领先技术学院</span>
+						</li>
+						<li>
+							科目：<span>汽车</span>
+						</li>
+					</ul>
+				</div>
+				<ul class="layui-nav layui-nav-tree">
+					<li class="layui-nav-item">
+						<a href="">我的分享<i class="layui-icon layui-icon-right nav-right"></i></a>
+					</li>
+					<li class="layui-nav-item">
+						<a href="">我的购买<i class="layui-icon layui-icon-right nav-right"></i></a>
+					</li>
+					<li class="layui-nav-item">
+						<a href="">个人设置<i class="layui-icon layui-icon-right nav-right"></i></a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="layui-col-md6">
+				<div class="" style="background-color: #F9F9F9;height: 30px;line-height: 30px;"><i class="layui-icon layui-icon-left"></i>个人页面</div>
+			</div>
+			<!--我的分享-分享资源-->
+			<div class="layui-col-md6" style="display: none;">
+				<div class="layui-row" style="margin:  auto 20px;">
+					<div class="common_block_title">
+						分享资源
+						<div class="rmb-list-more">
+							<span><a href="#">查看更多<i class="layui-icon layui-icon-right"></i></a></span>
+						</div>
+					</div>
+					<hr />
+					<div class="per-box">
+						<div class="rmb-product">
+							<a href="">
+								<img src="../img/微信图片_20191113143904_WPS图片.png" />
+							</a>
+						</div>
+						<div class="per-title">
+							<a href="">
+								<span>电动汽车发展史电动汽车发展史电动汽车发展史</span><span>.ppt</span>
+							</a>
+							<ul>
+								<li>上传者:<span class="teacherName"> 王*老师</span></li>
+								<li>修改时间:<span class="date"> 2019/11/14</span></li>
+								<li>购买量:<span class="cont"> 555526</span></li>
+							</ul>
+						</div>
+						<div class="per-btn layui-form" style="margin:auto 10px;line-height: 24px;">
+							<div class="layui-form-item layui-input-inline">
+								<span class="layui-btn layui-btn-normal  layui-btn-radius">暂停分享</span>
+							</div>
+							<div class="layui-form-item layui-input-inline">
+								<span class="layui-btn layui-btn-normal  layui-btn-radius">推送</span>
+							</div>
+							<div class="layui-form-item layui-input-inline">
+								<span style="color: red;float: right;">分享通过</span>
+							</div>
+						</div>
+					</div>
+
+					<!--我的分享-分享试卷-->
+					<div class="layui-row">
+						<div class="common_block_title" style="margin-top: 20px;">
+							分享试卷
+							<div class="rmb-list-more">
+								<span><a href="#">查看更多<i class="layui-icon layui-icon-right"></i></a></span>
+							</div>
+						</div>
+						<hr />
+						<div class="layui-row exam-rmb">
+							<p class="exam-title">一.这是一道题目，这个是题目的标题，下面是题目的内容，接下来是题目的选项，剩下的就是题目的编辑还有题目的删除,这是一道题目，这个是题目的标题，下面是题目的内容，接下来是题目的选项，剩下的就是题目的编辑还有题目的删除</p>
+						</div>
+						<div class="layui-row exam-rmb layui-form" style="margin:20px 0 0 40px;">
+							<div class="layui-form-item exam-rmb">
+								<input type="checkbox" name="" title="这是一个选项" lay-skin="primary">
+							</div>
+							<div class="layui-form-item exam-rmb">
+								<input type="checkbox" name="" title="这是一个选项" lay-skin="primary">
+							</div>
+							<div class="layui-form-item exam-rmb">
+								<input type="checkbox" name="" title="这是一个选项" lay-skin="primary">
+							</div>
+							<div class="layui-form-item exam-rmb">
+								<input type="checkbox" name="" title="这是一个选项" lay-skin="primary">
+							</div>
+							<div class="layui-form-item">
+								<span style="font-size: 20px;">正确答案:</span><samp style="font-size: 20px;">A</samp>
+							</div>
+							<div class="layui-form-item">
+								<p style="font-size: 20px;">解析：这是一段解析。。。。。。。。。。。</p>
+							</div>
+						</div>
+						<div class="layui-form-item" style="float: right;margin-right: 10%;">
+							<span class="layui-btn layui-btn-radius layui-btn-primary">编辑</span>
+							<span class="layui-btn layui-btn-radius layui-btn-primary">删除</span>
+						</div>
+						<hr />
+					</div>
+
+				</div>
+			</div>
+			<!--我的购买-->
+
+			<!--个人设置-->
+			<div class="layui-col-md6" style="padding: 5px 0 0 20px;">
+				<div class="common_block_title">
+					个性头像
+				</div>
+				<hr />
+				<div class="layui-row layui-form" style="padding-bottom: 20px;">
+					<div class="Pic layui-input-inline" style="padding: 0 10px 0 10px;">
+						<img src="../img/home_icon_headportrait_image.png" />
+					</div>
+					<div class="layui-form-item layui-input-inline" style="padding: 0 10px 0 10px;">
+						<span class="layui-btn  layui-btn-primary pic-btn">上传本地照片</span>
+					</div>
+					<div class="layui-form-item layui-input-inline" style="padding: 0 10px 0 10px;">
+						<span class="layui-btn  layui-btn-primary pic-btn">使用默认头像</span>
+					</div>
+				</div>
+				<div class="common_block_title">
+					基本信息
+					<div class="rmb-list-more">
+						<div class="layui-btn layui-btn-normal pic-btn">编辑</div>
+					</div>
+				</div>
+				<hr />
+				<div class="layui-row layui-form">
+					<form class="layui-form" action="" autocomplete="off">
+						<div class="layui-form-item layui-form-item-up">
+							<label class="layui-form-label">真实姓名</label>
+							<div class="layui-input-block">
+								<input type="text" name="name" lay-verify="title"  placeholder="请输入" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item layui-form-item-up">
+							<label class="layui-form-label">性别</label>
+							<div class="layui-input-block">
+								<input type="radio" name="sex" value="男" title="男" checked="">
+    							<input type="radio" name="sex" value="女" title="女">
+							</div>
+						</div>
+						<div class="layui-form-item layui-form-item-up">
+							<label class="layui-form-label">生日</label>
+							<div class="layui-input-block">
+								<input type="text" name="name" lay-verify="title"  placeholder="请输入标题" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item layui-form-item-up">
+							<label class="layui-form-label">地址</label>
+							<div class="layui-input-block">
+								<input type="text" name="name" lay-verify="title"  placeholder="云南省昆明市" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item layui-form-item-up">
+							<label class="layui-form-label">学校名称</label>
+							<div class="layui-input-block">
+								<input type="text" name="name" lay-verify="title"  placeholder="南翔技术学校" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item layui-form-item-up">
+							<label class="layui-form-label">专业</label>
+							<div class="layui-input-block">
+								<input type="text" name="name" lay-verify="title"  placeholder="汽车维修运用" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item layui-form-item-up">
+							<label class="layui-form-label">管理班级</label>
+							<div class="layui-input-block">
+								<input type="text" name="name" lay-verify="title"  placeholder="2019(1)班 2019(2)班" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item layui-form-item-up">
+							<label class="layui-form-label">工号</label>
+							<div class="layui-input-block">
+								<input type="text" name="name" lay-verify="title"  placeholder="665542424" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item layui-form-item-up">
+							<label class="layui-form-label">教龄</label>
+							<div class="layui-input-block">
+								<input type="text" name="name" lay-verify="title"  placeholder="10年" class="layui-input">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<script>
+			$(function() {
+				$('.nav-tap').height($(window).height());
+			})
+		</script>
+	</body>
+
+</html>

@@ -14,10 +14,17 @@
 		<script src="../lib/js/jquery.min.js"></script>
 		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
 		<script type="text/javascript" src="../js/xadmin.js"></script>
+		<script type="text/javascript" src="../js/util.js"></script>
 		<script type="text/javascript" src="../js/Configuration.js"></script>
-		<script type="text/javascript" src="../js/pagejs/AuditResources.js" ></script>
+		<script type="text/javascript" src="../js/pagejs/AuditResources.js"></script>
 
 	</head>
+	<style type="text/css">
+		#modifyIntegral {
+			display: none;
+			margin-top: 10px;
+		}
+	</style>
 
 	<body>
 		<div class="x-nav">
@@ -28,17 +35,48 @@
 			<fieldset class="layui-elem-field">
 				<legend>资源审核列表</legend>
 				<div class="layui-field-box">
-					<table id="demo"></table>
+					<table id="demo" lay-filter="demo"></table>
 				</div>
 			</fieldset>
 		</div>
 		<script type="text/html" id="operation">
-			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" >通过审核</span>
-			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" >驳回</span>
+			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal">通过审核</span>
+			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal">驳回</span>
 		</script>
 		<script type="text/html" id="integral">
-			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" >更改积分</span>
+			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="load()">更改积分</span>
+		</script>
+
+		<script>
+			function load() {
+				index = layer.open({
+					type: 1,
+					area: ['500px', '300px'],
+					anim: 2,
+					title: '修改积分',
+					maxmin: true,
+					shadeClose: true, //点击遮罩关闭
+					content: $('#modifyIntegral')
+				});
+			}
 		</script>
 	</body>
+	<div id="modifyIntegral" class="layui-fluid">
+		<form class="layui-form" autocomplete="off" lay-filter="load">
+			<div class="layui-form-item">
+				<label class="layui-form-label">默认积分</label>
+				<div class="layui-input-block widths">
+					<input name="resourceId" type="hidden" />
+					<input type="number" name="integral" required lay-verify="required" value="5" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+	</div>
 
 </html>

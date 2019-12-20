@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>教务</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../css/index.css" />
+		<link rel="stylesheet" href="../css/administration.css" />
+		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
+		<script src="../lib/js/jquery.min.js"></script>
+		<script src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/administration.js"></script>
+	</head>
+	<style>
+		.layui-form-select dl dd.layui-this {
+			background-color: #3C94FF;
+		}
+		
+		.layui-tab {
+			margin: 0 0 0 20px;
+		}
+		
+		.layui-unselect {
+			border-radius: 20px 20px;
+		}
+		
+		.layui-table-cell {
+			height: 30px;
+			line-height: 30px;
+		}
+		
+		.layui-box {
+			width: 22%;
+			height: 300px;
+			float: left;
+		}
+		.xs{
+			display:block;
+		}
+		.yc{
+			display: none;
+		}
+	</style>
+
+	<body>
+		<iframe src="../head.html" frameborder="0" scrolling="no" class="x-iframe"></iframe>
+		<div class="layui-row" style="background-color: #F3F5F7;margin-top: 10px;">
+			<div class="layui-col-md8 layui-col-md-offset2">
+				<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+					<ul class="layui-tab-title">
+						<li class="layui-this" value ="1">班级管理</li>
+						<li value="2">学生管理</li>
+						<li value="3">考勤</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="layui-row" >
+			<div class="layui-col-md8 layui-col-md-offset2 one xs"> 
+				<div class="layui-row" style="margin: 20px;">
+					<span class="layui-btn layui-btn-primary layui-btn-radius">新增班级</span>
+					<span class="layui-btn layui-btn-primary layui-btn-radius">创建班级</span>
+					<span class="layui-btn layui-btn-primary layui-btn-radius">班级管理</span>
+				</div>
+				<div class="layui-row" style="margin: 20px;">
+					<div class="rmb-box">
+						<div class="rmb-product">
+							<a href="#">
+								<img src="../img/微信图片_20191113143904_WPS图片.png" />
+							</a>
+						</div>
+						<div class="rmb-box-title">
+							<span>2019年汽车维修（1）班</span>
+							<ul>
+								<li>
+									班级人数：<samp>30人</samp>
+								</li>
+								<li>
+									开班时间：<samp>2019-09-09</samp>
+								</li>
+							</ul>
+						</div>
+						<div class="layui-row" style="margin: 0 0 0 20px;">
+							<span class="layui-btn layui-btn-radius layui-btn-lg layui-btn-primary">查看</span>
+							<span class="layui-btn layui-btn-radius layui-btn-lg layui-btn-primary">删除</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--学生管理-->
+			<div class="layui-col-md8 layui-col-md-offset2 two yc">
+				<div class="common_block_title" style="margin-top: 20px;">
+					分享试卷
+					<div class="layui-form" style="float: right;">
+						<div class="layui-form-item layui-input-inline">
+							<select name="city" lay-verify="" class="layui-btn-radius">
+								<option value="">上传标签</option>
+								<option value="010">北京</option>
+								<option value="021">上海</option>
+								<option value="0571">杭州</option>
+							</select>
+						</div>
+						<div class="layui-form-item layui-input-inline">
+							<span class="layui-btn layui-btn-radius layui-btn-primary">新增学生</span>
+						</div>
+						<div class="layui-form-item layui-input-inline">
+							<span class="layui-btn layui-btn-radius layui-btn-primary">批量导入</span>
+						</div>
+						<div class="layui-form-item layui-input-inline">
+							<span class="layui-btn layui-btn-radius layui-btn-primary">表格导入</span>
+						</div>
+					</div>
+				</div>
+				<hr />
+				<div class="layui-row">
+					<table id="demo" lay-filter="demo"></table>
+				</div>
+			</div>
+			<!--考勤-->
+			<div class="layui-col-md8 layui-col-md-offset2 three yc">
+				<table id="Check" lay-filter="Check"></table>
+			</div>
+		</div>
+		<script type="text/html" id="operation">
+			<span class="layui-btn layui-btn-sm layui-btn-radius layui-btn-primary">查看</span>
+			<span class="layui-btn layui-btn-sm layui-btn-radius layui-btn-primary">修改</span>
+			<span class="layui-btn layui-btn-sm layui-btn-radius layui-btn-primary">删除</span>
+		</script>
+	</body>
+
+</html>

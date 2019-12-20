@@ -4,7 +4,7 @@ import cn.com.szedu.entity.IntermediateTable.SchoolCurriculumRelation;
 import cn.com.szedu.entity.IntermediateTable.SchoolUserRelation;
 import cn.com.szedu.entity.OpLog;
 import cn.com.szedu.entity.SchoolInfo;
-import cn.com.szedu.model.SchoolInfoModel;
+import cn.com.szedu.model.student.SchoolInfoModel;
 import cn.com.szedu.model.UserInfoForToken;
 import cn.com.szedu.repository.IOpLogRepository;
 import cn.com.szedu.repository.ISchoolInfoRepository;

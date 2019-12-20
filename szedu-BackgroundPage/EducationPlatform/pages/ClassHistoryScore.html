@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>班级历史成绩</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../css/index.css" />
+		<link rel="stylesheet" href="../css/administration.css" />
+		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
+		<script src="../lib/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/echarts.min.js"></script>
+		<script src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/ClassHistoryScore.js" ></script>
+	</head>
+	<style>
+		.common_block_title {
+			margin-top: 50px;
+		}
+				
+		.layui-table-cell {
+			height: 30px;
+			line-height: 30px;
+		}
+	</style>
+
+	<body>
+		<iframe src="../head.html" frameborder="0" scrolling="no" class="x-iframe"></iframe>
+		<div class="layui-row">
+			<div class="layui-row" style="background-color: #F9F9F9;height: 30px;line-height: 30px;">
+				<div class="layui-col-md8 layui-col-md-offset2" style="text-align: center;">
+					<i class="layui-icon layui-icon-left" style="float: left;"></i>
+					<span>班级成绩管理</span>
+				</div>
+			</div>
+			<div class="layui-col-md8 layui-col-md-offset2">
+				<div class="common_block_title">
+					历史考试成绩分布图
+				</div>
+				<hr />
+				<div class="layui-row">
+					<div id="main" style="width: 100%;height:600px;"></div>
+				</div>
+				<div class="common_block_title">
+					历史考试成绩分总览
+				</div>
+				<hr />
+				<div class="layui-row">
+					<table id="demo" lay-filter="demo"></table>
+				</div>
+			</div>
+		</div>
+		<script type="text/html" id="operation">
+			<div class="layui-btn layui-btn-radius layui-btn-normal layui-btn-sm"> 查看</div>
+		</script>
+		<script type="text/javascript">
+			// 基于准备好的dom，初始化echarts实例
+			var myChart = echarts.init(document.getElementById('main'));
+
+			// 指定图表的配置项和数据
+			var option = {
+				color: ['#3398DB'],
+				title: {
+					text: '学生近20次成绩统计图'
+				},
+				tooltip: {},
+				legend: {
+					data: ['平均分数']
+				},
+				xAxis: {
+					data: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20(次)"]
+				},
+				yAxis: {
+//					data:[10,20,30,40,50,60,70,80,90,100]	
+				},
+				series: [{
+					name: '平均分数',
+					type: 'bar',
+					barWidth: '30%',
+					data: [76, 65, 86, 88, 85, 85, 66, 87, 66, 78, 76, 65, 86, 88, 85, 85, 66, 87, 66, 78]
+				}]
+			};
+			// 使用刚指定的配置项和数据显示图表。
+			myChart.setOption(option);
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,51 @@
+{
+  "id": "988511",
+  "name": "layui-icon-extend",
+  "font_family": "iconfont",
+  "css_prefix_text": "layui-icon-extend",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "566178",
+      "name": "心",
+      "font_class": "xin1",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "680963",
+      "name": "心",
+      "font_class": "xin",
+      "unicode": "e711",
+      "unicode_decimal": 59153
+    },
+    {
+      "icon_id": "705689",
+      "name": "锁",
+      "font_class": "suo",
+      "unicode": "e625",
+      "unicode_decimal": 58917
+    },
+    {
+      "icon_id": "1309848",
+      "name": "锁",
+      "font_class": "suo2",
+      "unicode": "e62a",
+      "unicode_decimal": 58922
+    },
+    {
+      "icon_id": "1526275",
+      "name": "锁 2",
+      "font_class": "suo1",
+      "unicode": "e657",
+      "unicode_decimal": 58967
+    },
+    {
+      "icon_id": "8922346",
+      "name": "锁",
+      "font_class": "suo3",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    }
+  ]
+}

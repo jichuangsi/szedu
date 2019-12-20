@@ -36,43 +36,54 @@ layui.use(['form', 'table', 'laydate', 'layedit'], function() {
 			, 'link' //超链接
 			, 'unlink' //清除链接
 			,'face' //表情
-			,'image' //插入图片
 			//,'help' //帮助
 		]
 	});
 	form.on('submit(formDemo)', function(data) {
 		var param = data.field;
-		//富文本的内容		
+		//获取富文本的内容		
+		var str = layedit.getContent(index);
+		param.content=str;
+		var category;
+		$('select[name=categoryId] option:selected').each(function() {
+			category= $(this).text()
+		})
+		param.category=category;
+		var url='/BackInformation/saveArticle'
+		ajaxPOST(url,param)
+		return false;
+	});
+	//获取分类
+	getLabel();
+	function getLabel() {
+		$('#teacher').empty();
+		var options = '<option value="-1" selected="selected">' + "请选择" + '</option>';
+		var arr = [];
 		$.ajax({
-			type: "post",
-			url: httpUrl() + "",
+			type: "get",
+			url: httpUrl() + "/BackInformation/getAllArticleCategory",
+			async: false,
 			headers: {
 				'accessToken': getToken()
 			},
-			async: false,
-			contentType: 'application/json',
-			data: JSON.stringify(model),
 			success: function(res) {
 				if(res.code == '0010') {
-					layer.msg('发布成功！', {
-						icon: 1,
-						time: 1000,
-						end: function() {
-							table.reload('Info');
+					arr = res.data
+					if(arr == null || arr == undefined) {
+						options = '<option value="" selected="selected">暂无信息请先去添加</option>'
+					} else {
+						for(var i = 0; i < arr.length; i++) {
+							options += '<option value="' + arr[i].id + '" >' + arr[i].categoryName + '</option>'
 						}
-					});
-				} else {
-					layer.msg(res.msg, {
-						icon: 2,
-						time: 1000,
-						end: function() {
-							table.reload('Info');
-						}
-					});
+					}
+				} else if(res.code == '0031') {
+					layui.notice.info("提示信息：权限不足");
+				} else if(res.code == '0050') {
+					layui.notice.error("提示信息:错误!");
 				}
 			}
 		});
-		return false;
-
-	});
+		$('#teacher').append(options);
+		form.render('select');
+	}
 })

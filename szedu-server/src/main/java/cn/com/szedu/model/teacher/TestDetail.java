@@ -6,18 +6,20 @@ import java.util.List;
 public class TestDetail {
     private String testId;
     private String testName;
+    private String term;//学期
     private String subjectId;
     private String subjectName;
-    private String testPaperType;
+    private String testType;//考试类型
     private Date startTime;
     private String authorId;
     private String authorName;
-    private String classId;
-    private String className;
     private Integer shouldNumber;//应到
     private Integer factNumber;//实到
     private Integer absenceNumber;//缺席
     private List<String> absenceName;//缺席人员
+    private List<ClassModel> classModes;
+    private String testPaperId;
+    private String testConten;//简介
 
     public String getTestId() {
         return testId;
@@ -33,6 +35,14 @@ public class TestDetail {
 
     public void setTestName(String testName) {
         this.testName = testName;
+    }
+
+    public String getTerm() {
+        return term;
+    }
+
+    public void setTerm(String term) {
+        this.term = term;
     }
 
     public String getSubjectId() {
@@ -51,12 +61,12 @@ public class TestDetail {
         this.subjectName = subjectName;
     }
 
-    public String getTestPaperType() {
-        return testPaperType;
+    public String getTestType() {
+        return testType;
     }
 
-    public void setTestPaperType(String testPaperType) {
-        this.testPaperType = testPaperType;
+    public void setTestType(String testType) {
+        this.testType = testType;
     }
 
     public Date getStartTime() {
@@ -81,22 +91,6 @@ public class TestDetail {
 
     public void setAuthorName(String authorName) {
         this.authorName = authorName;
-    }
-
-    public String getClassId() {
-        return classId;
-    }
-
-    public void setClassId(String classId) {
-        this.classId = classId;
-    }
-
-    public String getClassName() {
-        return className;
-    }
-
-    public void setClassName(String className) {
-        this.className = className;
     }
 
     public Integer getShouldNumber() {
@@ -129,5 +123,29 @@ public class TestDetail {
 
     public void setAbsenceName(List<String> absenceName) {
         this.absenceName = absenceName;
+    }
+
+    public List<ClassModel> getClassModes() {
+        return classModes;
+    }
+
+    public void setClassModes(List<ClassModel> classModes) {
+        this.classModes = classModes;
+    }
+
+    public String getTestPaperId() {
+        return testPaperId;
+    }
+
+    public void setTestPaperId(String testPaperId) {
+        this.testPaperId = testPaperId;
+    }
+
+    public String getTestConten() {
+        return testConten;
+    }
+
+    public void setTestConten(String testConten) {
+        this.testConten = testConten;
     }
 }

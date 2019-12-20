@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>成绩分析</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../css/app/index.css" />
+		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
+		<script src="../lib/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/echarts.min.js"></script>
+		<script src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/AppJs/Score.js"></script>
+	</head>
+	<style>
+	</style>
+
+	<body>
+		<div class="layui-row">
+			<ul class="layui-nav" lay-filter="">
+				<li class="layui-nav-item">
+					<a href="#">信力达</a>
+				</li>
+				<li class="layui-nav-item">
+					<a href="#">智能.互联.引领未来</a>
+				</li>
+				<li class="layui-nav-item" style="float: right;margin-right: 3%;">
+					<i class="layui-icon layui-icon-shrink-right"></i>
+					<dl class="layui-nav-child">
+						<!-- 二级菜单 -->
+						<dd>
+							<a href="">我的收藏</a>
+						</dd>
+						<dd>
+							<a href="">成绩分析</a>
+						</dd>
+						<dd>
+							<a href="">账号与设置</a>
+						</dd>
+						<dd>
+							<a href="">帮助与反馈</a>
+						</dd>
+						<dd>
+							<a href="">退出</a>
+						</dd>
+					</dl>
+				</li>
+
+				<li class="layui-nav-item" style="float: right;">
+					<a href="#">积分：<span>5562</span></a>
+				</li>
+				<li class="layui-nav-item" style="float: right;">
+					<a href="#">王木木<img src="//t.cn/RCzsdCq" class="layui-nav-img"></a>
+				</li>
+			</ul>
+		</div>
+		<!--历史成绩-->
+		<div class="layui-row">
+			<div class="layui-col-xs12 layui-col-sm12" style="text-align: center;line-height: 1.5rem;padding-left: 10px;">
+				<i class="layui-icon layui-icon-left" style="float: left;"></i>
+				<span>成绩分析</span>
+			</div>
+		</div>
+		<div class="" style="padding: 10px;">
+			<span>王木木：历史最高分：100 最低分：50</span>
+		</div>
+		<div class="layui-row" style="padding: 0 10px;">
+			<div class="common_block_title" style="margin-top: 20px;">
+				历史考试成绩分布图
+			</div>
+			<hr/>
+			<div class="layui-row">
+				<div id="main" style="width: 100%;height:400px;"></div>
+			</div>
+			<div class="common_block_title" style="margin-top: 20px;">
+				历史考试成绩总览
+			</div>
+			<hr/>
+			<table id="demo" lay-filter="demo"></table>
+		</div>
+		<script type="text/html" id="operation">
+			<div class="layui-btn layui-btn-radius layui-btn-normal layui-btn-sm"> 查看</div>
+		</script>
+		<script type="text/javascript">
+			// 基于准备好的dom，初始化echarts实例
+			var myChart = echarts.init(document.getElementById('main'));
+
+			// 指定图表的配置项和数据
+			var option = {
+				color: ['#3398DB'],
+				title: {
+					text: ''
+				},
+				tooltip: {},
+				legend: {
+					data: ['分数']
+				},
+				xAxis: {
+					data: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20(次)"],
+					itemStyle: {
+						normal: {
+							label: {
+								show: true,
+							}
+						}
+					}
+				},
+				yAxis: {
+					//					data:[10,20,30,40,50,60,70,80,90,100]	
+				},
+				series: [{
+					name: '分数',
+					type: 'bar',
+					barWidth: '30%',
+					data: [76, 65, 86, 88, 85, 85, 66, 87, 66, 78, 76, 65, 86, 88, 85, 85, 66, 87, 66, 78],
+					itemStyle: {
+						normal: {
+							label: {
+								show: true,
+							}
+						}
+					}
+				}]
+			};
+			// 使用刚指定的配置项和数据显示图表。
+			myChart.setOption(option);
+		</script>
+	</body>
+
+</html>

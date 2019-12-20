@@ -1,0 +1,8 @@
+.layui-this{
+	background-color: #3C94FF;
+	color: white !important;
+	border-radius: 10% 10% 0 0;
+}
+.layui-tab-title>li{
+	margin-right: 40px;
+}

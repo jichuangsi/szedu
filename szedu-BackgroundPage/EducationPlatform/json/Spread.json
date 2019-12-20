@@ -1,0 +1,40 @@
+{
+	"code": "0010",
+	"data": {
+		"list": [
+			{
+				"id": 1,
+				"segment":"90-100",
+				"rank":"A",
+				"Number":"10",
+				"Proportion":"10%"
+			}, {
+				"id": 2,
+				"segment":"80-89",
+				"rank":"B",
+				"Number":"20",
+				"Proportion":"20%"
+			}, {
+				"id": 3,
+				"segment":"70-79",
+				"rank":"C",
+				"Number":"40",
+				"Proportion":"40%"
+			}, {
+				"id": 4,
+				"segment":"60-69",
+				"rank":"D",
+				"Number":"20",
+				"Proportion":"20%"
+			}, {
+				"id": 5,
+				"segment":"0-59",
+				"rank":"E",
+				"Number":"10",
+				"Proportion":"10%"
+			}
+		],
+		"total": 4,
+		"msg": "�ɹ�"
+	}
+}

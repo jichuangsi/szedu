@@ -1,0 +1,47 @@
+ {
+	"code": "0010",
+	"data": {
+		"list": [
+			{
+				"id": 1,
+				"name":"电子动力考试",
+				"type":"期末考试",
+				"Semester":"第一学期",
+				"createTime":"2019-08-13",
+				"subject":"汽车",
+				"acc":"80%",
+				"Average":"80",
+				"rank":"B"
+			}, {
+				"id": 2,
+				"name":"电子动力考试",
+				"type":"期中考试",
+				"Semester":"第二学期",
+				"createTime":"2019-08-13",
+				"subject":"汽车",
+				"acc":"80%",
+				"Average":"90",
+				"rank":"A"
+			}, {
+				"id": 3,
+				"name":"电子动力考试",
+				"type":"期末考试",
+				"Semester":"第三学期",
+				"createTime":"2019-08-13",
+				"subject":"汽车",
+				"acc":"80%",
+				"Average":"80",
+				"rank":"B"
+			},{
+				"id":4,
+				"name":"电子动力考试",
+				"type":"期中考试",
+				"Semester":"第四学期",
+				"createTime":"2019-08-13",
+				"subject":"汽车"
+			}
+		],
+		"total": 4,
+		"msg": "�ɹ�"
+	}
+}

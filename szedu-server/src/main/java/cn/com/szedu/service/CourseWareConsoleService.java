@@ -1,14 +1,17 @@
 package cn.com.szedu.service;
 
 import cn.com.szedu.constant.ResultCode;
+import cn.com.szedu.dao.mapper.ICourseWareMapper;
 import cn.com.szedu.entity.CourseWare;
 import cn.com.szedu.entity.CourseWareShare;
+import cn.com.szedu.entity.IntermediateTable.CoursewareUserRelation;
+import cn.com.szedu.entity.UserInfo;
 import cn.com.szedu.exception.CourseWareException;
-import cn.com.szedu.model.GradeModel;
-import cn.com.szedu.model.ShareElements;
-import cn.com.szedu.model.SubjectModel;
-import cn.com.szedu.model.UserInfoForToken;
+import cn.com.szedu.model.*;
 import cn.com.szedu.repository.ICourseWareRespository;
+import cn.com.szedu.repository.IUserInfoRepository;
+import cn.com.szedu.repository.IntermediateTableRepository.ICoursewareUserRelationRepository;
+import com.github.pagehelper.PageInfo;
 import com.github.tobato.fastdfs.domain.StorePath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -39,20 +43,28 @@ public class CourseWareConsoleService {
     private IGradeInfoRepository gradeInfoRepository;*/
     @Resource
     private IFastDFSClientService fastDFSClientService;
+    @Resource
+    private IUserInfoRepository userInfoRepository;
+    @Resource
+    private ICourseWareMapper courseWareMapper;
+    @Resource
+    private ICoursewareUserRelationRepository coursewareUserRelationRepository;
 
     private Logger logger=LoggerFactory.getLogger(getClass());
 
     @Transactional(rollbackFor = Exception.class)
     public void saveCourseWare(CourseWare courseWare){
+        courseWare.setIntegral(5);
+        courseWare.setIsCheck("1");
         courseWareRespository.save(courseWare);
     }
 
     //课件上传
     public StorePath upLoadFile(UserInfoForToken userInfoForToken, MultipartFile file) throws CourseWareException {
         String fileName=file.getOriginalFilename();
-        if(!fileName.endsWith(".ppt")){
+        /*if(!fileName.endsWith(".ppt")){
             logger.error("文件不是.ppt类型");
-        }
+        }*/
         try {
             return fastDFSClientService.upLoadFile(file);
         }catch (Exception e){
@@ -77,7 +89,10 @@ public class CourseWareConsoleService {
         courseWare.setFilepath(path.getPath());
         courseWare.setFilename(file.getOriginalFilename());
         courseWare.setTeacherid(userInfoForToken.getUserId());
-        courseWareRespository.save(courseWare);
+        courseWare.setIntegral(5);
+        CourseWare courseWare1=courseWareRespository.save(courseWare);
+        CoursewareUserRelation relation=new CoursewareUserRelation(courseWare1.getId(),courseWare1.getTeacherid());
+        coursewareUserRelationRepository.save(relation);
     }
 
     //下载附件
@@ -87,7 +102,7 @@ public class CourseWareConsoleService {
             throw  new CourseWareException(ResultCode.FILE_ISNOT_EXIST);
         }
         //拼接后缀名
-        String suffix=courseWare.getFilepath().substring(courseWare.getFilepath().lastIndexOf("."));
+        String suffix=courseWare.getFilepath().substring(courseWare.getFilepath().lastIndexOf(" "));
         courseWare.setFilename(courseWare.getFilename().concat(suffix));
         try {
             fastDFSClientService.downLoadFile(courseWare.getFilegroup(),courseWare.getFilepath(),courseWare.getFilename(),response);
@@ -125,10 +140,99 @@ public class CourseWareConsoleService {
             List<Predicate> predicateList = new ArrayList<>();
             if(teacherId!=null && teacherId!=""){
                 predicateList.add(criteriaBuilder.equal(root.get("teacherid"),teacherId));
+                predicateList.add(criteriaBuilder.equal(root.get("name"),teacherId));
             }
-
             return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
         },pageable);
+        return page;
+    }
+
+    //分页查询全部课件
+    public Page<CourseWare> getCouserWareByFileNameAndPage(String fileName,int pageNum,int pageSize){
+        pageNum=pageNum-1;
+        Pageable pageable=new PageRequest(pageNum,pageSize);
+        Page<CourseWare> page=courseWareRespository.findAll((Root<CourseWare> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder)->{
+            List<Predicate> predicateList = new ArrayList<>();
+            if(fileName!=null && fileName!=""){
+                predicateList.add(criteriaBuilder.equal(root.get("filename"),fileName));
+            }
+            return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
+        },pageable);
+        return page;
+    }
+
+    //资源审核列表
+    public PageInfo<CourseModel> getCouserWareByPage(int pageNum,int pageSize){
+        List<CourseModel> courseModelList=courseWareMapper.getCheckResourceList();
+        PageInfo<CourseModel> page=new PageInfo<>();
+        page.setTotal(courseModelList.size());
+        page.setList(courseModelList);
+        page.setPageNum(pageNum);
+        page.setPageSize(pageSize);
+        return page;
+    }
+
+    //统计
+    public PageInfo<UploadResouseModel> teacherResourseStatistics(int pageNum,int pageSize){
+        List<UserInfo> userInfos=userInfoRepository.findByRole("Teacher");
+        List<UploadResouseModel> modelList=new ArrayList<>();
+        for (UserInfo user:userInfos) {
+            UploadResouseModel model=new UploadResouseModel();
+            model.setTeacherId(user.getId());
+            model.setCountUpload(courseWareRespository.countByTeacherid(user.getId()));
+            model.setIntegral(user.getIntegral().toString());
+            model.setSubject(user.getSubject());
+            model.setUserName(user.getName());
+            modelList.add(model);
+        }
+        PageInfo<UploadResouseModel> page=new PageInfo<>();
+        page.setPageSize(pageSize);
+        page.setPageNum(pageNum);
+        page.setList(modelList);
+        page.setTotal(modelList.size());
+        return page;
+    }
+
+    //资源审核
+    public void updateIsCheck(String resourceId,String status,String integral)throws CourseWareException{
+        if (StringUtils.isEmpty(resourceId) || StringUtils.isEmpty(status)){
+            throw new CourseWareException(ResultCode.PARAM_MISS_MSG);
+        }
+        CourseWare courseWare=courseWareRespository.findByid(resourceId);
+        if (courseWare==null){
+            throw  new CourseWareException(ResultCode.FILE_ISNOT_EXIST);
+        }
+        if(status.equalsIgnoreCase("3")){//删除fast资源驳回
+            if(!(StringUtils.isEmpty(courseWare.getFilegroup())|| StringUtils.isEmpty(courseWare.getFilepath()))){
+                fastDFSClientService.deleteFlie(courseWare.getFilegroup(),courseWare.getFilepath());
+            }
+        }
+        if(status.equalsIgnoreCase("2")){//删除fast资源
+            userInfoRepository.updateIntegral(integral,courseWare.getTeacherid());
+        }
+        courseWareRespository.updateIsCheck(resourceId,status);
+    }
+
+    //积分修改
+    public void updateIntegral(String resourceId,Integer integral)throws CourseWareException{
+        if (StringUtils.isEmpty(resourceId) || StringUtils.isEmpty(integral)){
+            throw new CourseWareException(ResultCode.PARAM_MISS_MSG);
+        }
+        courseWareRespository.updateIntegral(resourceId,integral);
+    }
+
+    //资源列表
+    public PageInfo<CourseModel> getCouserWareByPage2(String name,int pageNum,int pageSize){
+        List<CourseModel> courseModelList=null;if(!(StringUtils.isEmpty(name))){
+            courseModelList=courseWareMapper.getResourceListByName("%"+name+"%");
+        }else {
+            courseModelList=courseWareMapper.getResourceList();
+        }
+        PageInfo<CourseModel> page=new PageInfo<>();
+        page.setTotal(courseModelList.size());
+        page.setList(courseModelList);
+        page.setPageNum(pageNum);
+        page.setPageSize(pageSize);
         return page;
     }
 

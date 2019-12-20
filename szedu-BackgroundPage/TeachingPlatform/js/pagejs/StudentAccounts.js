@@ -11,9 +11,9 @@ layui.use(['form', 'upload', 'element', 'table'], function() {
 		id: "student",
 		url: httpUrl() + '/UserInfoConsole/student/getStudentByCondition',
 		contentType: 'application/json',
-		//		headers: {
-		//			'accessToken': getToken()
-		//		},
+		headers: {
+			'accessToken': getToken()
+		},
 		cols: [
 			[{
 					field: 'id',
@@ -27,7 +27,7 @@ layui.use(['form', 'upload', 'element', 'table'], function() {
 					field: 'phone',
 					title: '手机号',
 					align: 'center'
-				},{
+				}, {
 					field: 'sex',
 					title: '性别',
 					align: 'center'
@@ -81,6 +81,9 @@ layui.use(['form', 'upload', 'element', 'table'], function() {
 		$(document).on('click', '#DelStudent', function() {
 			DelStudent(param.id);
 		});
+		form.val('pwd', {
+			"id": param.id
+		});
 		form.val('test', {
 			"id": param.id,
 			"name": param.name,
@@ -124,12 +127,25 @@ layui.use(['form', 'upload', 'element', 'table'], function() {
 	function DelStudent(id) {
 		layer.confirm('确认要删除吗？', function(index) {
 			var url = "/UserInfoConsole/deleteUserById?id=" + id;
-			ajaxGET(url)
+			ajaxPOST(url)
 			table.reload('student');
 			layer.close(index);
 		})
 	}
-
+	//修改学生的密码
+	form.on('submit(formModifyPwdDemo)', function(data) {
+		var param = data.field;
+		//判断两次密码是否相同
+		if(param.pwd != param.oldPwd) {
+			setMsg("两次密码不相同！", 7)
+			return false;
+		} else {
+			var url = "/UserInfoConsole/updateUserPwdById?id=" + param.id + "&pwd=" + param.pwd + "&newPwd=" + param.oldPwd;
+			ajaxGET(url);
+			layer.close(index);
+			return false;
+		}
+	});
 	//表格上传 批量上传
 	upload.render({
 		elem: '#load',

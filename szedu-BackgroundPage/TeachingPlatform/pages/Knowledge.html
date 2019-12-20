@@ -14,6 +14,7 @@
 		<script src="../lib/js/jquery.min.js"></script>
 		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
 		<script type="text/javascript" src="../js/xadmin.js"></script>
+		<script type="text/javascript" src="../js/util.js" ></script>
 		<script type="text/javascript" src="../js/Configuration.js"></script>
 		<script type="text/javascript" src="../js/pagejs/Knowledge.js"></script>
 	</head>
@@ -33,16 +34,17 @@
 			<div class="layui-row layui-col-space30">
 				<div class="layui-col-md4 ">
 					<fieldset class="layui-elem-field">
-						<legend>新建标签</legend>
+						<legend>新建根节点</legend>
 						<div class="layui-field-box">
 							<form class="layui-form" action="">
 								<div class="layui-form-item">
-									<label class="layui-form-label">标签名</label>
+									<label class="layui-form-label">根节点</label>
 									<div class="layui-input-block widths">
-										<input type="text" name="title" required lay-verify="required" placeholder="请输入标签名称" autocomplete="off" class="layui-input">
+										<input type="hidden" name="pid" value="0" />
+										<input type="text" name="title" required lay-verify="required" placeholder="请输入根节点" autocomplete="off" class="layui-input">
 									</div>
 								</div>
-								<div class="layui-form-item ">
+								<!--<div class="layui-form-item ">
 									<label class="layui-form-label">关联课程</label>
 									<div class="layui-input-block widths">
 										<select name="city" lay-verify="required">
@@ -52,14 +54,14 @@
 											<option value="3">传统汽车</option>
 										</select>
 									</div>
-								</div>
-								<div class="layui-form-item">
+								</div>-->
+								<!--<div class="layui-form-item">
 									<label class="layui-form-label">是否考点</label>
 									<div class="layui-input-block widths">
 										<input type="radio" name="sex" value="是" title="是">
 										<input type="radio" name="sex" value="否" title="否" checked>
 									</div>
-								</div>
+								</div>-->
 								<div class="layui-form-item">
 									<div class="layui-input-block">
 										<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
@@ -74,14 +76,15 @@
 					<fieldset class="layui-elem-field layui-field-title ">
 						<legend>标签管理</legend>
 						<div class="layui-field-box">
-							<table id="demo"></table>
+							<!--<table id="demo"></table>-->
+							<div id="tree" class="demo-tree demo-tree-box"></div>
 						</div>
 					</fieldset>
 				</div>
 			</div>
 			<div class="layui-row">
 				<div id="tree" class="demo-tree demo-tree-box"></div>
-        
+
 			</div>
 		</div>
 		<script type="text/html" id="operation">

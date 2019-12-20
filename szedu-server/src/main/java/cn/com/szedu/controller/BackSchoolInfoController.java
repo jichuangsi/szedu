@@ -1,7 +1,7 @@
 package cn.com.szedu.controller;
 
 import cn.com.szedu.model.ResponseModel;
-import cn.com.szedu.model.SchoolInfoModel;
+import cn.com.szedu.model.student.SchoolInfoModel;
 import cn.com.szedu.model.UserInfoForToken;
 import cn.com.szedu.service.IBackSchoolService;
 import io.swagger.annotations.Api;

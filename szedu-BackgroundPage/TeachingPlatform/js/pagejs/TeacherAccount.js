@@ -88,11 +88,14 @@ layui.use(['form', 'upload', 'element', 'table'], function() {
 	table.on('row(demo)', function(data) {
 		var param = data.data;
 		form.val('test', {
-			"id":param.id,
+			"id": param.id,
 			"name": param.name,
 			"subject": param.subject,
 			"schoolName": param.schoolName,
 			"integral": param.integral
+		});
+		form.val('pwd', {
+			"id": param.id
 		});
 		$(document).on('click', '#DelTeacher', function() {
 			DelTeacher(param.id);
@@ -133,7 +136,7 @@ layui.use(['form', 'upload', 'element', 'table'], function() {
 	function DelTeacher(id) {
 		layer.confirm('确认要删除吗？', function(index) {
 			var url = "/UserInfoConsole/deleteUserById?id=" + id;
-			ajaxGET(url)
+			ajaxPOST(url)
 			table.reload('teacher');
 			layer.close(index);
 		})
@@ -144,11 +147,13 @@ layui.use(['form', 'upload', 'element', 'table'], function() {
 		var param = data.field;
 		//判断两次密码是否相同
 		if(param.pwd != param.oldPwd) {
-			setMsg("两次密码不相同！",7	)
+			setMsg("两次密码不相同！", 7)
 			return false;
 		} else {
-			var url = "";
-			//			ajaxPOST(url, param)
+			var url = "/UserInfoConsole/updateUserPwdById?id=" + param.id + "&pwd=" + param.pwd + "&newPwd=" + param.oldPwd;
+			ajaxGET(url);
+			layer.close(index);
+			return false;
 		}
 	});
 
@@ -156,9 +161,9 @@ layui.use(['form', 'upload', 'element', 'table'], function() {
 	upload.render({
 		elem: '#load',
 		url: httpUrl() + '/UserInfoConsole/excel/saveTeacherByExcel',
-//		headers: {
-//			'accessToken': getToken()
-//		},
+		//		headers: {
+		//			'accessToken': getToken()
+		//		},
 		method: 'POST',
 		accept: 'file',
 		size: 1024 * 8,

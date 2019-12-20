@@ -2,16 +2,15 @@ package cn.com.szedu.util;
 
 import cn.com.szedu.commons.Md5Util;
 import cn.com.szedu.constant.Status;
-import cn.com.szedu.entity.BackUser;
-import cn.com.szedu.entity.StaticPage;
-import cn.com.szedu.entity.UserInfo;
-import cn.com.szedu.model.StaticPageModel;
-import cn.com.szedu.model.StudentModel;
-import cn.com.szedu.model.TeacherModel;
-import cn.com.szedu.model.UserInfoForToken;
+import cn.com.szedu.entity.*;
+import cn.com.szedu.model.*;
+import cn.com.szedu.model.role.StaticPageModel;
+import cn.com.szedu.model.student.SchoolInfoModel;
+import cn.com.szedu.model.teacher.ExamModel;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MappingEntity2ModelCoverter {
@@ -99,6 +98,145 @@ public class MappingEntity2ModelCoverter {
         model.setStatus(userInfo.getStatus());
         model.setSchoolName(userInfo.getSchoolName());
         model.setPhone(userInfo.getPhone());
+        return model;
+    }
+
+    public final static SelfQuestions CONVERTERFROMQUESTIONSMODELIITOSELFQUESTIONS(QuestionsModelII modelII){
+        SelfQuestions questions=new SelfQuestions();
+        if (!StringUtils.isEmpty(modelII.getId())){
+            questions.setId(modelII.getId());
+        }
+        questions.setAnswer(modelII.getAnswer());
+        questions.setAnswerDetail(modelII.getAnswerDetail());
+        questions.setTeacherId(modelII.getTeacherId());
+        questions.setTeacherName(modelII.getTeacherName());
+        questions.setSubject(modelII.getSubject());
+        questions.setSubjectId(modelII.getSubjectId());
+        questions.setCreateTime(new Date().getTime());
+        questions.setIntegral(modelII.getIntegral());
+        questions.setType(modelII.getType());
+        questions.setContent(modelII.getTitle());
+        return questions;
+    }
+
+    public final static QuestionsModelII CONVERTERFROMSELFQUESTIONSTOQUESTIONSMODELII(SelfQuestions questions){
+       QuestionsModelII model=new QuestionsModelII();
+       model.setId(questions.getId());
+       model.setAnswer(questions.getAnswer());
+       model.setAnswerDetail(questions.getAnswerDetail());
+       model.setIntegral(questions.getIntegral());
+       QuestionOptions options=new QuestionOptions();
+       options.setA(questions.getAoption());
+       options.setAoptionPic(questions.getAoptionPic());
+       options.setB(questions.getAoption());
+       options.setBoptionPic(questions.getAoptionPic());
+       options.setC(questions.getAoption());
+       options.setCoptionPic(questions.getAoptionPic());
+       options.setD(questions.getAoption());
+       options.setDoptionPic(questions.getAoptionPic());
+       options.setE(questions.getAoption());
+       options.setEoptionPic(questions.getAoptionPic());
+       options.setF(questions.getAoption());
+       options.setFoptionPic(questions.getAoptionPic());
+       options.setTureOption(questions.getAoption());
+       options.setTureOptionPic(questions.getAoptionPic());
+       options.setFalseOption(questions.getAoption());
+       options.setFalseOptionPic(questions.getAoptionPic());
+       model.setOptions(options);
+       model.setSubject(questions.getSubject());
+       model.setSubjectId(questions.getSubjectId());
+       model.setTeacherId(questions.getTeacherId());
+       model.setTeacherName(questions.getTeacherName());
+       model.setTitle(questions.getContent());
+       model.setTitlePic(questions.getContentPic());
+       model.setType(questions.getType());
+       model.setChapter(questions.getChapter());
+       return  model;
+    }
+
+    public final static Curriculum CONVERTERFROMCURRICULUMMODELCURRICULUM(CurriculumModel model){
+        Curriculum curriculum=new Curriculum();
+        if(StringUtils.isEmpty(curriculum.getId())){
+            curriculum.setId(model.getId());
+        }
+        curriculum.setCurriculumName(model.getCurriculumName());
+        curriculum.setContent(model.getContent());
+        curriculum.setIntegral(model.getIntegral());
+        curriculum.setIsCheck(model.getIsCheck());
+        curriculum.setCurriculumPic(model.getCurriculumPic());
+        curriculum.setSubject(model.getSubject());
+        curriculum.setSubjectId(model.getSubjectId());
+        curriculum.setTeacherid(model.getTeacherid());
+        curriculum.setTeacherName(model.getTeacherName());
+        return curriculum;
+    }
+
+    public final static CurriculumResource CONVERTERFROMCURRICULUMMODELCURRICULUMRESOUTCE(CurriculumModel model){
+        CurriculumResource curriculum=new CurriculumResource();
+        curriculum.setCurriculumId(model.getId());
+        curriculum.setFilegroup(model.getFilegroup());
+        curriculum.setFilename(model.getFilename());
+        curriculum.setFilepath(model.getFilepath());
+        curriculum.setTeacherid(model.getTeacherid());
+        return curriculum;
+    }
+
+    public final static SchoolInfo CONVERTERFROMSCHOOLINFOMODELSCHOOLINFO(SchoolInfoModel model){
+        SchoolInfo schoolInfo =new SchoolInfo();
+        schoolInfo.setAddress(model.getAddress());
+        schoolInfo.setBuyTime(model.getBuyTime());
+        schoolInfo.setContacts(model.getContacts());
+        schoolInfo.setContactsJob(model.getContactsJob());
+        schoolInfo.setPhone(model.getPhone());
+        schoolInfo.setRemarks(model.getRemarks());
+        schoolInfo.setSchoolMotto(model.getSchoolMotto());
+        schoolInfo.setSchoolName(model.getSchoolName());
+        schoolInfo.setStatus(model.getStatus());
+        schoolInfo.setType(model.getType());
+        return schoolInfo;
+    }
+
+    public final static Exam CONVERTERFROMEXAMMODELTOEXAM(ExamModel model){
+        Exam exam=new Exam();
+        exam.setExamName(model.getExamName());
+        exam.setContent(model.getContent());
+        exam.setCreatorId(model.getCreatorId());
+        exam.setStatus(model.getStatus());
+        exam.setTerm(model.getTerm());
+        exam.setSubjectId(model.getSubjectId());
+        exam.setSubjectName(model.getSubjectName());
+        exam.setExamType(model.getExamType());
+        model.getModels().forEach(testTimeModel -> {
+            if (testTimeModel.getId().equalsIgnoreCase("1")){
+                exam.setStartTime(testTimeModel.getStartTime());
+                exam.setTestTimeLength(testTimeModel.getTimeLength());
+                exam.setTiqian(testTimeModel.getTiqian());
+            }else {
+                exam.setStartTime(testTimeModel.getStartTime());
+                exam.setEndTime(testTimeModel.getEndTime());
+                exam.setTestTimeLength(testTimeModel.getTimeLength());
+            }
+        });
+        return exam;
+    }
+
+    public final static ExamModel CONVERTERFROMEXAMTOEXAMMODEL(Exam exam){
+        ExamModel model=new ExamModel();
+        model.setContent(exam.getContent());
+        model.setExamId(exam.getId());
+        model.setExamName(exam.getExamName());
+        model.setCreatorId(exam.getCreatorId());
+        model.setStatus(exam.getStatus());
+        model.setTerm(exam.getTerm());
+        model.setSubjectId(exam.getSubjectId());
+        model.setSubjectName(exam.getSubjectName());
+        model.setExamType(exam.getExamType());
+        model.getModels().forEach(testTimeModel -> {
+           testTimeModel.setStartTime(exam.getStartTime());
+           testTimeModel.setEndTime(exam.getEndTime());
+           testTimeModel.setTimeLength(exam.getTestTimeLength());
+           testTimeModel.setTiqian(exam.getTiqian());
+        });
         return model;
     }
 

@@ -1,6 +1,6 @@
 package cn.com.szedu.service;
 
-import cn.com.szedu.model.SchoolInfoModel;
+import cn.com.szedu.model.student.SchoolInfoModel;
 import cn.com.szedu.model.UserInfoForToken;
 
 public interface IBackSchoolService {

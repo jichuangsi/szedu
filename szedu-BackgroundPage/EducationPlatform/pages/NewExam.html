@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>新建考试</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../css/index.css" />
+		<link rel="stylesheet" href="../css/administration.css" />
+		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
+		<script src="../lib/js/jquery.min.js"></script>
+		<script src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/NewExam.js"></script>
+	</head>
+	<style>
+		.layui-form-item-up-han {
+			border-bottom: #D2D2D2 1px solid;
+		}
+		
+		.layui-form-item-up {
+			border-bottom: #D2D2D2 1px solid;
+			width: 23%;
+		}
+		
+		.layui-form-label {
+			text-align: left;
+		}
+		
+		.layui-input-block>input,
+		.layui-unselect {
+			border: 0px;
+		}
+		
+		.layui-form-selec {
+			border: 0px;
+		}
+		
+		.layui-form-label {
+			font-size: 20px;
+		}
+		
+		.layui-input,
+		.layui-textarea {
+			font-size: 20px;
+		}
+		
+		.layui-form-item {
+			margin-bottom: 20px;
+		}
+	</style>
+
+	<body>
+		<iframe src="../head.html" frameborder="0" scrolling="no" class="x-iframe"></iframe>
+		<div class="layui-row">
+			<div class="layui-row" style="background-color: #F9F9F9;height: 30px;line-height: 30px;">
+				<div class="layui-col-md8 layui-col-md-offset2" style="text-align: center;">
+					<i class="layui-icon layui-icon-left" style="float: left;"></i>
+					<span>新建考试</span>
+				</div>
+			</div>
+			<!--新建试卷-->
+			<div class="layui-col-md8 layui-col-md-offset2">
+				<form class="layui-form" style="margin-top: 30px;">
+					<div class="layui-form-item layui-form-item-up-han">
+						<label class="layui-form-label">试卷名称</label>
+						<div class="layui-input-block">
+							<input type="text" name="name" lay-verify="title" placeholder="请输入" value="王木木" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item layui-form-item-up layui-input-inline">
+						<label class="layui-form-label">学期</label>
+						<div class="layui-input-block">
+							<select name="city" lay-verify="" class="layui-btn-radius">
+								<option value="">汽车</option>
+								<option value="010">北京</option>
+								<option value="021">上海</option>
+								<option value="0571">杭州</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item layui-form-item-up layui-input-inline">
+						<label class="layui-form-label">试卷类型</label>
+						<div class="layui-input-block">
+							<select name="city" lay-verify="" class="layui-btn-radius">
+								<option value="">单元测试</option>
+								<option value="010">北京</option>
+								<option value="021">上海</option>
+								<option value="0571">杭州</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item layui-form-item-up layui-input-inline">
+						<label class="layui-form-label">科目</label>
+						<div class="layui-input-block">
+							<select name="city" lay-verify="" class="layui-btn-radius">
+								<option value="">单元测试</option>
+								<option value="010">北京</option>
+								<option value="021">上海</option>
+								<option value="0571">杭州</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item layui-form-item-up layui-input-inline">
+						<label class="layui-form-label">出题人</label>
+						<div class="layui-input-block">
+							<input type="text" name="" value="王老师" />
+						</div>
+					</div>
+					<div class="layui-form-item layui-form-item-up-han">
+						<label class="layui-form-label">考核方式</label>
+						<div class="layui-input-block">
+							<input type="radio" name="sex" value="男" title="固定考试时间">
+							<input type="radio" name="sex" value="女" title="规定时段内答题" checked>
+						</div>
+					</div>
+					<div class="layui-form-item layui-form-item-up layui-input-inline">
+						<label class="layui-form-label">选择班级</label>
+						<div class="layui-input-block">
+							<select name="city" lay-verify="" class="layui-btn-radius">
+								<option value="">单元测试</option>
+								<option value="010">北京</option>
+								<option value="021">上海</option>
+								<option value="0571">杭州</option>
+							</select>
+						</div>
+					</div>
+					
+					<div class="layui-form-item layui-form-item-up-han">
+						<label class="layui-form-label">考试简介</label>
+						<div class="layui-input-block">
+							<input type="text" name="name" lay-verify="title" placeholder="请输入" value="王木木" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item layui-form-item-up layui-input-inline">
+						<label class="layui-form-label">选择试卷</label>
+						<div class="layui-input-block">
+							<select name="city" lay-verify="" class="layui-btn-radius">
+								<option value="">单元测试</option>
+								<option value="010">北京</option>
+								<option value="021">上海</option>
+								<option value="0571">杭州</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-input-block" style="text-align: center;">
+							<button class="layui-btn layui-btn-normal layui-btn-radius" lay-submit lay-filter="formDemo">立即提交</button>
+							<button type="reset" class="layui-btn layui-btn-primary layui-btn-radius">重置</button>
+						</div>
+					</div>
+
+				</form>
+			</div>
+
+		</div>
+	</body>
+
+</html>

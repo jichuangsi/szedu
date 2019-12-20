@@ -14,6 +14,7 @@
 		<script src="../lib/js/jquery.min.js"></script>
 		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
 		<script type="text/javascript" src="../js/xadmin.js"></script>
+		<script type="text/javascript" src="../js/util.js"></script>
 		<script type="text/javascript" src="../js/Configuration.js"></script>
 		<script type="text/javascript" src="../js/pagejs/TeacherResources.js"></script>
 	</head>
@@ -33,21 +34,25 @@
 			<fieldset class="layui-elem-field">
 				<legend>教师资源上传信息</legend>
 				<div class="layui-field-box">
-					<table id="demo"></table>
+					<table id="demo" lay-filter="demo"></table>
 				</div>
 			</fieldset>
 		</div>
 		<script type="text/html" id="operation">
-			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="">上传</span>
+			<button class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="load()">上传</button>
+			
 		</script>
-		<script type="text/html" id="operation">
-			<span class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="">上传</span>
+		<script type="text/html" id="list">
+			<button class="layui-btn-sm layui-btn layui-btn layui-btn-normal" onclick="list()">查看详情</button>
+		</script>
+		<script type="text/html" id="del">
+			<span class="layui-btn-sm layui-btn layui-btn layui-btn-danger" id="DelTeacher">删除</span>
 		</script>
 		<script>
-			function teacher() {
+			function load() {
 				index = layer.open({
 					type: 1,
-					area: ['500px', '260px'],
+					area: ['500px', '300px'],
 					anim: 2,
 					title: '上传资源',
 					maxmin: true,
@@ -55,26 +60,60 @@
 					content: $('#ResoureLoad')
 				});
 			}
+			function list() {
+				index = layer.open({
+					type: 2,
+					area: ['90%', '90%'],
+					anim: 2,
+					title: '上传资源列表',
+					maxmin: true,
+					shadeClose: true, //点击遮罩关闭
+					content:'Resources.html'
+				});
+			}
+			function loadList() {
+				index = layer.open({
+					type: 2,
+					area: ['90%', '90%'],
+					anim: 2,
+					title: '下载资源列表',
+					maxmin: true,
+					shadeClose: true, //点击遮罩关闭
+					content:'Resources.html'
+				});
+			}
 		</script>
 	</body>
 	<div id="ResoureLoad" class="layui-fluid">
-		<form class="layui-form" autocomplete="off" lay-filter="">
+		<form class="layui-form" autocomplete="off" lay-filter="load">
 			<div class="layui-form-item">
 				<label class="layui-form-label">名称</label>
 				<div class="layui-input-block widths">
-					<input type="text" name="title" required lay-verify="required" placeholder="请输入资源名称" autocomplete="off" class="layui-input">
+					<input name="filegroup" type="hidden" />
+					<input name="filepath" type="hidden" />
+					<input name="teacherid" type="hidden" />
+					<input type="text" name="filename" required lay-verify="required" placeholder="请输入资源名称" autocomplete="off" class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">描述</label>
 				<div class="layui-input-block widths">
-					<input type="text" name="title" required lay-verify="required" placeholder="请输入资源描述" autocomplete="off" class="layui-input">
+					<input type="text" name="describes" required lay-verify="required" placeholder="请输入资源描述" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">导入文件</label>
+				<div class="layui-input-block widths">
+					<button type="button" class="layui-btn" id="load">
+			 			 <i class="layui-icon">&#xe67c;</i>导入文件
+						</button>
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<div class="layui-input-block">
-					<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+					<div class="layui-btn" lay-submit lay-filter="formDemo">立即提交</div>
 					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+
 				</div>
 			</div>
 		</form>

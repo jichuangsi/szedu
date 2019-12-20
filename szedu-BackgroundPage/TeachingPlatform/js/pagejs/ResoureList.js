@@ -6,7 +6,8 @@ layui.use(['form', 'table'], function() {
 		elem: '#demo',
 		method: "get",
 		async: false,
-		url: '../json/data.json',
+		id:"teacher",
+		url: httpUrl() + '/CourseWare/getCourseWareList2',
 		headers: {
 			'accessToken': getToken()
 		},
@@ -16,31 +17,26 @@ layui.use(['form', 'table'], function() {
 					title: '序号',
 					type: 'numbers'
 				}, {
-					field: 'resources',
-					title: '资源名称',
+					field: 'teacherName',
+					title: '上传者',
 					align: 'center'
 				}, {
-					field: 'account',
-					title: '上传者',
+					field: 'resourceName',
+					title: '资源名称',
 					align: 'center'
 				},
 				{
-					field: 'bq',
+					field: 'resourceType',
 					title: '资源标签',
 					align: 'center'
 				},
 				{
-					field: 'downloadIntegral',
+					field: 'integral',
 					title: '下载积分',
 					align: 'center'
 				},
 				{
-					field: 'reslb',
-					title: '资源类别',
-					align: 'center'
-				},
-				{
-					field: 'describe',
+					field: 'describes',
 					title: '描述',
 					align: 'center'
 				},
@@ -62,7 +58,7 @@ layui.use(['form', 'table'], function() {
 		limit: 10,
 		loading: true,
 		request: {
-			pageName: 'pageIndex',
+			pageName: 'pageNum',
 			limitName: "pageSize"
 		},
 		parseData: function(res) {
@@ -82,4 +78,30 @@ layui.use(['form', 'table'], function() {
 			};
 		}
 	});
+
+	//监听表格
+	table.on('row(demo)', function(data) {
+		var param = data.data;
+		$(document).on('click', '#delFile', function() {
+			DelResoure(param.resourceId);
+		});
+	});
+	//按条件查询
+	form.on('submit(sreach)', function(data) {
+		var param = data.field;
+		table.reload('teacher', {
+			where: {
+				'name': param.userName
+			}
+		});
+	});
+	//删除
+	function DelResoure(id) {
+		layer.confirm('确认要删除吗？', function(index) {
+			var url = "/CourseWare/deleteAttachment?fileId=" + id;
+			ajaxPOST(url)
+			table.reload('demo');
+			layer.close(index);
+		})
+	}
 })

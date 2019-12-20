@@ -16,20 +16,20 @@ public class Exam {
     @GeneratedValue(generator = "jpa-uuid")
     private String id;
     private String examName;
-    private String course;
-    private String testTimeLength;
-    private Date startTime;
-    private String creatorId;//创建者、出题人
-    private String creatorName;
     private String term;//学期
-    private String examType;
     private String subjectId;
     private String subjectName;
-    private String classId;//班级
+    private String examType;
+    private String creatorId;//创建者、出题人
+    private String creatorName;
+    private String tiqian;//提前阅卷（min）
+    private long startTime;//规定时间段答题
+    private long endTime;
+    private String testTimeLength;//答题时长
     private String content;//考试简介
-    private String checkWay;//考核方式
     private String status;//状态（发布/未发布）
-    private Date ReleaseTime;//发布时间
+    private String testPaperId;//试卷
+    private long createTime=new Date().getTime();
 
     public String getId() {
         return id;
@@ -47,60 +47,12 @@ public class Exam {
         this.examName = examName;
     }
 
-    public String getCourse() {
-        return course;
-    }
-
-    public void setCourse(String course) {
-        this.course = course;
-    }
-
-    public String getTestTimeLength() {
-        return testTimeLength;
-    }
-
-    public void setTestTimeLength(String testTimeLength) {
-        this.testTimeLength = testTimeLength;
-    }
-
-    public Date getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getCreatorId() {
-        return creatorId;
-    }
-
-    public void setCreatorId(String creatorId) {
-        this.creatorId = creatorId;
-    }
-
-    public String getCreatorName() {
-        return creatorName;
-    }
-
-    public void setCreatorName(String creatorName) {
-        this.creatorName = creatorName;
-    }
-
     public String getTerm() {
         return term;
     }
 
     public void setTerm(String term) {
         this.term = term;
-    }
-
-    public String getExamType() {
-        return examType;
-    }
-
-    public void setExamType(String examType) {
-        this.examType = examType;
     }
 
     public String getSubjectId() {
@@ -119,12 +71,60 @@ public class Exam {
         this.subjectName = subjectName;
     }
 
-    public String getClassId() {
-        return classId;
+    public String getExamType() {
+        return examType;
     }
 
-    public void setClassId(String classId) {
-        this.classId = classId;
+    public void setExamType(String examType) {
+        this.examType = examType;
+    }
+
+    public String getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(String creatorId) {
+        this.creatorId = creatorId;
+    }
+
+    public String getCreatorName() {
+        return creatorName;
+    }
+
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
+    }
+
+    public String getTiqian() {
+        return tiqian;
+    }
+
+    public void setTiqian(String tiqian) {
+        this.tiqian = tiqian;
+    }
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getTestTimeLength() {
+        return testTimeLength;
+    }
+
+    public void setTestTimeLength(String testTimeLength) {
+        this.testTimeLength = testTimeLength;
     }
 
     public String getContent() {
@@ -135,14 +135,6 @@ public class Exam {
         this.content = content;
     }
 
-    public String getCheckWay() {
-        return checkWay;
-    }
-
-    public void setCheckWay(String checkWay) {
-        this.checkWay = checkWay;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -151,11 +143,19 @@ public class Exam {
         this.status = status;
     }
 
-    public Date getReleaseTime() {
-        return ReleaseTime;
+    public String getTestPaperId() {
+        return testPaperId;
     }
 
-    public void setReleaseTime(Date releaseTime) {
-        ReleaseTime = releaseTime;
+    public void setTestPaperId(String testPaperId) {
+        this.testPaperId = testPaperId;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
     }
 }

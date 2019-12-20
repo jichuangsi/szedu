@@ -1,9 +1,11 @@
 layui.config({
-	base: '../js/modules/'
+	base: '../js/modules/dist/'
 }).extend({
-	notice: 'dist/notice'
-}).use(['layer', 'laypage', 'notice'], function(exports) {
-	var notice = layui.notice;
+	xmSelect: 'xm-select'
+}).use(['layer', 'laypage', 'notice', 'multiSelect', 'xmSelect'], function(exports) {
+	var notice = layui.notice,
+		xmSelect = layui.xmSelect,
+		multiSelect = layui.multiSelect;
 	notice.options = {
 		closeButton: true, //显示关闭按钮
 		debug: false, //启用debug
@@ -23,6 +25,11 @@ layui.config({
 		//notice.success("提示信息,成功!");
 	};
 })
+//layui.config({
+//	base: '../js/modules/dist/'
+//}).extend({
+//	xmSelect: 'xm-select'
+//}).use(['xmSelect'], function() {});
 
 function setMsg(msg, icon) {
 	layer.msg(msg, {

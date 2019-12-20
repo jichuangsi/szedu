@@ -9,13 +9,13 @@ public class ExamModel {
     private String examType;
     private String subjectId;
     private String subjectName;
-    private String authorId;//出题人
-    private String authorName;
-    private String checkWay;//考核方式
-    private String classId;//班级
+    private String creatorId;//创建者、出题人
+    private String creatorName;
+    private String status;//状态（发布/未发布）
     private String content;//考试简介
-    private List<TestPaperModel> testPaperModels;//试卷
-
+    private String testPaperId;;//试卷
+    private List<String> classId;
+    private List<TestTimeModel> models;//时间
 
     public String getExamId() {
         return examId;
@@ -65,44 +65,28 @@ public class ExamModel {
         this.subjectName = subjectName;
     }
 
-    public String getAuthorId() {
-        return authorId;
+    public String getCreatorId() {
+        return creatorId;
     }
 
-    public void setAuthorId(String authorId) {
-        this.authorId = authorId;
+    public void setCreatorId(String creatorId) {
+        this.creatorId = creatorId;
     }
 
-    public String getAuthorName() {
-        return authorName;
+    public String getCreatorName() {
+        return creatorName;
     }
 
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
     }
 
-    public String getCheckWay() {
-        return checkWay;
+    public String getStatus() {
+        return status;
     }
 
-    public void setCheckWay(String checkWay) {
-        this.checkWay = checkWay;
-    }
-
-    public String getClassId() {
-        return classId;
-    }
-
-    public void setClassId(String classId) {
-        this.classId = classId;
-    }
-
-    public List<TestPaperModel> getTestPaperModels() {
-        return testPaperModels;
-    }
-
-    public void setTestPaperModels(List<TestPaperModel> testPaperModels) {
-        this.testPaperModels = testPaperModels;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getContent() {
@@ -112,4 +96,30 @@ public class ExamModel {
     public void setContent(String content) {
         this.content = content;
     }
+
+    public String getTestPaperId() {
+        return testPaperId;
+    }
+
+    public void setTestPaperId(String testPaperId) {
+        this.testPaperId = testPaperId;
+    }
+
+    public List<String> getClassId() {
+        return classId;
+    }
+
+    public void setClassId(List<String> classId) {
+        this.classId = classId;
+    }
+
+    public List<TestTimeModel> getModels() {
+        return models;
+    }
+
+    public void setModels(List<TestTimeModel> models) {
+        this.models = models;
+    }
+
+
 }

@@ -7,16 +7,15 @@ public class TestPaperModel {//试卷
     private String id;
     private String name;
     private String testType;//考试类型
-    private String testPaperType;//试卷类型
     private Date startTime;//试卷开始时间
     private Date endTime;//试卷结束时间
     private String duration;//时长
     private String classId;
     private String className;
-    //提前进入考试
     private String strettiTime;//提前进入考试
     private String testCover;//封面
     private List<SelfQuestionsModel> questionsModels;
+
 
     public String getId() {
         return id;
@@ -40,14 +39,6 @@ public class TestPaperModel {//试卷
 
     public void setTestType(String testType) {
         this.testType = testType;
-    }
-
-    public String getTestPaperType() {
-        return testPaperType;
-    }
-
-    public void setTestPaperType(String testPaperType) {
-        this.testPaperType = testPaperType;
     }
 
     public Date getStartTime() {
@@ -113,4 +104,6 @@ public class TestPaperModel {//试卷
     public void setQuestionsModels(List<SelfQuestionsModel> questionsModels) {
         this.questionsModels = questionsModels;
     }
+
+
 }

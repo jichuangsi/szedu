@@ -111,6 +111,15 @@ public class UserCRUDController {
             return ResponseModel.fail("",e.getMessage());
         }
     }
+    @ApiOperation(value = "查询全部老师", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping(value = "/teacher/getAllTeacher")
+    public ResponseModel getAllTeacher(@ModelAttribute UserInfoForToken userInfo){
+        return ResponseModel.sucess("",userInfoService.getAllTeacher());
+    }
+
 
     @ApiOperation(value = "根据条件查学生", notes = "")
     @ApiImplicitParams({
@@ -129,7 +138,7 @@ public class UserCRUDController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
-    @GetMapping(value = "/deleteUserById")
+    @PostMapping(value = "/deleteUserById")
     public ResponseModel<PageInfo<UserInfo>> deleteUserById(@ModelAttribute UserInfoForToken userInfo, @RequestParam String id){
         try {
             userInfoService.deleteUserInfo(userInfo, id);

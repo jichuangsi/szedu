@@ -15,6 +15,7 @@
 		<script src="./lib/js/jquery.min.js"></script>
 		<script src="./lib/layui/layui.js" charset="utf-8"></script>
 		<script type="text/javascript" src="./js/xadmin.js"></script>
+		<script type="text/javascript" src="js/Configuration.js" ></script>
 		<script type="text/javascript" src="js/index.js"></script>
 
 	</head>
@@ -30,6 +31,10 @@
 		
 		.site {
 			display: none;
+		}
+		#addm{
+			display: none;
+			margin-top: 10px;
 		}
 	</style>
 
@@ -49,6 +54,9 @@
 						<!-- 二级菜单 -->
 						<dd>
 							<a href="javascript:;" onclick="updatePwd()">修改密码</a>
+						</dd>
+						<dd>
+							<a href="javascript:;" onclick="add()">添加菜单</a>
 						</dd>
 						<dd>
 							<a href="./login.html">退出</a>
@@ -101,12 +109,12 @@
 									<cite>标签管理</cite>
 								</a>
 							</li>
-							<!--<li>
-								<a _href="pages/Subject.html">
+							<li>
+								<a _href="pages/CourseList.html">
 									<i class="iconfont">&#xe6a7;</i>
-									<cite>科目管理</cite>
+									<cite>精品课程</cite>
 								</a>
-							</li>-->
+							</li>
 							<li>
 								<a _href="pages/ExamManagement.html">
 									<i class="iconfont">&#xe6a7;</i>
@@ -188,7 +196,7 @@
 						</a>
 						<ul class="sub-menu">
 							<li>
-								<a _href="pages/ InfoCategory.html">
+								<a _href="pages/InfoCategory.html">
 									<i class="iconfont">&#xe6a7;</i>
 									<cite>文章分类</cite>
 								</a>
@@ -253,6 +261,17 @@
 				content: $('#upPwd')
 			});
 		}
+		function add() {
+			index = layer.open({
+				type: 1,
+				area: ['500px', '250px'],
+				anim: 2,
+				title: '添加菜单',
+				maxmin: true,
+				shadeClose: true, //点击遮罩关闭
+				content: $('#addm')
+			});
+		}
 	</script>
 	<div id="upPwd" class="layui-fluid">
 		<form class="layui-form" autocomplete="off" lay-filter="test">
@@ -272,6 +291,21 @@
 			<div class="layui-form-item">
 				<div class="layui-input-block">
 					<button class="layui-btn" lay-submit lay-filter="update_Pwd">确认修改</button>
+				</div>
+			</div>
+		</form>
+	</div><div id="addm" class="layui-fluid">
+		<form class="layui-form" autocomplete="off" lay-filter="test">
+			<div class="layui-form-item">
+				<label class="layui-form-label">菜单名称：</label>
+				<div class="layui-input-block widths">
+					<input type="hidden" name="userId" />
+					<input type="text" name="newPwd" class="layui-input " lay-verify="pwd">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit lay-filter="addMenu">确认修改</button>
 				</div>
 			</div>
 		</form>

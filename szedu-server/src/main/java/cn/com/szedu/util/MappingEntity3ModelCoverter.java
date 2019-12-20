@@ -149,7 +149,7 @@ public class MappingEntity3ModelCoverter {
      * @param model
      * @return
      */
-    public final static TeacherExamDetailModel CONVERTERFROMBACKEXAMDETAIL(Exam model) {
+   /* public final static TeacherExamDetailModel CONVERTERFROMBACKEXAMDETAIL(Exam model) {
         TeacherExamDetailModel att = new TeacherExamDetailModel();
        att.setExamId(model.getId());
        att.setExamName(model.getExamName());
@@ -164,7 +164,7 @@ public class MappingEntity3ModelCoverter {
       att.setAuthorId(model.getCreatorId());
       att.setAuthorName(model.getCreatorName());
         return att;
-    }
+    }*/
 
     /**
      * 课堂

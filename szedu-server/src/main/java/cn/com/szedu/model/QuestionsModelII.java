@@ -8,6 +8,7 @@ import java.util.List;
 public class QuestionsModelII {
     private Integer id;
     private String title;
+    private String titlePic;
     private String answerDetail;
     private QuestionOptions options;
     private String answer;
@@ -19,7 +20,8 @@ public class QuestionsModelII {
     private Integer integral;
     private String teacherId;//老师id1
     private String teacherName;//1
-    private List<Knowledges> knowledges;
+    private String chapter;//章节
+
 
     public Integer getId() {
         return id;
@@ -35,6 +37,14 @@ public class QuestionsModelII {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getTitlePic() {
+        return titlePic;
+    }
+
+    public void setTitlePic(String titlePic) {
+        this.titlePic = titlePic;
     }
 
     public String getAnswerDetail() {
@@ -117,19 +127,19 @@ public class QuestionsModelII {
         this.teacherName = teacherName;
     }
 
-    public List<Knowledges> getKnowledges() {
-        return knowledges;
-    }
-
-    public void setKnowledges(List<Knowledges> knowledges) {
-        this.knowledges = knowledges;
-    }
-
     public Integer getIntegral() {
         return integral;
     }
 
     public void setIntegral(Integer integral) {
         this.integral = integral;
+    }
+
+    public String getChapter() {
+        return chapter;
+    }
+
+    public void setChapter(String chapter) {
+        this.chapter = chapter;
     }
 }

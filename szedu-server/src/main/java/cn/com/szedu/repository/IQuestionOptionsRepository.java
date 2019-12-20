@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IQuestionOptionsRepository extends JpaRepository<QuestionOptions,Integer> {
     void deleteByQuestionId(Integer questionId);
+    QuestionOptions findByid(Integer questionId);
 }

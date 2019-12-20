@@ -4,10 +4,12 @@ import cn.com.szedu.commons.Md5Util;
 import cn.com.szedu.constant.ResultCode;
 import cn.com.szedu.constant.Status;
 import cn.com.szedu.entity.BackUser;
+import cn.com.szedu.entity.OpLog;
 import cn.com.szedu.entity.UserInfo;
 import cn.com.szedu.exception.BackUserException;
 import cn.com.szedu.exception.UserServiceException;
 import cn.com.szedu.model.*;
+import cn.com.szedu.repository.IOpLogRepository;
 import cn.com.szedu.repository.IUserInfoRepository;
 import cn.com.szedu.service.BackTokenService;
 import cn.com.szedu.service.UserInfoService;
@@ -40,6 +42,9 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Resource
     private BackTokenService backTokenService;
 
+    @Resource
+    private IOpLogRepository opLogRepository;
+
     @Override
     public void saveTeacher(UserInfoForToken userInfo,TeacherModel model) throws UserServiceException {
         if (StringUtils.isEmpty(model.getAccount()) || StringUtils.isEmpty(model.getPwd())) {
@@ -50,6 +55,8 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
         UserInfo info = MappingEntity2ModelCoverter.CONVERTEERFROMTEACHERMODEL(model);
         info.setStatus(Status.ACTIVATE.getName());
+        OpLog opLog=new OpLog(userInfo.getUserName(),"添加","添加老师");
+        opLogRepository.save(opLog);
         userInfoRepository.save(info);
     }
 
@@ -63,6 +70,8 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
         UserInfo info = MappingEntity2ModelCoverter.CONVERTEERFROMSTUDENTMODEL(model);
         info.setStatus(Status.ACTIVATE.getName());
+        OpLog opLog=new OpLog(userInfo.getUserName(),"添加","添加学生");
+        opLogRepository.save(opLog);
         userInfoRepository.save(info);
     }
 
@@ -132,6 +141,8 @@ public class UserInfoServiceImpl implements UserInfoService {
                 }
             }
             userInfoRepository.saveAll(userInfos);
+            OpLog opLog=new OpLog(userInfo.getUserName(),"添加","批量添加老师");
+            opLogRepository.save(opLog);
             return JSONObject.toJSONString(errorRowNum.toArray());
         }catch (IOException e){
             throw new UserServiceException(ResultCode.EXCEL_IMPORT_MSG);
@@ -171,6 +182,8 @@ public class UserInfoServiceImpl implements UserInfoService {
                 }
             }
             userInfoRepository.saveAll(userInfos);
+            OpLog opLog=new OpLog(userInfo.getUserName(),"添加","批量添加学生");
+            opLogRepository.save(opLog);
             return JSONObject.toJSONString(errorRowNum.toArray());
         }catch (IOException e){
             throw new UserServiceException(ResultCode.EXCEL_IMPORT_MSG);
@@ -270,6 +283,24 @@ public class UserInfoServiceImpl implements UserInfoService {
         userInfoRepository.save(userInfo);
     }
 
+    @Override
+    public void updateUserIntegral(String userId, String integral)throws UserServiceException {
+        if (StringUtils.isEmpty(userId) || StringUtils.isEmpty(integral)){
+            throw new  UserServiceException(ResultCode.PARAM_MISS_MSG);
+        }
+        userInfoRepository.updateIntegral(integral,userId);
+    }
+
+    @Override
+    public List<TeacherModel> getAllTeacher() {
+        List<UserInfo> infos=userInfoRepository.findByRole("Teacher");
+        List<TeacherModel> models = new ArrayList<TeacherModel>();
+        infos.forEach(userInfo1 -> {
+            models.add(MappingEntity2ModelCoverter.CONVERTERFROMUSERINFO(userInfo1));
+        });
+        return models;
+    }
+
     private UserInfo saveRowTeacher(HSSFRow row,List<String> accounts) throws UserServiceException{
         UserInfo userInfo=new UserInfo();
         String account = "";
@@ -325,6 +356,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         userInfo.setPwd(Md5Util.encodeByMd5(pwd));
         userInfo.setRole("Teacher");
         userInfo.setIntegral(0);
+        userInfo.setStatus(Status.ACTIVATE.getName());
         return userInfo;
     }
 
@@ -382,6 +414,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         userInfo.setPhone(phone);
         userInfo.setSchoolName(schoolName);
         userInfo.setRole("Student");
+        userInfo.setStatus(Status.ACTIVATE.getName());
         return userInfo;
     }
 

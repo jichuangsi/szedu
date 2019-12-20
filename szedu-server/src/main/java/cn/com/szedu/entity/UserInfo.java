@@ -22,7 +22,6 @@ public class UserInfo {
 	private String pwd;
 	private String sex = "M";
 	private String portrait;
-	/*private List<RoleInfo> roleInfos=new ArrayList<RoleInfo>();*/
 	private String role;
 	private String subject;
 	private String schoolName;
@@ -71,14 +70,6 @@ public class UserInfo {
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
-
-	/*public List<RoleInfo> getRoleInfos() {
-		return roleInfos;
-	}
-
-	public void setRoleInfos(List<RoleInfo> roleInfos) {
-		this.roleInfos = roleInfos;
-	}*/
 
 	public String getStatus() {
 		return status;

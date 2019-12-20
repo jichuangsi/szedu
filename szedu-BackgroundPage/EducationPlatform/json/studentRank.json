@@ -1,0 +1,61 @@
+ {
+	"code": "0010",
+	"data": {
+		"list": [
+			{
+				"id": 1,
+				"number":"0012",
+				"name":"小李",
+				"class":"2019(1)班",
+				"mark":"85",
+				"rank":"A",
+				"accuracy":"90%",
+				"ranking":"2",
+				"Remarks":""
+			}, {
+				"id": 2,
+				"number":"0013",
+				"name":"小力",
+				"class":"2019(1)班",
+				"mark":"86",
+				"rank":"A",
+				"accuracy":"90%",
+				"ranking":"1",
+				"Remarks":""
+			}, {
+				"id": 3,
+				"number":"0014",
+				"name":"小明",
+				"class":"2019(1)班",
+				"mark":"80",
+				"rank":"A",
+				"accuracy":"80%",
+				"ranking":"3",
+				"Remarks":""
+			},{
+				"id":4,
+				"number":"0015",
+				"name":"小王",
+				"class":"2019(1)班",
+				"mark":"85",
+				"rank":"A",
+				"accuracy":"90%",
+				"ranking":"3",
+				"Remarks":""
+			},
+			{
+				"id":5,
+				"number":"0015",
+				"name":"小王",
+				"class":"2019(1)班",
+				"mark":null,
+				"rank":null,
+				"accuracy":null,
+				"ranking":null,
+				"Remarks":"缺考"
+			}
+		],
+		"total":5,
+		"msg": "�ɹ�"
+	}
+}

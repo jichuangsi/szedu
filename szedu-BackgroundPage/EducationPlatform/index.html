@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="stylesheet" href="lib/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="css/index.css" />
+		<link rel="stylesheet" href="lib/layui/css/modules/layui-icon-extend/iconfont.css" />
+		<script src="./lib/js/jquery.min.js"></script>
+		<script src="./lib/layui/layui.js" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<style>
+			.layui-input-block {
+				margin-left: 0px;
+				min-height: 0px;
+			}
+		</style>
+		<script>
+			var DEFAULT_VERSION = 8.0;
+			var ua = navigator.userAgent.toLowerCase();
+			var isIE = ua.indexOf("msie") > -1;
+			var safariVersion;
+			if(isIE) {
+				safariVersion = ua.match(/msie ([\d.]+)/)[1];
+			}
+			if(safariVersion <= DEFAULT_VERSION) {
+				alert('系统检测到您正在使用ie8以下内核的浏览器，不能实现完美体验，请更换或升级浏览器访问！')
+			};
+		</script>
+		<iframe src="head.html" frameborder="0" scrolling="no" class="x-iframe"></iframe>
+		<div class="x-boy ">
+			<!--轮播图-->
+			<div class="layui-carousel" id="test1">
+				<div carousel-item style="text-align: center;margin: auto auto;">
+					<div><img src="img/1573544222(1).jpg" style="width: 100%; height: 100%;" /></div>
+					<div style="background-color: green;">条目2</div>
+					<div>条目3</div>
+					<div>条目4</div>
+					<div>条目5</div>
+				</div>
+			</div>
+			<!--精品课程-->
+			<div class="layui-fluid">
+				<div class="layui-row ">
+					<div class="layui-col-md6 layui-col-md-offset2">
+						<div class="layui-row layui-border">
+							<div class="layui-row " style="margin: 0 30px 0 20px;">
+								<div class="layui-col-md4 layui-col-sm8">
+									<span class="kc"><i class="layui-icon layui-icon-picture"></i>信力达精品课程</span>
+								</div>
+								<div class="layui-col-md2 layui-col-sm3 layui-col-md-offset6" style="text-align: right;">
+									<span class="more">查看更多<i class="layui-icon layui-icon-right"></i></span>
+								</div>
+								<hr>
+							</div>
+							<div class="layui-row" style="margin: 0 auto 20px 20px;">
+								<div class="rmb-box">
+									<div class="rmb-product">
+										<a href="">
+											<img src="img/微信图片_20191113143904_WPS图片.png" />
+										</a>
+									</div>
+									<div class="rmb-icon-product"><i class="iconfont layui-icon-extendsuo"></i></div>
+									<div class="rmb-product-title">
+										<a href="">电动汽车电池管理系统</a>
+									</div>
+									<div class="rmb-product-res">
+										<span>151</span>课时 <span>150</span>个资源
+									</div>
+									<div class="rmb-product-desc">
+										<a href="">本课程将详细介绍电动车电理系统的基础原理，主要包括</a>
+									</div>
+								</div>
+								<div class="rmb-box">
+									<div class="rmb-product">
+										<a href="">
+											<img src="img/微信图片_20191113143904_WPS图片.png" />
+										</a>
+									</div>
+									<div class="rmb-icon-product"><i class="iconfont layui-icon-extendsuo1"></i></div>
+									<div class="rmb-product-title">
+										<a href="">电动汽车电池管理系统</a>
+									</div>
+									<div class="rmb-product-res">
+										<span>151</span>课时 <span>150</span>个资源
+									</div>
+									<div class="rmb-product-desc">
+										<a href="">本课程将详细介绍电动车电理系统的基础原理，主要包括</a>
+									</div>
+								</div>
+								<div class="rmb-box">
+									<div class="rmb-product">
+										<a href="">
+											<img src="img/微信图片_20191113143904_WPS图片.png" />
+										</a>
+									</div>
+									<div class="rmb-icon-product"><i class="iconfont layui-icon-extendsuo"></i></div>
+									<div class="rmb-product-title">
+										<a href="">电动汽车电池管理系统</a>
+									</div>
+									<div class="rmb-product-res">
+										<span>151</span>课时 <span>150</span>个资源
+									</div>
+									<div class="rmb-product-desc">
+										<a href="">本课程将详细介绍电动车电理系统的基础原理，主要包括</a>
+									</div>
+								</div>
+								<div class="rmb-box">
+									<div class="rmb-product">
+										<a href="">
+											<img src="img/微信图片_20191113143904_WPS图片.png" />
+										</a>
+									</div>
+									<div class="rmb-icon-product"><i class="iconfont layui-icon-extendsuo"></i></div>
+									<div class="rmb-product-title">
+										<a href="">电动汽车电池管理系统</a>
+									</div>
+									<div class="rmb-product-res">
+										<span>151</span>课时 <span>150</span>个资源
+									</div>
+									<div class="rmb-product-desc">
+										<a href="">本课程将详细介绍电动车电理系统的基础原理，主要包括</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--资源-->
+						<div class="layui-row layui-border" style="margin-top: 22px;">
+							<div class="layui-row" style="margin: 0 30px 0 20px;">
+								<div class="layui-col-md4 layui-col-sm8">
+									<span class="kc"><i class="layui-icon layui-icon-picture"></i>热门资源</span>
+								</div>
+								<div class="layui-col-md2 layui-col-sm3 layui-col-md-offset6" style="text-align: right;">
+									<span class="more">查看更多<i class="layui-icon layui-icon-right"></i></span>
+								</div>
+								<hr>
+							</div>
+							<div class="layui-row" style="margin: 0 auto 20px 20px;">
+								<div class="rmb-box">
+									<div class="rmb-product">
+										<a href="">
+											<img src="img/微信图片_20191113143904_WPS图片.png" />
+										</a>
+									</div>
+									<div class="rmb-icon-res"><span><i class="iconfont layui-icon-extendxin1"></i></span></div>
+									<div class="rmb-res-title">
+										电动汽车电池管理系统
+									</div>
+									<ul>
+										<li>上传者:<span class="teacherName"> 王*老师</span></li>
+										<li>资源类型:<span class="teacherName"> 视频资源</span></li>
+										<li>发布时间:<span class="date"> 2019/11/14</span></li>
+										<li>购买量:<span class="cont"> 555526</span></li>
+									</ul>
+									<div class="rmb-res-buy">
+										<span class="layui-badge layui-bg-orange">￥</span>
+										<span>252积分</span>
+										<span class="layui-btn layui-btn-normal  layui-btn-radius">购买资源</span>
+									</div>
+								</div>
+								<div class="rmb-box">
+									<div class="rmb-product">
+										<a href="">
+											<img src="img/微信图片_20191113143904_WPS图片.png" />
+										</a>
+									</div>
+									<div class="rmb-icon-res"><span><i class="iconfont layui-icon-extendxin1"></i></span></div>
+									<div class="rmb-res-title">
+										电动汽车电池管理系统
+									</div>
+									<ul>
+										<li>上传者:<span class="teacherName"> 王*老师</span></li>
+										<li>资源类型:<span class="teacherName"> 视频资源</span></li>
+										<li>发布时间:<span class="date"> 2019/11/14</span></li>
+										<li>购买量:<span class="cont"> 555526</span></li>
+									</ul>
+									<div class="rmb-res-buy">
+										<span class="layui-badge layui-bg-orange">￥</span>
+										<span>252积分</span>
+										<span class="layui-btn layui-btn-normal  layui-btn-radius">购买资源</span>
+									</div>
+								</div>
+								<div class="rmb-box">
+									<div class="rmb-product">
+										<a href="">
+											<img src="img/微信图片_20191113143904_WPS图片.png" />
+										</a>
+									</div>
+									<div class="rmb-icon-res"><span><i class="iconfont layui-icon-extendxin1"></i></span></div>
+									<div class="rmb-res-title">
+										电动汽车电池管理系统
+									</div>
+									<ul>
+										<li>上传者:<span class="teacherName"> 王*老师</span></li>
+										<li>资源类型:<span class="teacherName"> 视频资源</span></li>
+										<li>发布时间:<span class="date"> 2019/11/14</span></li>
+										<li>购买量:<span class="cont"> 555526</span></li>
+									</ul>
+									<div class="rmb-res-buy">
+										<span class="layui-badge layui-bg-orange">￥</span>
+										<span>252积分</span>
+										<span class="layui-btn layui-btn-normal  layui-btn-radius">购买资源</span>
+									</div>
+								</div>
+								<div class="rmb-box">
+									<div class="rmb-product">
+										<a href="">
+											<img src="img/微信图片_20191113143904_WPS图片.png" />
+										</a>
+									</div>
+									<div class="rmb-icon-res"><span><i class="iconfont layui-icon-extendxin1"></i></span></div>
+									<div class="rmb-res-title">
+										电动汽车电池管理系统
+									</div>
+									<ul>
+										<li>上传者:<span class="teacherName"> 王*老师</span></li>
+										<li>资源类型:<span class="teacherName"> 视频资源</span></li>
+										<li>发布时间:<span class="date"> 2019/11/14</span></li>
+										<li>购买量:<span class="cont"> 555526</span></li>
+									</ul>
+									<div class="rmb-res-buy">
+										<span class="layui-badge layui-bg-orange">￥</span>
+										<span>252积分</span>
+										<span class="layui-btn layui-btn-normal  layui-btn-radius">购买资源</span>
+									</div>
+								</div>
+
+							</div>
+						</div>
+						<!--最新资源-->
+						<div class="layui-row layui-border" style="margin-top: 22px;">
+							<div class="layui-row" style="margin: 0 30px 0 20px;">
+								<div class="layui-col-md4 layui-col-sm8">
+									<span class="kc"><i class="layui-icon layui-icon-picture"></i>最新资源</span>
+								</div>
+								<div class="layui-col-md2 layui-col-sm3 layui-col-md-offset6" style="text-align: right;">
+									<span class="more">查看更多<i class="layui-icon layui-icon-right"></i></span>
+								</div>
+								<hr>
+							</div>
+							<div class="layui-row" style="margin: 0 auto 20px 20px;">
+								<div class="rmb-box">
+									<div class="rmb-product">
+										<a href="">
+											<img src="img/微信图片_20191113143904_WPS图片.png" />
+										</a>
+									</div>
+									<div class="rmb-icon-res"><span><i class="iconfont layui-icon-extendxin1"></i></span></div>
+									<div class="rmb-res-title">
+										电动汽车电池管理系统
+									</div>
+									<ul>
+										<li>上传者:<span class="teacherName"> 王*老师</span></li>
+										<li>资源类型:<span class="teacherName"> 视频资源</span></li>
+										<li>发布时间:<span class="date"> 2019/11/14</span></li>
+										<li>购买量:<span class="cont"> 555526</span></li>
+									</ul>
+									<div class="rmb-res-buy">
+										<span class="layui-badge layui-bg-orange">￥</span>
+										<span>252积分</span>
+										<span class="layui-btn layui-btn-normal  layui-btn-radius">购买资源</span>
+									</div>
+								</div>
+								<div class="rmb-box">
+									<div class="rmb-product">
+										<a href="">
+											<img src="img/微信图片_20191113143904_WPS图片.png" />
+										</a>
+									</div>
+									<div class="rmb-icon-res"><span><i class="iconfont layui-icon-extendxin1"></i></span></div>
+									<div class="rmb-res-title">
+										电动汽车电池管理系统
+									</div>
+									<ul>
+										<li>上传者:<span class="teacherName"> 王*老师</span></li>
+										<li>资源类型:<span class="teacherName"> 视频资源</span></li>
+										<li>发布时间:<span class="date"> 2019/11/14</span></li>
+										<li>购买量:<span class="cont"> 555526</span></li>
+									</ul>
+									<div class="rmb-res-buy">
+										<span class="layui-badge layui-bg-orange">￥</span>
+										<span>252积分</span>
+										<span class="layui-btn layui-btn-normal  layui-btn-radius">购买资源</span>
+									</div>
+								</div>
+								<div class="rmb-box">
+									<div class="rmb-product">
+										<a href="">
+											<img src="img/微信图片_20191113143904_WPS图片.png" />
+										</a>
+									</div>
+									<div class="rmb-icon-res"><span><i class="iconfont layui-icon-extendxin1"></i></span></div>
+									<div class="rmb-res-title">
+										电动汽车电池管理系统
+									</div>
+									<ul>
+										<li>上传者:<span class="teacherName"> 王*老师</span></li>
+										<li>资源类型:<span class="teacherName"> 视频资源</span></li>
+										<li>发布时间:<span class="date"> 2019/11/14</span></li>
+										<li>购买量:<span class="cont"> 555526</span></li>
+									</ul>
+									<div class="rmb-res-buy">
+										<span class="layui-badge layui-bg-orange">￥</span>
+										<span>252积分</span>
+										<span class="layui-btn layui-btn-normal  layui-btn-radius">购买资源</span>
+									</div>
+								</div>
+								<div class="rmb-box">
+									<div class="rmb-product">
+										<a href="">
+											<img src="img/微信图片_20191113143904_WPS图片.png" />
+										</a>
+									</div>
+									<div class="rmb-icon-res"><span><i class="iconfont layui-icon-extendxin1"></i></span></div>
+									<div class="rmb-res-title">
+										电动汽车电池管理系统
+									</div>
+									<ul>
+										<li>上传者:<span class="teacherName"> 王*老师</span></li>
+										<li>资源类型:<span class="teacherName"> 视频资源</span></li>
+										<li>发布时间:<span class="date"> 2019/11/14</span></li>
+										<li>购买量:<span class="cont"> 555526</span></li>
+									</ul>
+									<div class="rmb-res-buy">
+										<span class="layui-badge layui-bg-orange">￥</span>
+										<span>252积分</span>
+										<span class="layui-btn layui-btn-normal  layui-btn-radius">购买资源</span>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<!--
+                    	描述：右侧栏目
+                    -->
+					<div class="layui-col-md2 " style="margin-left: 20px;">
+						<div class="layui-row layui-border">
+							<div class="layui-row" style="margin: 0 20px 20px 20px;">
+								<span class="kc"><i class="layui-icon layui-icon-list"></i>新闻咨询</span>
+								<hr />
+								<ul>
+									<li class="rmb-list">
+										<div class="rmb-list-product">
+											<a href=""><img src="img/微信图片_20191113143904_WPS图片.png" /></a>
+										</div>
+										<div class="rmb-list-title">
+											<span class="list-title"><a href="#">美国同意取消中国加征税，股票上涨股票上涨，美国同意取消中国加征税，股票上涨股票上涨</a></span>
+										</div>
+										<div class="rmb-list-date">
+											<span>2019/11/14</span>
+										</div>
+									</li>
+									<li class="rmb-list">
+										<div class="rmb-list-product">
+											<a href=""><img src="img/微信图片_20191113143904_WPS图片.png" /></a>
+										</div>
+										<div class="rmb-list-title">
+											<span class="list-title"><a href="#">美国同意取消中国加征税，股票上涨股票上涨，美国同意取消中国加征税，股票上涨股票上涨</a></span>
+										</div>
+										<div class="rmb-list-date">
+											<span>2019/11/14</span>
+										</div>
+									</li>
+									<li class="rmb-list">
+										<div class="rmb-list-product">
+											<a href=""><img src="img/微信图片_20191113143904_WPS图片.png" /></a>
+										</div>
+										<div class="rmb-list-title">
+											<span class="list-title"><a href="#">美国同意取消中国加征税，股票上涨股票上涨，美国同意取消中国加征税，股票上涨股票上涨</a></span>
+										</div>
+										<div class="rmb-list-date">
+											<span>2019/11/14</span>
+										</div>
+									</li>
+									<li class="rmb-list">
+										<div class="rmb-list-product">
+											<a href=""><img src="img/微信图片_20191113143904_WPS图片.png" /></a>
+										</div>
+										<div class="rmb-list-title">
+											<span class="list-title"><a href="#">美国同意取消中国加征税，股票上涨股票上涨，美国同意取消中国加征税，股票上涨股票上涨</a></span>
+										</div>
+										<div class="rmb-list-date">
+											<span>2019/11/14</span>
+										</div>
+									</li>
+									<li class="rmb-list">
+										<div class="rmb-list-product">
+											<a href=""><img src="img/微信图片_20191113143904_WPS图片.png" /></a>
+										</div>
+										<div class="rmb-list-title">
+											<span class="list-title"><a href="#">美国同意取消中国加征税，股票上涨股票上涨，美国同意取消中国加征税，股票上涨股票上涨</a></span>
+										</div>
+										<div class="rmb-list-date">
+											<span>2019/11/14</span>
+										</div>
+									</li>
+								</ul>
+								<div class="rmb-list-more">
+									<span><a href="#">查看更多<i class="layui-icon layui-icon-right"></i></a></span>
+								</div>
+							</div>
+						</div>
+
+						<!--赛事通知-->
+						<div class="layui-row layui-border">
+							<div class="layui-row" style="margin: 20px 20px 20px 20px;">
+								<span class="kc"><i class="layui-icon layui-icon-list"></i>赛事通知</span>
+								<hr />
+								<ul>
+									<li class="rmb-list">
+										<div class="rmb-list-product">
+											<a href=""><img src="img/微信图片_20191113143904_WPS图片.png" /></a>
+										</div>
+										<div class="rmb-list-title">
+											<span class="list-title"><a href="#">美国同意取消中国加征税，股票上涨股票上涨，美国同意取消中国加征税，股票上涨股票上涨</a></span>
+										</div>
+										<div class="rmb-list-date">
+											<span>2019/11/14</span>
+										</div>
+									</li>
+									<li class="rmb-list">
+										<div class="rmb-list-product">
+											<a href=""><img src="img/微信图片_20191113143904_WPS图片.png" /></a>
+										</div>
+										<div class="rmb-list-title">
+											<span class="list-title"><a href="#">美国同意取消中国加征税，股票上涨股票上涨，美国同意取消中国加征税，股票上涨股票上涨</a></span>
+										</div>
+										<div class="rmb-list-date">
+											<span>2019/11/14</span>
+										</div>
+									</li>
+									<li class="rmb-list">
+										<div class="rmb-list-product">
+											<a href=""><img src="img/微信图片_20191113143904_WPS图片.png" /></a>
+										</div>
+										<div class="rmb-list-title">
+											<span class="list-title"><a href="#">美国同意取消中国加征税，股票上涨股票上涨，美国同意取消中国加征税，股票上涨股票上涨</a></span>
+										</div>
+										<div class="rmb-list-date">
+											<span>2019/11/14</span>
+										</div>
+									</li>
+									<li class="rmb-list">
+										<div class="rmb-list-product">
+											<a href=""><img src="img/微信图片_20191113143904_WPS图片.png" /></a>
+										</div>
+										<div class="rmb-list-title">
+											<span class="list-title"><a href="#">美国同意取消中国加征税，股票上涨股票上涨，美国同意取消中国加征税，股票上涨股票上涨</a></span>
+										</div>
+										<div class="rmb-list-date">
+											<span>2019/11/14</span>
+										</div>
+									</li>
+									<li class="rmb-list">
+										<div class="rmb-list-product">
+											<a href=""><img src="img/微信图片_20191113143904_WPS图片.png" /></a>
+										</div>
+										<div class="rmb-list-title">
+											<span class="list-title"><a href="#">美国同意取消中国加征税，股票上涨股票上涨，美国同意取消中国加征税，股票上涨股票上涨</a></span>
+										</div>
+										<div class="rmb-list-date">
+											<span>2019/11/14</span>
+										</div>
+									</li>
+								</ul>
+								<div class="rmb-list-more">
+									<span><a href="#">查看更多<i class="layui-icon layui-icon-right"></i></a></span>
+								</div>
+							</div>
+						</div>
+						<!--公司信息-->
+						<div class="layui-row layui-border">
+							<div class="layui-row" style="margin: 20px 20px 20px 20px;">
+								<span class="kc"><i class="layui-icon layui-icon-list"></i>公司信息</span>
+								<hr />
+								<div class="rmb-content">
+									<p>
+										深圳市信力达机电科技有限公司成立于 2013 年，集研发、生产、销 售为一体，是一家专注于为全国职业院校提供汽车教学整体解决方案的 公司。 信力达以专业·创新·值得信赖为核心价值，拥有汽车行业的专业 技术人员、市场销售人员和课程研发人员，在汽车专业规划建设、方案 设计、课程开发、师资培训、维修服务等方面具备专业技能及丰富经验。
+									</p>
+								</div>
+								<div class="rmb-content">
+									<span>荣誉:</span>
+									<p>
+										广东省技工院校首届新能源大赛技术设备唯一支持单位 第 45 届世界技能大赛全国选拔赛支持单位 联系电话：0755-28282687；联系人：徐小姐
+									</p>
+								</div>
+								<div class="rmb-content">
+									<i>
+										联系电话：0755-28282687
+										<br />
+										联系人：徐小姐
+									</i>
+								</div>
+
+								<div class="rmb-list-more" style="padding-bottom: 20px;">
+									<span><a href="#">查看更多<i class="layui-icon layui-icon-right"></i></a></span>
+								</div>
+							</div>
+						</div>
+
+						<!--意见反馈-->
+
+						<div class="layui-row layui-border">
+							<div class="layui-row" style="margin: 20px 20px 20px 20px;">
+								<span class="kc"><i class="layui-icon layui-icon-list"></i>留言反馈</span>
+								<hr />
+								<form class="layui-form" autocomplete="off" style="padding-bottom: 5px;text-align: center;">
+									<div class="layui-form-item">
+										<div class="layui-input-block">
+											<input type="text" name="name" placeholder="你的名字" lay-verify="required" class="layui-input" />
+										</div>
+									</div>
+									<div class="layui-form-item">
+										<div class="layui-input-block">
+											<input type="text" name="name" placeholder="你的电话" lay-verify="required|phone" class="layui-input" />
+										</div>
+									</div>
+									<div class="layui-form-item">
+										<div class="layui-input-block">
+											<input type="text" name="name" placeholder="你的邮箱" lay-verify="required|email" class="layui-input" />
+										</div>
+									</div>
+									<div class="layui-form-item">
+										<div class="layui-input-block">
+											<textarea name="answerDetail" required lay-verify="required" placeholder="请输入" class="layui-textarea"></textarea>
+										</div>
+									</div>
+									<div class="layui-form-item">
+										<div class="layui-input-block">
+											<button class="layui-btn layui-btn-radius layui-btn-primary" lay-submit lay-filter="formDemoMultiple">提交反馈</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			layui.use(['element', 'carousel'], function() {
+				var element = layui.element,
+					carousel = layui.carousel;
+				carousel.render({
+					elem: '#test1',
+					width: '100%',
+					height: '600px',
+					arrow: 'always'
+				});
+				$('.rmb-icon-res').click(function() {
+					$(this).css('color', '#999999');
+				})
+				$('.rmb-icon-res').dblclick(function() {
+					$(this).css('color', '#ff0000');
+				})
+			});
+		</script>
+		<!--[if lt IE 9]>
+		  <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+		  <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+	</body>
+
+</html>

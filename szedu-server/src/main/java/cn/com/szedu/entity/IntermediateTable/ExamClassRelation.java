@@ -8,8 +8,8 @@ public class ExamClassRelation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String classId;
     private String examId;
+    private String classId;
 
     public Integer getId() {
         return id;
@@ -17,6 +17,14 @@ public class ExamClassRelation {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getExamId() {
+        return examId;
+    }
+
+    public void setExamId(String examId) {
+        this.examId = examId;
     }
 
     public String getClassId() {
@@ -27,11 +35,8 @@ public class ExamClassRelation {
         this.classId = classId;
     }
 
-    public String getExamId() {
-        return examId;
-    }
-
-    public void setExamId(String examId) {
+    public ExamClassRelation(String examId, String classId) {
         this.examId = examId;
+        this.classId = classId;
     }
 }
