@@ -21,6 +21,7 @@ public class AttendanceModel {
     private String studentName;//学生名字
     private String sid;//学生id
 
+
     public String getSid() {
         return sid;
     }

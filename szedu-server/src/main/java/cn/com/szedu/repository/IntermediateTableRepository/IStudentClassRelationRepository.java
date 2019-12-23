@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface IStudentClassRelationRepository extends JpaRepository<StudentClassRelation,Integer> {
 
+
     List<StudentClassRelation> findAllByClassId(String classId);
     boolean deleteByClassIdAndStudentId(String classId,String studentId);
     List<StudentClassRelation> findByClassIdIn(List<String> classId);

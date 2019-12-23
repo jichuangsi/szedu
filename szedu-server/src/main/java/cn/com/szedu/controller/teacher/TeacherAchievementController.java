@@ -6,6 +6,7 @@ import cn.com.szedu.model.UserInfoForToken;
 import cn.com.szedu.model.teacher.ClassExamModel;
 import cn.com.szedu.model.teacher.ExamClassResultModel;
 import cn.com.szedu.model.teacher.ExamModel;
+import cn.com.szedu.service.BackExamService;
 import cn.com.szedu.service.TeacherAchievementService;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
@@ -21,8 +22,12 @@ import javax.annotation.Resource;
 @Api("班级相关的api")
 @CrossOrigin
 public class TeacherAchievementController {
+
     @Resource
     private TeacherAchievementService teacherAchievementService;
+    @Resource
+    private BackExamService backExamService;
+
 
     @ApiOperation(value = "根据班级查询考试信息", notes = "")
     @ApiImplicitParams({
@@ -68,5 +73,14 @@ public class TeacherAchievementController {
     @PostMapping("/getAnswerSituation")
     public ResponseModel<ExamClassResultModel> getAnswerSituation(@ModelAttribute UserInfoForToken userInfo, @RequestParam String examId , @RequestParam String classId , @RequestParam int pageNum , @RequestParam int pageSize)throws TecherException {
         return  ResponseModel.sucess("",null);
+    }
+
+    @ApiOperation(value = "根据考试id查询考试详情", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/getExamDetailByTeacherid")
+    public ResponseModel getAllExam(@ModelAttribute UserInfoForToken userInfo,String examId) {
+        return ResponseModel.sucess("",backExamService.getExamByExamId(userInfo,examId));
     }
 }

@@ -1,6 +1,7 @@
 package cn.com.szedu.util;
 
 import cn.com.szedu.commons.Md5Util;
+import cn.com.szedu.constant.CourseStatus;
 import cn.com.szedu.entity.*;
 import cn.com.szedu.model.Student.StudentInfoModel;
 import cn.com.szedu.model.StudentModel;
@@ -149,22 +150,25 @@ public class MappingEntity3ModelCoverter {
      * @param model
      * @return
      */
-   /* public final static TeacherExamDetailModel CONVERTERFROMBACKEXAMDETAIL(Exam model) {
+    public final static TeacherExamDetailModel CONVERTERFROMBACKEXAMDETAIL(Exam model) {
         TeacherExamDetailModel att = new TeacherExamDetailModel();
        att.setExamId(model.getId());
        att.setExamName(model.getExamName());
-       att.setClassId(model.getClassId());
+     /*  att.setClassId(model.getClassId());*/
        att.setExamType(model.getExamType());
         att.setSubjectId(model.getSubjectId());
         att.setSubjectName(model.getSubjectName());
-       att.setTime(model.getStartTime());
-       att.setCheckWay(model.getCheckWay());
-       att.setFabutime(model.getReleaseTime());
+       att.setStartTime(model.getStartTime());
+       att.setEndTime(model.getEndTime());
+       /*att.setCheckWay(model.getCheckWay());
+       att.setFabutime(model.getReleaseTime());*/
+       att.setStatus(model.getStatus());
       att.setContent(model.getContent());
       att.setAuthorId(model.getCreatorId());
       att.setAuthorName(model.getCreatorName());
+      att.setTiqian(model.getTiqian());
         return att;
-    }*/
+    }
 
     /**
      * 课堂
@@ -188,7 +192,24 @@ public class MappingEntity3ModelCoverter {
       model.setEndTime(info.getEndTime());
         return model;
     }
-
+    public final static Course CONVERTERFROMBACKLESSON(TeacherLessonModel model) {
+        Course course = new Course();
+       course.setId(StringUtils.isEmpty(model.getLessonId())?UUID.randomUUID().toString().replaceAll("-", ""):model.getLessonId());
+       course.setCourseTitle(model.getLessonName());
+       course.setTeachAddress(model.getTeachAddress());
+       course.setLessonTypeId(model.getLessonTypeId());
+       course.setLessonTypeName(model.getLessonTypeName());
+       course.setTeacherId(model.getTeacherId());
+       course.setTeacherName(model.getTeacherName());
+      course.setSubjectId(model.getSubjectId());
+      course.setSubject(model.getSubjectName());
+      course.setChapter(model.getChapter());
+      course.setStartTime(model.getTeachTime());
+      course.setCourseTimeLength(model.getTeachTimeLength());
+      course.setContent(model.getLessonContent());
+      course.setStatus(CourseStatus.UNPUBLISH.getName());
+       return course;
+    }
     /**
      * 学生
      * @param userInfo
@@ -222,4 +243,23 @@ public class MappingEntity3ModelCoverter {
         return model1;
     }
 
+
+    /*public final static CourseWare CONVERTERFROMBACKCOURCEWARE(TeacherLessonModel model) {
+        Course course = new Course();
+        course.setId(StringUtils.isEmpty(model.getLessonId())?UUID.randomUUID().toString().replaceAll("-", ""):model.getLessonId());
+        course.setCourseTitle(model.getLessonName());
+        course.setTeachAddress(model.getTeachAddress());
+        course.setLessonTypeId(model.getLessonTypeId());
+        course.setLessonTypeName(model.getLessonTypeName());
+        course.setTeacherId(model.getTeacherId());
+        course.setTeacherName(model.getTeacherName());
+        course.setSubjectId(model.getSubjectId());
+        course.setSubject(model.getSubjectName());
+        course.setChapter(model.getChapter());
+        course.setStartTime(model.getTeachTime());
+        course.setCourseTimeLength(model.getTeachTimeLength());
+        course.setContent(model.getLessonContent());
+        course.setStatus(CourseStatus.UNPUBLISH.getName());
+        return course;
+    }*/
 }

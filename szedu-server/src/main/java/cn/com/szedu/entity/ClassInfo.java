@@ -10,6 +10,7 @@ import java.util.Date;
 @Table(name = "classInfo")
 @GenericGenerator(name = "jpa-uuid",strategy = "uuid")
 public class ClassInfo {
+
     @Id
     @GeneratedValue(generator = "jpa-uuid")
     private String id;

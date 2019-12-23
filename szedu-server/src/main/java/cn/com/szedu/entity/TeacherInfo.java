@@ -33,6 +33,7 @@ public class TeacherInfo {
     private long createTime = new Date().getTime();
     private long updateTime = new Date().getTime();
 
+
    /* @ManyToMany(fetch=FetchType.LAZY, targetEntity=ClassRelation.class)
     @JoinColumn(name = "id")
     private ClassRelation classRelation;

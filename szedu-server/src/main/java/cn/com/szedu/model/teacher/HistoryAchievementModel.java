@@ -16,6 +16,7 @@ public class HistoryAchievementModel {
     private String rank;//等级
     private String classId;//班级Id
 
+
     public String getStudentId() {
         return studentId;
     }

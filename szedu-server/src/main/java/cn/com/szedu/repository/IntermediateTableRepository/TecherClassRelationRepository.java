@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface TecherClassRelationRepository extends JpaRepository<ClassRelation,Integer> {
 
+
     public List<ClassRelation> findByTecherId(String techerId);
 
     Integer deleteByClassIdAndAndTecherId(String classId,String techerId);

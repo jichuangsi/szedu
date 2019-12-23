@@ -24,11 +24,21 @@ public class TeacherLessonModel {
     private String lessonTypeName;//课堂类型
     private String teachAddress;//上课地点
     private String lessonCover;//课堂封面
-    private List<CourseWare> courseWares;
+    private List<CourseWare> courseWares;//上课资源
+    private List<CourseWare> pushcourseWares;//推送资源资源
     private List<ClassModel> classModelList;//班级
     private Integer sum;
     private Timestamp endTime;//结束时间
     private List<StudentCourseScoreModel> score;//课堂评分
+
+
+    public List<CourseWare> getPushcourseWares() {
+        return pushcourseWares;
+    }
+
+    public void setPushcourseWares(List<CourseWare> pushcourseWares) {
+        this.pushcourseWares = pushcourseWares;
+    }
 
     public List<StudentCourseScoreModel> getScore() {
         return score;

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IStudentInfoRespository extends JpaRepository<StudentInfo,Integer> {
 
+
     StudentInfo findFirstByid(String id);
 
     //Integer findByStudentId(String studentId);

@@ -4,6 +4,7 @@ import javax.validation.constraints.Pattern;
 
 public class StudentModel  {
 
+
     private String id;
     @Pattern(regexp = "^[a-zA-Z0-9_-]{4,16}$",message = "账号必须是4到16位（字母，数字，下划线，减号）")
     private String account;

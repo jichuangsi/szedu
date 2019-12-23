@@ -45,13 +45,14 @@ public class TecherClassService {
     @Resource
     private IClassInfoMapper classInfoMapper;
 
+
     /**
      * 学校管理员创建班级
      * @param userInfo
      * @param model
      * @throws UserServiceException
      */
-    public void insertClass(UserInfoForToken userInfo,ClassModel model) throws UserServiceException{
+    public ClassModel insertClass(UserInfoForToken userInfo,ClassModel model) throws UserServiceException{
         if (StringUtils.isEmpty(userInfo) ||StringUtils.isEmpty(model)){
             throw  new UserServiceException(ResultCode.PARAM_MISS_MSG);
         }
@@ -75,6 +76,14 @@ public class TecherClassService {
         techerClassRelationRepository.save(classRelation);//班级老师关系表
         OpLog opLog=new OpLog(userInfo.getUserName(),"添加","添加班级");
         opLogRepository.save(opLog);
+
+        //返回信息
+        ClassModel classModel=new ClassModel();
+        classModel.setSpecialty(info.getSpeciality());
+        classModel.setClassName(info.getClassName());
+        classModel.setCreateTime(info.getCreateTime());
+        return classModel;
+
     }
 
     /**
@@ -210,13 +219,19 @@ public class TecherClassService {
      * @param
      * @throws UserServiceException
      */
-    public void upadteClassStatus(UserInfoForToken userInfo,String classId,String status) throws UserServiceException{
+    public ClassModel upadteClassStatus(UserInfoForToken userInfo,String classId,String status) throws UserServiceException{
         if (StringUtils.isEmpty(userInfo) || StringUtils.isEmpty(classId) ||StringUtils.isEmpty(status)) {
             throw  new UserServiceException(ResultCode.PARAM_MISS_MSG);
         }
         ClassInfo info =classInfoRepository.findExistById(classId);
         info.setStatus(status);
         classInfoRepository.save(info);
+
+        ClassModel classModel=new ClassModel();
+            classModel.setSpecialty(info.getSpeciality());
+            classModel.setClassName(info.getClassName());
+            classModel.setStatus(status);
+            return classModel;
     }
 
     /**
@@ -245,6 +260,11 @@ public class TecherClassService {
             throw  new TecherException(ResultCode.PARAM_MISS_MSG);
         }
         techerClassRelationRepository.deleteByClassIdAndAndTecherId(classId,userInfo.getUserId());
+
+       /* ClassModel classModel=new ClassModel();
+        classModel.setSpecialty(info.getSpeciality());
+        classModel.setClassName(info.getClassName());
+        classModel.setStatus(status);*/
     }
 
 

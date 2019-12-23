@@ -1,6 +1,7 @@
 package cn.com.szedu.model.teacher;
 
 public class SudentModel {
+
     private String id;
     private String name;
     private String sex;

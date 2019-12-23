@@ -10,6 +10,7 @@ import java.util.List;
 
 @Mapper
 public interface IClassInfoMapper {
+
     @Select("<script>SELECT c.id AS classId,c.`class_name` AS className ,c.`school_id` AS schoolId,c.`school_name` AS schoolName,\n" +
             "c.`speciality` AS specialty,c.`ru_time` AS enrollTime,c.`open_time` AS startTime,c.`content` AS content,\n" +
             "c.`status` AS `status` ,c.`founder` AS founder,c.`founder_id` AS founderId,c.`educational_system` AS educationalSystem\n" +

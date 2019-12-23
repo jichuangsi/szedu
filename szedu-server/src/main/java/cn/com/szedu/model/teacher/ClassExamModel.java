@@ -17,6 +17,7 @@ public class ClassExamModel {
     private List<String> aName;//实考人
     private ClassGradeDistributionModel model;
 
+
     public ClassGradeDistributionModel getModel() {
         return model;
     }

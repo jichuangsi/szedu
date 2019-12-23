@@ -8,6 +8,7 @@ import javax.persistence.*;
 @Table(name = "techer_course_relation")
 @GenericGenerator(name = "jpa-uuid",strategy = "uuid")
 public class TeacherCourseRelation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

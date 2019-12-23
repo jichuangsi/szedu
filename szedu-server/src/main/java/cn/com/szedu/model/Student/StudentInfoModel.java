@@ -25,6 +25,7 @@ public class StudentInfoModel {
 
     private String accessToken;
 
+
     public String getAccessToken() {
         return accessToken;
     }

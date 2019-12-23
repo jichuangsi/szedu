@@ -8,7 +8,7 @@ public class CourseResourceRelation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer courseId;
+    private String courseId;
     private String resourceid;
 
     public Integer getId() {
@@ -19,11 +19,11 @@ public class CourseResourceRelation {
         this.id = id;
     }
 
-    public Integer getCourseId() {
+    public String getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(Integer courseId) {
+    public void setCourseId(String courseId) {
         this.courseId = courseId;
     }
 
@@ -32,6 +32,11 @@ public class CourseResourceRelation {
     }
 
     public void setResourceid(String resourceid) {
+        this.resourceid = resourceid;
+    }
+
+    public CourseResourceRelation(String courseId, String resourceid) {
+        this.courseId = courseId;
         this.resourceid = resourceid;
     }
 }

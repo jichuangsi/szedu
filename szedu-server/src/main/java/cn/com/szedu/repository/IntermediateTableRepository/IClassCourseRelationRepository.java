@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface IClassCourseRelationRepository extends JpaRepository<CourseClassRelation,Integer> {
 
+    Integer deleteByCourseId(String courseId);
     List<CourseClassRelation> findByCourseId(String courseId);
 }

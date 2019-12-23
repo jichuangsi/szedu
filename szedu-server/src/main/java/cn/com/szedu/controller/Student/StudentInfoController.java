@@ -18,6 +18,7 @@ import javax.annotation.Resource;
 @CrossOrigin
 public class StudentInfoController {
 
+
   /*  @Resource
     private StudentInfoService studentInfoService;*/
    /* @ApiOperation("登录")

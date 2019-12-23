@@ -1,6 +1,7 @@
 package cn.com.szedu.model.teacher;
 
 public class TeacherModel {
+
     private String teacherId;
     private String acount;
     private String teacherName;

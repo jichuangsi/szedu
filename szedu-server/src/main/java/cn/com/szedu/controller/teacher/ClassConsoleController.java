@@ -47,9 +47,10 @@ public class ClassConsoleController {
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @PostMapping("/addClass")
-    public ResponseModel addClass(@ModelAttribute UserInfoForToken userInfo,@RequestBody ClassModel model) throws UserServiceException {
-        techerClassService.insertClass(userInfo,model);
-        return  ResponseModel.sucessWithEmptyData("");
+    public ResponseModel<ClassModel> addClass(@ModelAttribute UserInfoForToken userInfo,@RequestBody ClassModel model) throws UserServiceException {
+        /*techerClassService.insertClass(userInfo,model);*/
+        return  ResponseModel.sucess("",techerClassService.insertClass(userInfo,model));
+       // return  ResponseModel.sucessWithEmptyData("");
     }
 
     @ApiOperation(value = "查询所有班级", notes = "")
@@ -94,9 +95,10 @@ public class ClassConsoleController {
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @GetMapping("/updateClassStatus")
-    public ResponseModel updateClassStatus(@ModelAttribute UserInfoForToken userInfo,@RequestParam String classId,@RequestParam String status) throws UserServiceException {
-        techerClassService.upadteClassStatus(userInfo, classId, status);
-        return  ResponseModel.sucessWithEmptyData("");
+    public ResponseModel<ClassModel> updateClassStatus(@ModelAttribute UserInfoForToken userInfo,@RequestParam String classId,@RequestParam String status) throws UserServiceException {
+        /*techerClassService.upadteClassStatus(userInfo, classId, status);
+        return  ResponseModel.sucessWithEmptyData("");*/
+        return  ResponseModel.sucess("",techerClassService.upadteClassStatus(userInfo, classId, status));
     }
 
     @ApiOperation(value = "删除班级", notes = "")

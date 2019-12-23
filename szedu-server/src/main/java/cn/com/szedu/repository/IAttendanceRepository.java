@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface IAttendanceRepository extends JpaRepository<AttendanceInClass,Integer> {
 
+
     List<AttendanceInClass> findAllByStudentNameLike(String name);
 
     List<AttendanceInClass> findByCourseId(String courseId);

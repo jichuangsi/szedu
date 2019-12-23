@@ -12,7 +12,7 @@ import java.util.Date;
 @Table(name = "attendance_duty")
 @GenericGenerator(name = "jpa-uuid",strategy = "uuid")
 public class AbsenceFromDuty {
-
+//缺勤表
     @Id
     @GeneratedValue(generator = "jpa-uuid")
     private String aid;

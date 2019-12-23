@@ -10,6 +10,7 @@ public interface ICourseRepository extends JpaRepository<Course,String> {
     Course findFirstByid(String id);
     void deleteByid(String id);
 
+
    // List<Course> findBySubjectAndLessonTypeNameAndStartTime(String subject, String type, Date time);
 
     List<Course> findBySubjectAndLessonTypeNameAndStartTimeAndIdIn(String subject, String type, Date time,List<String> classId);

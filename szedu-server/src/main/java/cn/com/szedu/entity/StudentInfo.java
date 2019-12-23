@@ -34,6 +34,7 @@ public class StudentInfo {
     private long createTime = new Date().getTime();
     private long updateTime = new Date().getTime();
 
+
     public String getId() {
         return id;
     }

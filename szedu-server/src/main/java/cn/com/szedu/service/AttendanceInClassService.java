@@ -44,6 +44,7 @@ public class AttendanceInClassService {
     @Resource
     private ICourseRepository courseRepository;
 
+
     /**
      * 考勤
      * @param userInfo

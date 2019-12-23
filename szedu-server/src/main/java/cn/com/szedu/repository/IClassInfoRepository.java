@@ -19,8 +19,5 @@ public interface IClassInfoRepository extends JpaRepository<ClassInfo,Integer> {
     Integer countBySpecialityAndRuTimeAndEducationalSystemAndClassName(String specialtity,String ruTime,String ed,String className);
     List<ClassInfo> findBySchoolIdAndStatus(String schoolId,String status);
 
-    /*@Query(value = "SELECT c.*,t.* FROM class_info c INNER JOIN techer_class_relation tcr \n" +
-            "ON c.id=tcr.class_id INNER JOIN teacher_info t ON tcr.techer_id=t.id\n" +
-            "WHERE t.id=? ORDER BY c.create_time DESC\n")
-   List<ClassInfo> getClassInfo();*/
+
 }

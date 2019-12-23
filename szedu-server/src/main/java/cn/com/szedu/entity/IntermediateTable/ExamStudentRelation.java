@@ -5,6 +5,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "examClassRelation")
 public class ExamStudentRelation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

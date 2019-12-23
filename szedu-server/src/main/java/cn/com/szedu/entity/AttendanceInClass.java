@@ -12,6 +12,7 @@ import java.util.Date;
 @Table(name = "attendance_in_class")
 @GenericGenerator(name = "jpa-uuid",strategy = "uuid")
 public class AttendanceInClass {
+    //考勤表
     @Id
     @GeneratedValue(generator = "jpa-uuid")
     private String aid;
@@ -23,6 +24,7 @@ public class AttendanceInClass {
     private String studentName;//学生名字
     private String classId;//班级id
     private String className;//班级名称
+
 
 
     public String getSid() {

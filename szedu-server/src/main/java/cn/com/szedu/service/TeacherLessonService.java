@@ -3,9 +3,7 @@ package cn.com.szedu.service;
 import cn.com.szedu.constant.CourseStatus;
 import cn.com.szedu.constant.ResultCode;
 import cn.com.szedu.entity.*;
-import cn.com.szedu.entity.IntermediateTable.CourseClassRelation;
-import cn.com.szedu.entity.IntermediateTable.StudentClassRelation;
-import cn.com.szedu.entity.IntermediateTable.TeacherCourseRelation;
+import cn.com.szedu.entity.IntermediateTable.*;
 import cn.com.szedu.exception.TecherException;
 import cn.com.szedu.model.UserInfoForToken;
 import cn.com.szedu.model.teacher.AttendanceCourseModel;
@@ -13,15 +11,15 @@ import cn.com.szedu.model.teacher.AttendanceModel;
 import cn.com.szedu.model.teacher.ClassModel;
 import cn.com.szedu.model.teacher.TeacherLessonModel;
 import cn.com.szedu.repository.*;
-import cn.com.szedu.repository.IntermediateTableRepository.IClassCourseRelationRepository;
-import cn.com.szedu.repository.IntermediateTableRepository.IStudentClassRelationRepository;
-import cn.com.szedu.repository.IntermediateTableRepository.ITeacherCouseRelationRepository;
+import cn.com.szedu.repository.IntermediateTableRepository.*;
 import cn.com.szedu.util.MappingEntity3ModelCoverter;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -50,7 +48,12 @@ public class TeacherLessonService {
     @Resource
     private IAbsenceFromDutyRepository absenceFromDutyRepository;
     @Resource
-    private ICourseWareRespository courseWareRespository;
+    private ICoursePushWareRelationRepository coursePushWareRelationRepository;
+    @Resource
+    private ICourseWareRelationRepository courseWareRelationRepository;
+    @Resource
+    private IOpLogRepository opLogRepository;
+
 
     /**
      * 我的课堂
@@ -94,6 +97,35 @@ public class TeacherLessonService {
     }
 
     /**
+     * 新增课堂
+     * @param userInfo
+     * @param model
+     * @throws TecherException
+     */
+    public void addLesson(UserInfoForToken userInfo,TeacherLessonModel model)throws TecherException{
+        if (StringUtils.isEmpty(userInfo)||StringUtils.isEmpty(model)){throw new TecherException(ResultCode.PARAM_MISS_MSG);}
+
+        Course course=courseRepository.save(MappingEntity3ModelCoverter.CONVERTERFROMBACKLESSON(model));
+        List<CourseClassRelation> courceClass=new ArrayList<CourseClassRelation>();
+        model.getClassModelList().forEach(c->{
+            CourseClassRelation relation=new CourseClassRelation(course.getId(),c.getClassId());
+            courceClass.add(relation);
+        });
+        classCourseRelationRepository.saveAll(courceClass);
+        List<CourseResourceRelation> courceware=new ArrayList<CourseResourceRelation>();
+        model.getCourseWares().forEach(c->{//上课资源
+            CourseResourceRelation crr=new CourseResourceRelation(course.getId(),c.getId());
+            courceware.add(crr);
+        });
+        courseWareRelationRepository.saveAll(courceware);
+        List<CoursePushResourceRelation> courcewarepush=new ArrayList<CoursePushResourceRelation>();
+        model.getPushcourseWares().forEach(cc->{//推送资源
+            CoursePushResourceRelation cprr=new CoursePushResourceRelation(course.getId(),cc.getId());
+            courcewarepush.add(cprr);
+        });
+        coursePushWareRelationRepository.saveAll(courcewarepush);
+    }
+    /**
      * 删除课堂
      * @param userInfo
      * @param lessionId
@@ -101,6 +133,11 @@ public class TeacherLessonService {
     public void deleteLession(UserInfoForToken userInfo, String lessionId)throws TecherException{
         if (StringUtils.isEmpty(userInfo) || StringUtils.isEmpty(lessionId)){throw  new TecherException(ResultCode.PARAM_MISS_MSG);}
         courseRepository.deleteByid(lessionId);
+        coursePushWareRelationRepository.deleteByCourseId(lessionId);
+        courseWareRelationRepository.deleteByCourseId(lessionId);
+        classCourseRelationRepository.deleteByCourseId(lessionId);
+        OpLog opLog=new OpLog(userInfo.getUserName(),"删除","删除课堂");
+        opLogRepository.save(opLog);
     }
 
     /**
@@ -166,7 +203,7 @@ public class TeacherLessonService {
      * @param courseId
      * @return
      */
-    public TeacherLessonModel getCourseDetail(UserInfoForToken userInfo,String courseId){
+    public TeacherLessonModel getCourseDetail(UserInfoForToken userInfo,String courseId)throws TecherException{
         ClassModel classModel=new ClassModel();
         List<ClassModel> classModelList=new ArrayList<ClassModel>();
         List<CourseClassRelation> acr=classCourseRelationRepository.findByCourseId(courseId);//根据课堂Id查询班级
@@ -233,23 +270,17 @@ public class TeacherLessonService {
     }
 
 
-    /**
-     * 课堂签到
-     * @param info
-     * @param model
+
+    /**上传课程图片
+     *
+     * @param file
+     * @return
+     * @throws IOException
      */
-    public void addAttendace(UserInfoForToken info, AttendanceModel model)throws TecherException {
-        if (StringUtils.isEmpty(info)||StringUtils.isEmpty(model)){throw  new TecherException(ResultCode.PARAM_MISS_MSG);}
-        List<CourseClassRelation> cclist=classCourseRelationRepository.findByCourseId(model.getCourseId());//根据courseId查班级
-        for (CourseClassRelation cr:cclist ) {//根据班级和学生查找班级
-            StudentClassRelation scr=studentClassRelationRepository.findByClassIdAndStudentId(cr.getClassId(),model.getSid());
-            if (scr!=null){
-                ClassInfo cinso=classInfoRepository.findExistById(scr.getClassId());
-                model.setClassId(scr.getClassId());
-                model.setClassName(cinso.getClassName());
-            }
-        }
-        AttendanceInClass aclass=MappingEntity3ModelCoverter.CONVERTERFROMBACKATTENDANCEMODEL(info, model);
-        attendanceRepository.save(aclass);
+    public String addCourseImg(MultipartFile file)throws IOException {
+        Course course=new Course();
+        course.setCoursePic(file.getBytes());
+        Course course2=courseRepository.save(course);
+        return course2.getId();
     }
 }

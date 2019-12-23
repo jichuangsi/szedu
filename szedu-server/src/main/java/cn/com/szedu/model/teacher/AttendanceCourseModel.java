@@ -14,6 +14,7 @@ public class AttendanceCourseModel {
    private String staus;//考勤状态
     private String className;//班级
 
+
     public String getClassName() {
         return className;
     }

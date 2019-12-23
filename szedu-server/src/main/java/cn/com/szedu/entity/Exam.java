@@ -30,6 +30,9 @@ public class Exam {
     private String status;//状态（发布/未发布）
     private String testPaperId;//试卷
     private long createTime=new Date().getTime();
+    /*private String classId;//班级
+    private Date ReleaseTime;//发布时间*/
+
 
     public String getId() {
         return id;

@@ -6,6 +6,7 @@ public class TeacherAddClassModel {
     private String speciality;
     private Boolean exist;
 
+
     public String getClassId() {
         return classId;
     }

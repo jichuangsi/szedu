@@ -5,5 +5,6 @@ import cn.com.szedu.model.Student.StudentInfoModel;
 
 public interface StudentInfoService {
 
+
     public StudentInfoModel loginStudent(StudentInfoModel model)throws UserServiceException;
 }

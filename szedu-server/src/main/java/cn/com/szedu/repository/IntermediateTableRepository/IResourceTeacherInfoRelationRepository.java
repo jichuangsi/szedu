@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface IResourceTeacherInfoRelationRepository extends JpaRepository<ResourceTeacherInfoRelation,Integer> {
 
+
     List<ResourceTeacherInfoRelation> findByTeacherId(String teacherId);
 }

@@ -17,7 +17,11 @@ public class TeacherExamDetailModel {
     private String content;//考试简介
     private List<TestPaperModel> testPaperModels;//试卷
     private String className;
-    private Date time;//考试时间
+    private String status;//状态（发布/未发布）
+    private String tiqian;//提前阅卷（min）
+    private long startTime;//规定时间段答题
+    private long endTime;
+    private String testPaperId;//试卷
     private Date fabutime;//发布时间
 
     public String getExamId() {
@@ -124,19 +128,51 @@ public class TeacherExamDetailModel {
         this.className = className;
     }
 
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
-    }
-
     public Date getFabutime() {
         return fabutime;
     }
 
     public void setFabutime(Date fabutime) {
         this.fabutime = fabutime;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getTiqian() {
+        return tiqian;
+    }
+
+    public void setTiqian(String tiqian) {
+        this.tiqian = tiqian;
+    }
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getTestPaperId() {
+        return testPaperId;
+    }
+
+    public void setTestPaperId(String testPaperId) {
+        this.testPaperId = testPaperId;
     }
 }

@@ -12,6 +12,7 @@ public class ExamClassResultModel {
     private Integer ranking;//排名
     private String remarks;//备注
 
+
     public String getExamId() {
         return examId;
     }

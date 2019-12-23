@@ -20,6 +20,7 @@ public class SchoolInfoModel {
     private String remarks;//备注
     private List<SchoolCurriculumRelation> schoolCurriculumRelations;
 
+
     public String getId() {
         return id;
     }

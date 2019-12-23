@@ -6,6 +6,7 @@ import javax.persistence.*;
 @Table(name = "resource_teacherInfo_relation")
 public class ResourceTeacherInfoRelation {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
