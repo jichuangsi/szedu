@@ -45,8 +45,8 @@ public class TecherClassService {
     private IOpLogRepository opLogRepository;
     @Resource
     private IClassInfoMapper classInfoMapper;
-    @Resource
-    private MessageRepository messageRepository;
+   /* @Resource
+    private MessageRepository messageRepository;*/
 
 
     /**
@@ -80,10 +80,10 @@ public class TecherClassService {
         OpLog opLog=new OpLog(userInfo.getUserName(),"添加","添加班级");
         opLogRepository.save(opLog);
 
-        //系统信息
+       /* //系统信息
         String messages="成功创建班级-----您创建了一个新班级，班级信息：专业-"+info.getSpeciality()+"  班级-"+info.getClassName();
         Message message=new Message(userInfo.getUserId(),userInfo.getUserName(),messages);
-        messageRepository.save(message);
+        messageRepository.save(message);*/
       /*  //返回信息
         ClassModel classModel=new ClassModel();
         classModel.setSpecialty(info.getSpeciality());
@@ -203,10 +203,10 @@ public class TecherClassService {
               classRelation.setTecherId(userInfo.getUserId());//老师id
              techerClassRelationRepository.save(classRelation);//班级老师关系表
               ClassInfo classInfo=classInfoRepository.findExistById(classId[i]);
-              //系统信息
+            /*  //系统信息
               String messages="成功新增班级-----您新增了一个新班级，班级信息：专业-"+classInfo.getSpeciality()+"  班级-"+classInfo.getClassName();
               Message message=new Message(userInfo.getUserId(),userInfo.getUserName(),messages);
-              messageRepository.save(message);
+              messageRepository.save(message);*/
           }
         }
     }
@@ -242,7 +242,7 @@ public class TecherClassService {
         info.setStatus(status);
         classInfoRepository.save(info);
 
-        if (status.equalsIgnoreCase("A")){
+       /* if (status.equalsIgnoreCase("A")){
             //系统信息
             String messages="启用-----您已启用班级的使用权限，班级信息：专业-"+info.getSpeciality()+"  班级-"+info.getClassName();
             Message message=new Message(userInfo.getUserId(),userInfo.getUserName(),messages);
@@ -252,7 +252,7 @@ public class TecherClassService {
             String messages="停用-----您已停用班级的使用权限，班级信息：专业-"+info.getSpeciality()+"  班级-"+info.getClassName();
             Message message=new Message(userInfo.getUserId(),userInfo.getUserName(),messages);
             messageRepository.save(message);
-        }
+        }*/
        /* ClassModel classModel=new ClassModel();
             classModel.setSpecialty(info.getSpeciality());
             classModel.setClassName(info.getClassName());
@@ -288,10 +288,10 @@ public class TecherClassService {
         ClassInfo info=classInfoRepository.findExistById(classId);
         techerClassRelationRepository.deleteByClassIdAndAndTecherId(classId,userInfo.getUserId());
 
-        //系统信息
+      /*  //系统信息
         String messages="删除-----您已将次班级从您的班级中移走，班级信息：专业-"+info.getSpeciality()+"  班级-"+info.getClassName();
         Message message=new Message(userInfo.getUserId(),userInfo.getUserName(),messages);
-        messageRepository.save(message);
+        messageRepository.save(message);*/
 
        /* ClassModel classModel=new ClassModel();
         classModel.setSpecialty(info.getSpeciality());
