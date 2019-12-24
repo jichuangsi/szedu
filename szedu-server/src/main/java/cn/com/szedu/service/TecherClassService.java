@@ -15,6 +15,7 @@ import cn.com.szedu.repository.IOpLogRepository;
 import cn.com.szedu.repository.ITeacherInfoRepository;
 import cn.com.szedu.repository.IntermediateTableRepository.IStudentClassRelationRepository;
 import cn.com.szedu.repository.IntermediateTableRepository.TecherClassRelationRepository;
+import cn.com.szedu.repository.MessageRepository;
 import cn.com.szedu.util.MappingEntity3ModelCoverter;
 import com.github.pagehelper.PageInfo;
 import org.springframework.data.domain.Sort;
@@ -44,6 +45,8 @@ public class TecherClassService {
     private IOpLogRepository opLogRepository;
     @Resource
     private IClassInfoMapper classInfoMapper;
+    @Resource
+    private MessageRepository messageRepository;
 
 
     /**
@@ -52,7 +55,7 @@ public class TecherClassService {
      * @param model
      * @throws UserServiceException
      */
-    public ClassModel insertClass(UserInfoForToken userInfo,ClassModel model) throws UserServiceException{
+    public void insertClass(UserInfoForToken userInfo,ClassModel model) throws UserServiceException{
         if (StringUtils.isEmpty(userInfo) ||StringUtils.isEmpty(model)){
             throw  new UserServiceException(ResultCode.PARAM_MISS_MSG);
         }
@@ -77,12 +80,19 @@ public class TecherClassService {
         OpLog opLog=new OpLog(userInfo.getUserName(),"添加","添加班级");
         opLogRepository.save(opLog);
 
-        //返回信息
+        //系统信息
+        String messages="成功创建班级-----您创建了一个新班级，班级信息：专业-"+info.getSpeciality()+"  班级-"+info.getClassName();
+        Message message=new Message(userInfo.getUserId(),userInfo.getUserName(),messages);
+        messageRepository.save(message);
+      /*  //返回信息
         ClassModel classModel=new ClassModel();
         classModel.setSpecialty(info.getSpeciality());
         classModel.setClassName(info.getClassName());
         classModel.setCreateTime(info.getCreateTime());
-        return classModel;
+        return classModel;*/
+     /* String message="您先添加了";
+      return message;*/
+
 
     }
 
@@ -191,7 +201,12 @@ public class TecherClassService {
               classRelation.setId(UUID.randomUUID().toString().replaceAll("-", ""));
               classRelation.setClassId(classId[i]);//班级id
               classRelation.setTecherId(userInfo.getUserId());//老师id
-              techerClassRelationRepository.save(classRelation);//班级老师关系表
+             techerClassRelationRepository.save(classRelation);//班级老师关系表
+              ClassInfo classInfo=classInfoRepository.findExistById(classId[i]);
+              //系统信息
+              String messages="成功新增班级-----您新增了一个新班级，班级信息：专业-"+classInfo.getSpeciality()+"  班级-"+classInfo.getClassName();
+              Message message=new Message(userInfo.getUserId(),userInfo.getUserName(),messages);
+              messageRepository.save(message);
           }
         }
     }
@@ -219,7 +234,7 @@ public class TecherClassService {
      * @param
      * @throws UserServiceException
      */
-    public ClassModel upadteClassStatus(UserInfoForToken userInfo,String classId,String status) throws UserServiceException{
+    public void upadteClassStatus(UserInfoForToken userInfo,String classId,String status) throws UserServiceException{
         if (StringUtils.isEmpty(userInfo) || StringUtils.isEmpty(classId) ||StringUtils.isEmpty(status)) {
             throw  new UserServiceException(ResultCode.PARAM_MISS_MSG);
         }
@@ -227,11 +242,22 @@ public class TecherClassService {
         info.setStatus(status);
         classInfoRepository.save(info);
 
-        ClassModel classModel=new ClassModel();
+        if (status.equalsIgnoreCase("A")){
+            //系统信息
+            String messages="启用-----您已启用班级的使用权限，班级信息：专业-"+info.getSpeciality()+"  班级-"+info.getClassName();
+            Message message=new Message(userInfo.getUserId(),userInfo.getUserName(),messages);
+            messageRepository.save(message);
+        }else if (status.equalsIgnoreCase("B")){
+            //系统信息
+            String messages="停用-----您已停用班级的使用权限，班级信息：专业-"+info.getSpeciality()+"  班级-"+info.getClassName();
+            Message message=new Message(userInfo.getUserId(),userInfo.getUserName(),messages);
+            messageRepository.save(message);
+        }
+       /* ClassModel classModel=new ClassModel();
             classModel.setSpecialty(info.getSpeciality());
             classModel.setClassName(info.getClassName());
             classModel.setStatus(status);
-            return classModel;
+            return classModel;*/
     }
 
     /**
@@ -259,7 +285,13 @@ public class TecherClassService {
         if (StringUtils.isEmpty(userInfo) || StringUtils.isEmpty(classId)) {
             throw  new TecherException(ResultCode.PARAM_MISS_MSG);
         }
+        ClassInfo info=classInfoRepository.findExistById(classId);
         techerClassRelationRepository.deleteByClassIdAndAndTecherId(classId,userInfo.getUserId());
+
+        //系统信息
+        String messages="删除-----您已将次班级从您的班级中移走，班级信息：专业-"+info.getSpeciality()+"  班级-"+info.getClassName();
+        Message message=new Message(userInfo.getUserId(),userInfo.getUserName(),messages);
+        messageRepository.save(message);
 
        /* ClassModel classModel=new ClassModel();
         classModel.setSpecialty(info.getSpeciality());
@@ -267,7 +299,19 @@ public class TecherClassService {
         classModel.setStatus(status);*/
     }
 
-
+    /**
+     * 查询全部
+     * @param userInfo
+     * @return
+     * @throws UserServiceException
+     */
+    public List<ClassInfo> getAllClass(UserInfoForToken userInfo)throws UserServiceException {
+        if (StringUtils.isEmpty(userInfo)){
+            throw new UserServiceException(ResultCode.PARAM_MISS_MSG);
+        }
+        List<ClassInfo> classInfos=classInfoRepository.findAll();
+        return classInfos;
+    }
 
 
 }

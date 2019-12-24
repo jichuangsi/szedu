@@ -1,6 +1,7 @@
 package cn.com.szedu.controller.teacher;
 
 import cn.com.szedu.entity.AttendanceInClass;
+import cn.com.szedu.entity.ClassInfo;
 import cn.com.szedu.entity.StudentInfo;
 import cn.com.szedu.exception.TecherException;
 import cn.com.szedu.exception.UserServiceException;
@@ -32,9 +33,6 @@ import java.util.List;
 @Api("班级相关的api")
 @CrossOrigin
 public class ClassConsoleController {
-
-
-
     @Resource
     private TecherClassService techerClassService;
     @Resource
@@ -47,10 +45,10 @@ public class ClassConsoleController {
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @PostMapping("/addClass")
-    public ResponseModel<ClassModel> addClass(@ModelAttribute UserInfoForToken userInfo,@RequestBody ClassModel model) throws UserServiceException {
-        /*techerClassService.insertClass(userInfo,model);*/
-        return  ResponseModel.sucess("",techerClassService.insertClass(userInfo,model));
-       // return  ResponseModel.sucessWithEmptyData("");
+    public ResponseModel addClass(@ModelAttribute UserInfoForToken userInfo,@RequestBody ClassModel model) throws UserServiceException {
+        techerClassService.insertClass(userInfo,model);
+        //return  ResponseModel.sucess("",techerClassService.insertClass(userInfo,model));
+        return  ResponseModel.sucessWithEmptyData("");
     }
 
     @ApiOperation(value = "查询所有班级", notes = "")
@@ -95,10 +93,10 @@ public class ClassConsoleController {
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @GetMapping("/updateClassStatus")
-    public ResponseModel<ClassModel> updateClassStatus(@ModelAttribute UserInfoForToken userInfo,@RequestParam String classId,@RequestParam String status) throws UserServiceException {
-        /*techerClassService.upadteClassStatus(userInfo, classId, status);
-        return  ResponseModel.sucessWithEmptyData("");*/
-        return  ResponseModel.sucess("",techerClassService.upadteClassStatus(userInfo, classId, status));
+    public ResponseModel updateClassStatus(@ModelAttribute UserInfoForToken userInfo,@RequestParam String classId,@RequestParam String status) throws UserServiceException {
+        techerClassService.upadteClassStatus(userInfo, classId, status);
+        return  ResponseModel.sucessWithEmptyData("");
+        //return  ResponseModel.sucess("",techerClassService.upadteClassStatus(userInfo, classId, status));
     }
 
     @ApiOperation(value = "删除班级", notes = "")
@@ -179,8 +177,8 @@ public class ClassConsoleController {
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @PostMapping("/updateStudentPwd")
-    public ResponseModel updateStudentPwd(@ModelAttribute UserInfoForToken userInfo,@RequestParam String studentId,@RequestParam String pwd) throws UserServiceException{
-        studentService.upadteStudentPwd(userInfo,studentId,pwd);
+    public ResponseModel updateStudentPwd(@ModelAttribute UserInfoForToken userInfo,@RequestParam String newPwd,@RequestParam String studentId) throws UserServiceException{
+        studentService.upadteStudentPwd(userInfo,studentId,newPwd);
         return  ResponseModel.sucessWithEmptyData("");
     }
 
@@ -231,5 +229,12 @@ public class ClassConsoleController {
         return  ResponseModel.sucess("",attendanceInClassService.getAttendance(userInfo,pageNum,pageSize));
     }
 
-
+    @ApiOperation(value = "查询所有班级", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/getAllClass")
+    public ResponseModel<List<ClassInfo>> getAllClass (@ModelAttribute UserInfoForToken userInfo)throws UserServiceException {
+        return  ResponseModel.sucess("",techerClassService.getAllClass(userInfo));
+    }
 }
