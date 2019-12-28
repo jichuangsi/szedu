@@ -7,6 +7,7 @@ import cn.com.szedu.model.*;
 import cn.com.szedu.model.role.StaticPageModel;
 import cn.com.szedu.model.student.SchoolInfoModel;
 import cn.com.szedu.model.teacher.ExamModel;
+import cn.com.szedu.model.teacher.TestTimeModel;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -134,14 +135,6 @@ public class MappingEntity2ModelCoverter {
        options.setCoptionPic(questions.getAoptionPic());
        options.setD(questions.getAoption());
        options.setDoptionPic(questions.getAoptionPic());
-       options.setE(questions.getAoption());
-       options.setEoptionPic(questions.getAoptionPic());
-       options.setF(questions.getAoption());
-       options.setFoptionPic(questions.getAoptionPic());
-       options.setTureOption(questions.getAoption());
-       options.setTureOptionPic(questions.getAoptionPic());
-       options.setFalseOption(questions.getAoption());
-       options.setFalseOptionPic(questions.getAoptionPic());
        model.setOptions(options);
        model.setSubject(questions.getSubject());
        model.setSubjectId(questions.getSubjectId());
@@ -201,14 +194,17 @@ public class MappingEntity2ModelCoverter {
         exam.setExamName(model.getExamName());
         exam.setContent(model.getContent());
         exam.setCreatorId(model.getCreatorId());
+        exam.setCreatorName(model.getCreatorName());
         exam.setStatus(model.getStatus());
         exam.setTerm(model.getTerm());
         exam.setSubjectId(model.getSubjectId());
         exam.setSubjectName(model.getSubjectName());
         exam.setExamType(model.getExamType());
+        exam.setIsOpenAnswer(model.getIsOpenAnswer());
         model.getModels().forEach(testTimeModel -> {
             if (testTimeModel.getId().equalsIgnoreCase("1")){
                 exam.setStartTime(testTimeModel.getStartTime());
+                exam.setEndTime(testTimeModel.getStartTime());
                 exam.setTestTimeLength(testTimeModel.getTimeLength());
                 exam.setTiqian(testTimeModel.getTiqian());
             }else {
@@ -231,12 +227,24 @@ public class MappingEntity2ModelCoverter {
         model.setSubjectId(exam.getSubjectId());
         model.setSubjectName(exam.getSubjectName());
         model.setExamType(exam.getExamType());
-        model.getModels().forEach(testTimeModel -> {
-           testTimeModel.setStartTime(exam.getStartTime());
-           testTimeModel.setEndTime(exam.getEndTime());
-           testTimeModel.setTimeLength(exam.getTestTimeLength());
-           testTimeModel.setTiqian(exam.getTiqian());
-        });
+        model.setIsOpenAnswer(exam.getIsOpenAnswer());
+        TestTimeModel testTimeModel=new TestTimeModel();
+        testTimeModel.setStartTime(exam.getStartTime());
+        testTimeModel.setEndTime(exam.getEndTime());
+        testTimeModel.setTimeLength(exam.getTestTimeLength());
+        testTimeModel.setTiqian(exam.getTiqian());
+        List<TestTimeModel> models=new ArrayList<>();
+        models.add(testTimeModel);
+        model.setModels(models);
+        if (exam.getStatus().equalsIgnoreCase("1")){
+            model.setStatusName("未发布");
+        }else if (exam.getStatus().equalsIgnoreCase("2")){
+            model.setStatusName("准备考试");
+        }else if (exam.getStatus().equalsIgnoreCase("3")){
+            model.setStatusName("正在考试");
+        }else if (exam.getStatus().equalsIgnoreCase("4")){
+            model.setStatusName("已结束");
+        }
         return model;
     }
 

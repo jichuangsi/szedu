@@ -3,7 +3,7 @@ package cn.com.szedu.entity.IntermediateTable;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "examClassRelation")
+@Table(name = "examStudentRelation")
 public class ExamStudentRelation {
 
     @Id

@@ -2,6 +2,7 @@ package cn.com.szedu.controller;
 
 import cn.com.szedu.entity.SelfQuestions;
 import cn.com.szedu.exception.UserServiceException;
+import cn.com.szedu.model.AddExaminationModel;
 import cn.com.szedu.model.QuestionsModelII;
 import cn.com.szedu.model.ResponseModel;
 import cn.com.szedu.model.UserInfoForToken;
@@ -11,15 +12,17 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/BackQuestions")
-@Api("BackInformationDeliveryController相关的api")
+@Api("我的题库相关的api")
 @CrossOrigin
 public class BackQuestionsController {
 
@@ -77,6 +80,15 @@ public class BackQuestionsController {
         return ResponseModel.sucess("",selfQuestionsService.getQuestion(pageSize,pageNum));
     }
 
+    @ApiOperation(value = "查询老师题库", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/getQuestionsByTeacher")
+    public ResponseModel<Page<SelfQuestions>> getQuestionsByTeacher(@ModelAttribute UserInfoForToken userInfo, @RequestParam String questionType, @RequestParam Integer pageSize, @RequestParam Integer pageNum) {
+        return ResponseModel.sucess("",selfQuestionsService.getQuestionByTeacherId(userInfo,questionType,pageSize,pageNum));
+    }
+
     @ApiOperation(value = "查询题目类型", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
@@ -93,7 +105,7 @@ public class BackQuestionsController {
     @PostMapping("/uploadQuestionContentImg")
     public ResponseModel uploadQuestionImg(@RequestParam MultipartFile file,@ModelAttribute UserInfoForToken userInfo,@RequestParam(required = false) Integer questionId) {
         try {
-            return ResponseModel.sucess("",selfQuestionsService.addSelfQuestionContentImg(file,questionId));
+            return ResponseModel.sucess("",selfQuestionsService.addSelfQuestionContentImg(userInfo,file,questionId));
         }catch (Exception e) {
             return ResponseModel.fail("", e.getMessage());
         }
@@ -104,9 +116,9 @@ public class BackQuestionsController {
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @PostMapping("/uploadQuestionOptionImg")
-    public ResponseModel uploadQuestionOptionImg(@RequestParam MultipartFile file,@ModelAttribute UserInfoForToken userInfo,String options,@RequestParam(required = false) Integer questionId) {
+    public ResponseModel uploadQuestionOptionImg(@RequestParam MultipartFile file,@ModelAttribute UserInfoForToken userInfo,@RequestParam String options,@RequestParam(required = false) Integer questionId) {
         try {
-            return ResponseModel.sucess("",selfQuestionsService.addSelfQuestionImg(file,options,questionId));
+            return ResponseModel.sucess("",selfQuestionsService.addSelfQuestionImg(userInfo,file,options,questionId));
         }catch (Exception e) {
             return ResponseModel.fail("", e.getMessage());
         }
@@ -118,7 +130,7 @@ public class BackQuestionsController {
     })
     @PostMapping("/saveSelfQuestion")
     public ResponseModel saveSelfQuestion(@RequestBody QuestionsModelII model,@ModelAttribute UserInfoForToken userInfo) {
-        selfQuestionsService.addQuestion(model);
+        selfQuestionsService.saveQuestion(model,userInfo);
         return ResponseModel.sucessWithEmptyData("");
     }
 
@@ -156,5 +168,14 @@ public class BackQuestionsController {
         } catch (UserServiceException e) {
             return ResponseModel.fail("",e.getMessage());
         }
+    }
+
+    @ApiOperation(value = "根据老师查询科目题数", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/getQuestionsBySubjectAndTeacher")
+    public ResponseModel getQuestionsBySubjectAndTeacher(@ModelAttribute UserInfoForToken userInfo,@RequestParam String subjectId) {
+        return ResponseModel.sucess("",selfQuestionsService.getTestSubjectModel(userInfo,subjectId));
     }
 }

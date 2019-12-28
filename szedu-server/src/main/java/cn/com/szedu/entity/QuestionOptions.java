@@ -17,14 +17,6 @@ public class QuestionOptions {
     private String CoptionPic;
     private String D;
     private String DoptionPic;
-    private String E;
-    private String EoptionPic;
-    private String F;
-    private String FoptionPic;
-    private String tureOption;
-    private String tureOptionPic;
-    private String falseOption;
-    private String falseOptionPic;
 
     public Integer getId() {
         return id;
@@ -64,22 +56,6 @@ public class QuestionOptions {
 
     public void setD(String d) {
         D = d;
-    }
-
-    public String getE() {
-        return E;
-    }
-
-    public void setE(String e) {
-        E = e;
-    }
-
-    public String getF() {
-        return F;
-    }
-
-    public void setF(String f) {
-        F = f;
     }
 
     public Integer getQuestionId() {
@@ -122,51 +98,4 @@ public class QuestionOptions {
         DoptionPic = doptionPic;
     }
 
-    public String getEoptionPic() {
-        return EoptionPic;
-    }
-
-    public void setEoptionPic(String eoptionPic) {
-        EoptionPic = eoptionPic;
-    }
-
-    public String getFoptionPic() {
-        return FoptionPic;
-    }
-
-    public void setFoptionPic(String foptionPic) {
-        FoptionPic = foptionPic;
-    }
-
-    public String getTureOption() {
-        return tureOption;
-    }
-
-    public void setTureOption(String tureOption) {
-        this.tureOption = tureOption;
-    }
-
-    public String getTureOptionPic() {
-        return tureOptionPic;
-    }
-
-    public void setTureOptionPic(String tureOptionPic) {
-        this.tureOptionPic = tureOptionPic;
-    }
-
-    public String getFalseOption() {
-        return falseOption;
-    }
-
-    public void setFalseOption(String falseOption) {
-        this.falseOption = falseOption;
-    }
-
-    public String getFalseOptionPic() {
-        return falseOptionPic;
-    }
-
-    public void setFalseOptionPic(String falseOptionPic) {
-        this.falseOptionPic = falseOptionPic;
-    }
 }

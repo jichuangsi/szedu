@@ -27,6 +27,11 @@ public interface ICourseWareRespository extends JpaRepository<CourseWare,String>
 
     @Transactional
     @Modifying
+    @Query(value = "UPDATE CourseWare SET is_share_check=?2 WHERE id=?1")
+    void updateIsShareCheck(String id,String status);
+
+    @Transactional
+    @Modifying
     @Query(value = "UPDATE CourseWare SET integral=?2 where id=?1")
     void updateIntegral(String id,Integer integral);
 }

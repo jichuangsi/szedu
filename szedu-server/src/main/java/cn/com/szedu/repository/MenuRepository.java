@@ -16,4 +16,5 @@ public interface MenuRepository extends JpaRepository<Menu,Integer> {
     @Query(value = "insert into menu(title,pid) values(?1,?2)",nativeQuery = true)
     void insertTreeNode(String name,Integer pid);
     Menu findFirstById(Integer id);
+    Menu findFirstByTitle(String title);
 }

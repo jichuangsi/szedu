@@ -1,5 +1,7 @@
 package cn.com.szedu.model.teacher;
 
+import cn.com.szedu.entity.ClassInfo;
+
 import java.util.List;
 
 public class ExamModel {
@@ -12,9 +14,12 @@ public class ExamModel {
     private String creatorId;//创建者、出题人
     private String creatorName;
     private String status;//状态（发布/未发布）
+    private String statusName;
     private String content;//考试简介
     private String testPaperId;;//试卷
+    private String isOpenAnswer;//是否公布答案
     private List<String> classId;
+    private List<ClassInfo> classInfos;
     private List<TestTimeModel> models;//时间
 
     public String getExamId() {
@@ -121,5 +126,27 @@ public class ExamModel {
         this.models = models;
     }
 
+    public String getStatusName() {
+        return statusName;
+    }
 
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
+    }
+
+    public String getIsOpenAnswer() {
+        return isOpenAnswer;
+    }
+
+    public void setIsOpenAnswer(String isOpenAnswer) {
+        this.isOpenAnswer = isOpenAnswer;
+    }
+
+    public List<ClassInfo> getClassInfos() {
+        return classInfos;
+    }
+
+    public void setClassInfos(List<ClassInfo> classInfos) {
+        this.classInfos = classInfos;
+    }
 }

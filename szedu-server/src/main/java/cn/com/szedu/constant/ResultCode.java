@@ -25,6 +25,8 @@ public class ResultCode {
 	public static final String EXCEL_IMPORT_MSG = "excel导入失败";
 	public static final String PWD_DIFFERENT_MSG="密码不一致";
 	public static final String CATEGORY_ISEXIT_MSG="该分类下仍有文章";
+	public static final String EXAMTESTPAPER_ISEXIT_MSG="考试下仍有该试卷";
+	public static final String RESOURCE_ISNOT_EXIST = "该资源不存在";
 
 	public static final String STUDENTID_IS_EXIST="学号已存在";
 }

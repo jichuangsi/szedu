@@ -15,7 +15,6 @@ import cn.com.szedu.repository.IOpLogRepository;
 import cn.com.szedu.repository.ITeacherInfoRepository;
 import cn.com.szedu.repository.IntermediateTableRepository.IStudentClassRelationRepository;
 import cn.com.szedu.repository.IntermediateTableRepository.TecherClassRelationRepository;
-import cn.com.szedu.repository.MessageRepository;
 import cn.com.szedu.util.MappingEntity3ModelCoverter;
 import com.github.pagehelper.PageInfo;
 import org.springframework.data.domain.Sort;

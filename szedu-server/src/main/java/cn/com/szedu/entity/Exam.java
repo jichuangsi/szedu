@@ -28,6 +28,7 @@ public class Exam {
     private String testTimeLength;//答题时长
     private String content;//考试简介
     private String status;//状态（发布/未发布）
+    private String isOpenAnswer;//是否公布答案
     private String testPaperId;//试卷
     private long createTime=new Date().getTime();
     /*private String classId;//班级
@@ -160,5 +161,13 @@ public class Exam {
 
     public void setCreateTime(long createTime) {
         this.createTime = createTime;
+    }
+
+    public String getIsOpenAnswer() {
+        return isOpenAnswer;
+    }
+
+    public void setIsOpenAnswer(String isOpenAnswer) {
+        this.isOpenAnswer = isOpenAnswer;
     }
 }

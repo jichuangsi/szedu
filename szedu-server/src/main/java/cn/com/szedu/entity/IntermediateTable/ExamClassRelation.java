@@ -5,7 +5,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "examClassRelation")
 public class ExamClassRelation {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -39,5 +38,8 @@ public class ExamClassRelation {
     public ExamClassRelation(String examId, String classId) {
         this.examId = examId;
         this.classId = classId;
+    }
+
+    public ExamClassRelation() {
     }
 }

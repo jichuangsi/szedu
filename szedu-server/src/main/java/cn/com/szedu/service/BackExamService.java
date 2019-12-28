@@ -11,6 +11,7 @@ import cn.com.szedu.entity.StudentAnswerCollection;
 import cn.com.szedu.exception.UserServiceException;
 import cn.com.szedu.model.UserInfoForToken;
 import cn.com.szedu.model.teacher.ExamModel;
+import cn.com.szedu.repository.IClassInfoRepository;
 import cn.com.szedu.repository.IExamRepository;
 import cn.com.szedu.repository.IOpLogRepository;
 import cn.com.szedu.repository.IStudentAnswerCollectionRepository;
@@ -21,6 +22,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -31,6 +33,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -53,6 +56,9 @@ public class BackExamService {
     @Resource
     private IStudentAnswerCollectionRepository studentAnswerCollectionRepository;
 
+    @Resource
+    private IClassInfoRepository classInfoRepository;
+
     //添加考试
     @Transactional(rollbackFor = Exception.class)
     public void addExam(UserInfoForToken userInfo, Exam exam) throws UserServiceException {
@@ -74,11 +80,18 @@ public class BackExamService {
     public void saveExam(UserInfoForToken userInfo, ExamModel model) throws UserServiceException {
         Exam exam=examRepository.save(MappingEntity2ModelCoverter.CONVERTERFROMEXAMMODELTOEXAM(model));
         List<ExamClassRelation> relations=new ArrayList<>();
-        model.getClassId().forEach(c ->{
+        List<String> cf =model.getClassId();
+        for (String cd:cf) {
+            ExamClassRelation relation=new ExamClassRelation(exam.getId(),cd);
+            relations.add(relation);
+            examClassRelationRepository.save(relation);
+        }
+        /*model.getClassId().forEach(c ->{
             ExamClassRelation relation=new ExamClassRelation(exam.getId(),c);
             relations.add(relation);
-        });
-        examClassRelationRepository.saveAll(relations);
+            examClassRelationRepository.save(relation);
+        });*/
+
     }
 
     //修改考试信息
@@ -129,7 +142,7 @@ public class BackExamService {
     }
 
     //我的考试
-    public Page<Exam> getExamListByTeacher(UserInfoForToken userInfo,String name,String subjectId,String examType, Integer pageNum, Integer pageSize){
+    public Page<Exam> getExamListByTeacher(UserInfoForToken userInfo,String name,String subjectId,String examType,int pageNum,int pageSize){
         pageNum=pageNum-1;
         Pageable pageable=new PageRequest(pageNum,pageSize);
         Page<Exam> exams=examRepository.findAll((Root<Exam> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder)->{
@@ -146,6 +159,10 @@ public class BackExamService {
             }
             return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
         },pageable);
+        /*List<ExamModel> examModels=new ArrayList<>();
+        exams.forEach(exam -> {
+            examModels.add(MappingEntity2ModelCoverter.CONVERTERFROMEXAMTOEXAMMODEL(exam));
+        });*/
         return exams;
     }
 
@@ -160,8 +177,21 @@ public class BackExamService {
         });
         //查找班级(显示)
         model.setClassId(classIds);
+        Sort sort=new Sort(Sort.Direction.DESC,"createTime");
+        model.setClassInfos(classInfoRepository.getClassInfoByIdIn(sort,classIds));
         return model;
     }
 
+    /**
+     * 修改考试状态
+     * @param examId
+     * @param status
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void updateExamStatus(String examId,String status){
+        Exam exam=examRepository.findFirstByid(examId);
+        exam.setStatus(status);
+        examRepository.save(exam);
+    }
 
 }

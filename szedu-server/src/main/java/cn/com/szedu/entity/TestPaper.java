@@ -1,11 +1,15 @@
-package cn.com.szedu.model.teacher;
+package cn.com.szedu.entity;
 
-import cn.com.szedu.entity.SelfQuestions;
+import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
-public class TestPaperModel {//试卷
+@Entity
+@Table(name = "testpaper")
+public class TestPaper {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String testPaperName;
     private String grade;//年级
@@ -15,7 +19,6 @@ public class TestPaperModel {//试卷
     private String teacherName;
     private long createTime=new Date().getTime();
     private long updateTime;
-    private List<SelfQuestions> questionsModels;//题目
 
     public Integer getId() {
         return id;
@@ -87,13 +90,5 @@ public class TestPaperModel {//试卷
 
     public void setUpdateTime(long updateTime) {
         this.updateTime = updateTime;
-    }
-
-    public List<SelfQuestions> getQuestionsModels() {
-        return questionsModels;
-    }
-
-    public void setQuestionsModels(List<SelfQuestions> questionsModels) {
-        this.questionsModels = questionsModels;
     }
 }

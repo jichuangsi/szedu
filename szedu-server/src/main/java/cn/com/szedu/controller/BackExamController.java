@@ -1,11 +1,15 @@
 package cn.com.szedu.controller;
 
 import cn.com.szedu.entity.Exam;
+import cn.com.szedu.entity.SelfQuestions;
+import cn.com.szedu.exception.TecherException;
 import cn.com.szedu.exception.UserServiceException;
+import cn.com.szedu.model.AddExaminationModel;
 import cn.com.szedu.model.ResponseModel;
 import cn.com.szedu.model.UserInfoForToken;
 import cn.com.szedu.model.teacher.ExamModel;
 import cn.com.szedu.service.BackExamService;
+import cn.com.szedu.service.TestPaperService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -13,14 +17,17 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @CrossOrigin
-@Api("BackExamController相关的api")
+@Api("考试相关的api")
 @RequestMapping("/backExam")
 public class BackExamController {
     @Resource
     private BackExamService backExamService;
+    @Resource
+    private TestPaperService testPaperService;
 
     /*@ApiOperation(value = "添加考试", notes = "")
     @ApiImplicitParams({
@@ -80,7 +87,7 @@ public class BackExamController {
     @PostMapping("/saveExam")
     public ResponseModel saveExam(@RequestBody ExamModel model, @ModelAttribute UserInfoForToken userInfo) {
         try {
-            backExamService.saveExam(userInfo,model);
+             backExamService.saveExam(userInfo,model);
             return ResponseModel.sucessWithEmptyData("");
         }catch (UserServiceException e) {
             return ResponseModel.fail("", e.getMessage());
@@ -92,7 +99,7 @@ public class BackExamController {
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @GetMapping("/getExamByTeacher")
-    public ResponseModel getExamByTeacher(@ModelAttribute UserInfoForToken userInfo,@RequestParam(required = false) String name,@RequestParam(required = false)String subjectId,@RequestParam(required = false)String examType, @RequestParam int pageNum, @RequestParam int pageSize) {
+    public ResponseModel getExamByTeacher(@ModelAttribute UserInfoForToken userInfo,@RequestParam(required = false) String name,@RequestParam(required = false)String subjectId,@RequestParam(required = false)String examType,int pageNum,int pageSize) {
         return ResponseModel.sucess("",backExamService.getExamListByTeacher(userInfo,name,subjectId,examType,pageNum,pageSize));
     }
 
@@ -100,8 +107,60 @@ public class BackExamController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
-    @GetMapping("/getExamDetailByTeacherid")
-    public ResponseModel getAllExam(@ModelAttribute UserInfoForToken userInfo,String examId) {
+    @GetMapping("/getExamDetailByExamid")
+    public ResponseModel getAllExam(@ModelAttribute UserInfoForToken userInfo,@RequestParam String examId) {
         return ResponseModel.sucess("",backExamService.getExamByExamId(userInfo,examId));
+    }
+
+    @ApiOperation(value = "发布考试", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/publishingexamination")
+    public ResponseModel publishingexamination(@ModelAttribute UserInfoForToken userInfo,@RequestParam String examId,@RequestParam String status) {
+        backExamService.updateExamStatus(examId,status);
+        return ResponseModel.sucessWithEmptyData("");
+    }
+
+    @ApiOperation(value = "组卷", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/addTestpaper")
+    public ResponseModel addTestpaper(@ModelAttribute UserInfoForToken userInfo, @RequestBody AddExaminationModel model) {
+        testPaperService.addTestPaper(userInfo,model);
+        return ResponseModel.sucessWithEmptyData("");
+    }
+
+    @ApiOperation(value = "根据试卷id查询试卷", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/getTestPaperDetailByid")
+    public ResponseModel getTestPaperDetailByid(@ModelAttribute UserInfoForToken userInfo,@RequestParam Integer testPaperId) {
+        return ResponseModel.sucess("",testPaperService.getTestPaperByid(testPaperId));
+    }
+
+    @ApiOperation(value = "根据老师id查询老师试卷", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/getTestPaperByTeacherId")
+    public ResponseModel getTestPaperByTeacherId(@ModelAttribute UserInfoForToken userInfo) {
+        return ResponseModel.sucess("",testPaperService.getTestpaperListByTeacherId(userInfo));
+    }
+
+    @ApiOperation(value = "删除试卷", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/deleteTestpaper")
+    public ResponseModel deleteTestpaper(@ModelAttribute UserInfoForToken userInfo, @RequestParam Integer id) {
+        try {
+            testPaperService.deleteTestPaperId(id);
+        }catch (TecherException e){
+            ResponseModel.fail("",e.getMessage());
+        }
+        return ResponseModel.sucessWithEmptyData("");
     }
 }

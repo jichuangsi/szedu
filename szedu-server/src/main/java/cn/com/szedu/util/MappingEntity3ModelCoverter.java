@@ -120,6 +120,7 @@ public class MappingEntity3ModelCoverter {
         TeacherModel model1 = new TeacherModel();
         model1.setAcount(userInfo.getAccount());
         model1.setTeacherName(userInfo.getName());
+        model1.setTeacherId(userInfo.getId());
         if (userInfo.getIntegral()==null){
             model1.setIntegral(0);
         }else {

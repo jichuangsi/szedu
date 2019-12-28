@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "selfQuestions")
-public class SelfQuestions {
+@Table(name = "topQuestions")
+public class TopQuestions {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -27,12 +27,8 @@ public class SelfQuestions {
     private String subject;//标签科目
     private String chapter;//章节
     private Integer integral;//积分
-    private String teacherId;//老师id1
-    private String teacherName;//1
-    /*@Lob
-    @Basic(fetch = FetchType.LAZY)
-    private byte[] questionPic;*///图片数据0;
-    private String questionPic;
+    private String createrId;//创建者id1
+    private String createrName;//1
     private long createTime=new Date().getTime();//0
     private long updateTime;//0
 
@@ -188,28 +184,20 @@ public class SelfQuestions {
         this.integral = integral;
     }
 
-    public String getTeacherId() {
-        return teacherId;
+    public String getCreaterId() {
+        return createrId;
     }
 
-    public void setTeacherId(String teacherId) {
-        this.teacherId = teacherId;
+    public void setCreaterId(String createrId) {
+        this.createrId = createrId;
     }
 
-    public String getTeacherName() {
-        return teacherName;
+    public String getCreaterName() {
+        return createrName;
     }
 
-    public void setTeacherName(String teacherName) {
-        this.teacherName = teacherName;
-    }
-
-    public String getQuestionPic() {
-        return questionPic;
-    }
-
-    public void setQuestionPic(String questionPic) {
-        this.questionPic = questionPic;
+    public void setCreaterName(String createrName) {
+        this.createrName = createrName;
     }
 
     public long getCreateTime() {
