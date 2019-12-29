@@ -19,7 +19,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/teacherAchievement")
-@Api("班级相关的api")
+@Api("教务成绩相关的api")
 @CrossOrigin
 public class TeacherAchievementController {
 

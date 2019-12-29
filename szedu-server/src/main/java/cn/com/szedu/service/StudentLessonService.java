@@ -1,21 +1,15 @@
 package cn.com.szedu.service;
 
 import cn.com.szedu.constant.ResultCode;
-import cn.com.szedu.entity.AttendanceInClass;
-import cn.com.szedu.entity.ClassInfo;
-import cn.com.szedu.entity.IntegralRecord;
+import cn.com.szedu.entity.*;
 import cn.com.szedu.entity.IntermediateTable.CourseClassRelation;
 import cn.com.szedu.entity.IntermediateTable.StudentClassRelation;
-import cn.com.szedu.entity.IntermediateTable.StudentCourseScore;
-import cn.com.szedu.entity.StudentInfo;
+import cn.com.szedu.entity.IntermediateTable.StudentCourseRelation;
 import cn.com.szedu.exception.TecherException;
 import cn.com.szedu.exception.UserServiceException;
 import cn.com.szedu.model.UserInfoForToken;
 import cn.com.szedu.model.teacher.AttendanceModel;
-import cn.com.szedu.repository.IAttendanceRepository;
-import cn.com.szedu.repository.IClassInfoRepository;
-import cn.com.szedu.repository.IStudentInfoRespository;
-import cn.com.szedu.repository.IntegralRecordRepository;
+import cn.com.szedu.repository.*;
 import cn.com.szedu.repository.IntermediateTableRepository.IClassCourseRelationRepository;
 import cn.com.szedu.repository.IntermediateTableRepository.IStudentClassRelationRepository;
 import cn.com.szedu.repository.IntermediateTableRepository.IStudentCourseScoreRepository;
@@ -45,6 +39,8 @@ public class StudentLessonService {
     private IStudentInfoRespository studentInfoRespository;
     @Resource
     private IntegralRecordRepository integralRecordRepository;
+    @Resource
+    private IIntegralRuleRepository integralRuleRepository;
 
     /**
      * 课堂签到
@@ -83,7 +79,7 @@ public class StudentLessonService {
         integralRecord.setCreateTime(new Date().getTime());*/
         IntegralRecord integralRecord=new IntegralRecord(UUID.randomUUID().toString().replaceAll("-", ""),
                 "签到","上课签到",studentInfo.getId(),infos.getName(),
-                5,"你今日课堂已签到，获得 5 积分",new Date().getTime());
+                5,new Date().getTime());
         integralRecordRepository.save(integralRecord);
     }
 
@@ -97,10 +93,25 @@ public class StudentLessonService {
         if (StringUtils.isEmpty(info) ||StringUtils.isEmpty(score) ||StringUtils.isEmpty(courseId)){
             throw new UserServiceException(ResultCode.PARAM_MISS_MSG);
         }
-        StudentCourseScore studentCourseScore=new StudentCourseScore();
+        StudentCourseRelation studentCourseScore=new StudentCourseRelation();
         studentCourseScore.setCourseId(courseId);
         studentCourseScore.setStudentId(info.getUserId());
-        studentCourseScore.setScore(score);
+        studentCourseScore.setScorse(score);
         studentCourseScoreRepository.save(studentCourseScore);
+        StudentInfo studentInfo=studentInfoRespository.findFirstByid(info.getUserId());
+        if (studentInfo.getIntegral()==null){
+            studentInfo.setIntegral(0);
+        }
+        IntegralRule integralRule=integralRuleRepository.findByRoleAndType("学生","评分");
+        if (score>=integralRule.getCount()){//大于integralRule.getCount()分
+            studentInfo.setIntegral(studentInfo.getIntegral()+integralRule.getIntegral());
+            //积分记录
+            IntegralRecord integralRecord = new IntegralRecord(UUID.randomUUID().toString().replaceAll("-", ""),
+                    "评分", "学生课堂评分", info.getUserId(), info.getUserName(),
+                    integralRule.getIntegral(), System.currentTimeMillis());
+            integralRecordRepository.save(integralRecord);
+        }
     }
+
+
 }

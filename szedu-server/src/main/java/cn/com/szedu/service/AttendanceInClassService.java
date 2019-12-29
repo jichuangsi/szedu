@@ -1,7 +1,9 @@
 package cn.com.szedu.service;
 
 import cn.com.szedu.constant.ResultCode;
+import cn.com.szedu.dao.mapper.IClassInfoMapper;
 import cn.com.szedu.entity.AttendanceInClass;
+import cn.com.szedu.entity.ClassInfo;
 import cn.com.szedu.entity.Course;
 import cn.com.szedu.entity.IntermediateTable.ClassRelation;
 import cn.com.szedu.entity.IntermediateTable.CourseClassRelation;
@@ -13,7 +15,9 @@ import cn.com.szedu.exception.UserServiceException;
 import cn.com.szedu.model.StudentModel;
 import cn.com.szedu.model.UserInfoForToken;
 import cn.com.szedu.model.teacher.AttendanceModel;
+import cn.com.szedu.model.teacher.ClassModel;
 import cn.com.szedu.repository.IAttendanceRepository;
+import cn.com.szedu.repository.IClassInfoRepository;
 import cn.com.szedu.repository.ICourseRepository;
 import cn.com.szedu.repository.IStudentInfoRespository;
 import cn.com.szedu.repository.IntermediateTableRepository.IClassCourseRelationRepository;
@@ -43,6 +47,10 @@ public class AttendanceInClassService {
     private IStudentInfoRespository studentInfoRespository;
     @Resource
     private ICourseRepository courseRepository;
+   /* @Resource
+    private IClassInfoMapper classInfoMapper;*/
+   @Resource
+   private IClassInfoRepository classInfoRepository;
 
 
     /**
@@ -71,7 +79,7 @@ public class AttendanceInClassService {
         if (listt.size()<=0){throw new UserServiceException(ResultCode.SELECT_NULL_MSG);}
         for (TeacherCourseRelation t:listt) {//循环课堂
             Date time=new Date();//考勤时间
-            Course course=courseRepository.findFirstByid(t.getCourseId());
+            Course course=courseRepository.findFirstById(t.getCourseId());
             if (StringUtils.isEmpty(course)){throw new UserServiceException(ResultCode.SELECT_NULL_MSG);
             }
             List<AttendanceInClass> attendance=attendanceRepository.findByCourseId(t.getCourseId());//根据课堂查询学生考勤记录
@@ -137,4 +145,6 @@ public class AttendanceInClassService {
         pageInfo.setPageNum(pageNum);
         return pageInfo;
     }*/
+
+
 }

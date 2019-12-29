@@ -39,4 +39,7 @@ public class CourseResourceRelation {
         this.courseId = courseId;
         this.resourceid = resourceid;
     }
+
+    public CourseResourceRelation() {
+    }
 }

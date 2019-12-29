@@ -29,4 +29,6 @@ public class ResultCode {
 	public static final String RESOURCE_ISNOT_EXIST = "该资源不存在";
 
 	public static final String STUDENTID_IS_EXIST="学号已存在";
+	public static final String SIGNIN_IS_EXIST="已签到";
+	public static final String COURSE_IS_INVALID="已过上课时间";
 }

@@ -10,6 +10,15 @@ public class CoursePushResourceRelation {
     private Integer id;
     private String courseId;
     private String pushresourceid;
+    private String push;//是否推送Y是N否
+
+    public String getPush() {
+        return push;
+    }
+
+    public void setPush(String push) {
+        this.push = push;
+    }
 
     public Integer getId() {
         return id;

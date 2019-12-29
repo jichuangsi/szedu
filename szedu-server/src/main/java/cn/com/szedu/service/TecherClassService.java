@@ -285,7 +285,7 @@ public class TecherClassService {
             throw  new TecherException(ResultCode.PARAM_MISS_MSG);
         }
         ClassInfo info=classInfoRepository.findExistById(classId);
-        techerClassRelationRepository.deleteByClassIdAndAndTecherId(classId,userInfo.getUserId());
+        techerClassRelationRepository.deleteByClassIdAndTecherId(classId,userInfo.getUserId());
 
       /*  //系统信息
         String messages="删除-----您已将次班级从您的班级中移走，班级信息：专业-"+info.getSpeciality()+"  班级-"+info.getClassName();

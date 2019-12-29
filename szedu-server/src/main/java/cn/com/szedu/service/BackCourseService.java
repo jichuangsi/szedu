@@ -53,7 +53,7 @@ public class BackCourseService {
                 || StringUtils.isEmpty(course.getId())){
             throw new UserServiceException(ResultCode.PARAM_MISS_MSG);
         }
-        Course course1=courseRepository.findFirstByid(course.getId());
+        Course course1=courseRepository.findFirstById(course.getId());
         course1.setCourseTitle(course.getCourseTitle());
         course1.setSubject(course.getSubject());
         course1.setTeacherId(course.getTeacherId());

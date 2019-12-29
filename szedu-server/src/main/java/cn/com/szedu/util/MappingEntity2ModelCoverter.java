@@ -247,5 +247,42 @@ public class MappingEntity2ModelCoverter {
         }
         return model;
     }
+    public static TeacherInfo CONVERTEERFROMTEACHERMODEL1(TeacherModel model) {
+        TeacherInfo userInfo = new TeacherInfo();
+        userInfo.setId(model.getId());
+        userInfo.setAccount(model.getAccount());
+        userInfo.setName(model.getName());
+        if (!StringUtils.isEmpty(model.getPwd())) {
+            userInfo.setPwd(Md5Util.encodeByMd5(model.getPwd()));
+        }
+        userInfo.setSex(model.getSex());
+        userInfo.setStatus(Status.ACTIVATE.getName());
+        userInfo.setSchoolName(model.getSchoolName());
+        userInfo.setRole("Teacher");
+        userInfo.setIntegral(0);
+        return userInfo;
+    }
 
+    public final static TeacherModel CONVERTERFROMUSERINFO2(TeacherInfo userInfo){
+        TeacherModel model = new TeacherModel();
+        model.setAccount(userInfo.getAccount());
+        model.setId(userInfo.getId());
+        model.setName(userInfo.getName());
+        model.setSex(userInfo.getSex());
+        model.setStatus(userInfo.getStatus());
+        model.setSchoolName(userInfo.getSchoolName());
+        model.setIntegral(userInfo.getIntegral());
+        return model;
+    }
+    public final static StudentModel CONVERTERFROMUSERINFOTOSTUDENT2(StudentInfo userInfo){
+        StudentModel model = new StudentModel();
+        model.setAccount(userInfo.getAccount());
+        model.setId(userInfo.getId());
+        model.setName(userInfo.getName());
+        model.setSex(userInfo.getSex());
+        model.setStatus(userInfo.getStatus());
+        model.setSchoolName(userInfo.getSchoolName());
+        model.setPhone(userInfo.getPhone());
+        return model;
+    }
 }

@@ -10,7 +10,7 @@ public interface TecherClassRelationRepository extends JpaRepository<ClassRelati
 
     public List<ClassRelation> findByTecherId(String techerId);
 
-    Integer deleteByClassIdAndAndTecherId(String classId,String techerId);
+    Integer deleteByClassIdAndTecherId(String classId,String techerId);
 
     Integer countByClassIdAndTecherId(String classId,String techerId);
 }

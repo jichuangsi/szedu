@@ -8,4 +8,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface IntegralRecordRepository extends JpaRepository<IntegralRecord,Integer>,PagingAndSortingRepository<IntegralRecord,Integer>,JpaSpecificationExecutor<IntegralRecord> {
 
+    Integer countByOperatorIdAndFunctionAndCreateTimeGreaterThanAndCreateTimeLessThan(String name,String id,long startTime,long endTime);
 }

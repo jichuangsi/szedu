@@ -3,17 +3,15 @@ package cn.com.szedu.service.impl;
 import cn.com.szedu.commons.Md5Util;
 import cn.com.szedu.constant.ResultCode;
 import cn.com.szedu.constant.Status;
-import cn.com.szedu.entity.BackUser;
-import cn.com.szedu.entity.OpLog;
-import cn.com.szedu.entity.UserInfo;
+import cn.com.szedu.entity.*;
 import cn.com.szedu.exception.BackUserException;
 import cn.com.szedu.exception.UserServiceException;
 import cn.com.szedu.model.*;
-import cn.com.szedu.repository.IOpLogRepository;
-import cn.com.szedu.repository.IUserInfoRepository;
+import cn.com.szedu.repository.*;
 import cn.com.szedu.service.BackTokenService;
 import cn.com.szedu.service.UserInfoService;
 import cn.com.szedu.util.MappingEntity2ModelCoverter;
+import cn.com.szedu.util.MappingEntity3ModelCoverter;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -44,20 +42,37 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Resource
     private IOpLogRepository opLogRepository;
+    @Resource
+    private ITeacherInfoRepository teacherInfoRepository;
+    @Resource
+    private IStudentInfoRespository studentInfoRespository;
+    @Resource
+    private MessageRepository messageRepository;
+
+
 
     @Override
     public void saveTeacher(UserInfoForToken userInfo,TeacherModel model) throws UserServiceException {
         if (StringUtils.isEmpty(model.getAccount()) || StringUtils.isEmpty(model.getPwd())) {
             throw new UserServiceException(ResultCode.PARAM_MISS_MSG);
         }
-        if(userInfoRepository.countByAccount(model.getAccount())>0){
+        if (teacherInfoRepository.countByAccount(model.getAccount())>0){
+            throw new UserServiceException(ResultCode.ACCOUNT_ISEXIST_MSG);
+        }
+        TeacherInfo teacherInfo=MappingEntity2ModelCoverter.CONVERTEERFROMTEACHERMODEL1(model);
+        teacherInfo.setStatus(Status.ACTIVATE.getName());
+        OpLog opLog=new OpLog(userInfo.getUserName(),"添加","添加老师");
+        opLogRepository.save(opLog);
+        teacherInfoRepository.save(teacherInfo);
+       /* if(userInfoRepository.countByAccount(model.getAccount())>0){
             throw new UserServiceException(ResultCode.ACCOUNT_ISEXIST_MSG);
         }
         UserInfo info = MappingEntity2ModelCoverter.CONVERTEERFROMTEACHERMODEL(model);
         info.setStatus(Status.ACTIVATE.getName());
         OpLog opLog=new OpLog(userInfo.getUserName(),"添加","添加老师");
         opLogRepository.save(opLog);
-        userInfoRepository.save(info);
+        userInfoRepository.save(info);*/
+
     }
 
     @Override
@@ -65,14 +80,33 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (StringUtils.isEmpty(model.getAccount()) || StringUtils.isEmpty(model.getPwd())) {
             throw new UserServiceException(ResultCode.PARAM_MISS_MSG);
         }
-        if(userInfoRepository.countByAccount(model.getAccount())>0){
+        int ok=studentInfoRespository.countByStudentId(model.getStudentId());
+        if (ok>0){throw  new UserServiceException(ResultCode.STUDENTID_IS_EXIST);}//学号
+        Integer count=studentInfoRespository.countByAccount(model.getAccount());
+        if (count>0){throw  new UserServiceException(ResultCode.ACCOUNT_ISEXIST_MSG);}//账号
+        Integer count2=studentInfoRespository.countByAccountAndPhone(model.getAccount(),model.getPhone());
+        if (count2>0){throw  new UserServiceException(ResultCode.ACCOUNT_ISEXIST_MSG);}//账号和手机号
+
+        TeacherInfo tinfo=teacherInfoRepository.findExsitById(userInfo.getUserId());
+        model.setSchoolId(tinfo.getSchoolId());
+        model.setSchoolName(tinfo.getSchoolName());
+        StudentInfo studentInfo=MappingEntity3ModelCoverter.CONVERTERFROMSTUDENTINFO(model);
+        StudentInfo info=studentInfoRespository.save(studentInfo);
+        OpLog opLog=new OpLog(userInfo.getUserName(),"添加","添加学生");
+        opLogRepository.save(opLog);
+
+        //系统信息
+        String messages="成功创建学生-----您创建了一个新学生，学生账号："+info.getAccount();
+        Message message=new Message(userInfo.getUserId(),userInfo.getUserName(),messages,"N");
+        messageRepository.save(message);
+       /* if(userInfoRepository.countByAccount(model.getAccount())>0){
             throw new UserServiceException(ResultCode.ACCOUNT_ISEXIST_MSG);
         }
         UserInfo info = MappingEntity2ModelCoverter.CONVERTEERFROMSTUDENTMODEL(model);
         info.setStatus(Status.ACTIVATE.getName());
         OpLog opLog=new OpLog(userInfo.getUserName(),"添加","添加学生");
         opLogRepository.save(opLog);
-        userInfoRepository.save(info);
+        userInfoRepository.save(info);*/
     }
 
     @Override
@@ -80,12 +114,17 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (StringUtils.isEmpty(model.getId())){
             throw new UserServiceException(ResultCode.PARAM_ERR_MSG);
         }
-        UserInfo info=userInfoRepository.findFirstById(model.getId());
+        TeacherInfo info=teacherInfoRepository.findExsitById(model.getId());
+        info.setIntegral(model.getIntegral());
+        info.setName(model.getName());
+        info.setSchoolName(model.getSchoolName());
+        teacherInfoRepository.save(info);
+      /*  UserInfo info=userInfoRepository.findFirstById(model.getId());
         info.setIntegral(model.getIntegral());
         info.setName(model.getName());
         info.setSchoolName(model.getSchoolName());
         info.setSubject(model.getSubject());
-        userInfoRepository.save(info);
+        userInfoRepository.save(info);*/
     }
 
     @Override
@@ -93,11 +132,18 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (StringUtils.isEmpty(model.getId())){
             throw new UserServiceException(ResultCode.PARAM_ERR_MSG);
         }
-        UserInfo info=userInfoRepository.findFirstById(model.getId());
+        StudentInfo info=studentInfoRespository.findFirstByid(model.getId());
+        info.setName(model.getName());
+        info.setStudentId(model.getStudentId());
+        info.setPhone(model.getPhone());
+        info.setAccount(model.getAccount());
+        info.setPwd(model.getPwd());
+        studentInfoRespository.save(info);
+       /* UserInfo info=userInfoRepository.findFirstById(model.getId());
         info.setName(model.getName());
         info.setSchoolName(model.getSchoolName());
         info.setPhone(model.getPhone());
-        userInfoRepository.save(info);
+        userInfoRepository.save(info);*/
     }
 
     @Override
@@ -108,7 +154,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         userInfoRepository.deleteById(userId);
     }
 
-    @Override
+   /* @Override
     public String saveExcelTeachers(MultipartFile file, UserInfoForToken userInfo) throws UserServiceException {
         String fileName=file.getOriginalFilename();
         if(!fileName.endsWith(".xls")){
@@ -147,9 +193,48 @@ public class UserInfoServiceImpl implements UserInfoService {
         }catch (IOException e){
             throw new UserServiceException(ResultCode.EXCEL_IMPORT_MSG);
         }
-    }
-
-    @Override
+    }*/
+   @Override
+   public String saveExcelTeachers(MultipartFile file, UserInfoForToken userInfo) throws UserServiceException {
+       String fileName=file.getOriginalFilename();
+       if(!fileName.endsWith(".xls")){
+           System.out.println("文件不是.xls类型");
+       }
+       try{
+           // 得到这个excel表格对象
+           HSSFWorkbook workbook=new HSSFWorkbook(new POIFSFileSystem(file.getInputStream()));
+           List<String> errorRowNum=new ArrayList<>();
+           List<TeacherInfo> userInfos=new ArrayList<>();
+           List<String> userAccounts=new ArrayList<>();
+           // 得到这个excel表格的sheet数量
+           int numberOfSheets=workbook.getNumberOfSheets();
+           for (int i=0;i<numberOfSheets;i++){
+               //得到sheet
+               HSSFSheet sheet=workbook.getSheetAt(i);
+               //得到sheet里的总行数
+               int physicalNumberOfRows=sheet.getPhysicalNumberOfRows();
+               for(int j=1;j<physicalNumberOfRows;j++){
+                   HSSFRow row=sheet.getRow(j);
+                   TeacherInfo info;
+                   try {
+                       info=saveRowTeacher2(row,userAccounts);
+                       userAccounts.add(info.getAccount());
+                   }catch (UserServiceException e){
+                       errorRowNum.add((j + 1) + " ");
+                       continue;
+                   }
+                   userInfos.add(info);
+               }
+           }
+           teacherInfoRepository.saveAll(userInfos);
+           OpLog opLog=new OpLog(userInfo.getUserName(),"添加","批量添加老师");
+           opLogRepository.save(opLog);
+           return JSONObject.toJSONString(errorRowNum.toArray());
+       }catch (IOException e){
+           throw new UserServiceException(ResultCode.EXCEL_IMPORT_MSG);
+       }
+   }
+    /*@Override
     public String saveExcelStudents(MultipartFile file, UserInfoForToken userInfo) throws UserServiceException {
         String fileName=file.getOriginalFilename();
         if(!fileName.endsWith(".xls")){
@@ -188,11 +273,50 @@ public class UserInfoServiceImpl implements UserInfoService {
         }catch (IOException e){
             throw new UserServiceException(ResultCode.EXCEL_IMPORT_MSG);
         }
+    }*/
+    @Override
+    public String saveExcelStudents(MultipartFile file, UserInfoForToken userInfo) throws UserServiceException {
+        String fileName=file.getOriginalFilename();
+        if(!fileName.endsWith(".xls")){
+            System.out.println("文件不是.xls类型");
+        }
+        try{
+            // 得到这个excel表格对象
+            HSSFWorkbook workbook=new HSSFWorkbook(new POIFSFileSystem(file.getInputStream()));
+            List<String> errorRowNum=new ArrayList<>();
+            List<StudentInfo> userInfos=new ArrayList<>();
+            List<String> userAccounts=new ArrayList<>();
+            // 得到这个excel表格的sheet数量
+            int numberOfSheets=workbook.getNumberOfSheets();
+            for (int i=0;i<numberOfSheets;i++){
+                //得到sheet
+                HSSFSheet sheet=workbook.getSheetAt(i);
+                //得到sheet里的总行数
+                int physicalNumberOfRows=sheet.getPhysicalNumberOfRows();
+                for(int j=1;j<physicalNumberOfRows;j++){
+                    HSSFRow row=sheet.getRow(j);
+                    StudentInfo info;
+                    try {
+                        info=saveRowStudent2(row,userAccounts);
+                        userAccounts.add(info.getAccount());
+                    }catch (UserServiceException e){
+                        errorRowNum.add((j + 1) + " ");
+                        continue;
+                    }
+                    userInfos.add(info);
+                }
+            }
+            studentInfoRespository.saveAll(userInfos);
+            OpLog opLog=new OpLog(userInfo.getUserName(),"添加","批量添加学生");
+            opLogRepository.save(opLog);
+            return JSONObject.toJSONString(errorRowNum.toArray());
+        }catch (IOException e){
+            throw new UserServiceException(ResultCode.EXCEL_IMPORT_MSG);
+        }
     }
-
     @Override
     public PageInfo<TeacherModel> getTeachersByCondition(UserInfoForToken userInfo, UserConditionModel model) throws UserServiceException {
-        List<UserInfo> infos=new ArrayList<>();
+       /* List<UserInfo> infos=new ArrayList<>();
         int count=0;
         if (StringUtils.isEmpty(model.getUserName())){
             infos=userInfoRepository.findByRole("Teacher");
@@ -204,6 +328,19 @@ public class UserInfoServiceImpl implements UserInfoService {
         List<TeacherModel> models = new ArrayList<TeacherModel>();
         infos.forEach(userInfo1 -> {
             models.add(MappingEntity2ModelCoverter.CONVERTERFROMUSERINFO(userInfo1));
+        });*/
+        List<TeacherInfo> infos=new ArrayList<>();
+        int count=0;
+       /* if (StringUtils.isEmpty(model.getUserName())){
+            infos=userInfoRepository.findByRole("Teacher");
+            count=userInfoRepository.countByRole("Teacher");
+        }else{*/
+            infos=teacherInfoRepository.findByNameLike("%"+model.getUserName()+"%");
+            count=teacherInfoRepository.countByNameLike("%"+model.getUserName()+"%");
+        //}
+        List<TeacherModel> models = new ArrayList<TeacherModel>();
+        infos.forEach(userInfo1 -> {
+            models.add(MappingEntity2ModelCoverter.CONVERTERFROMUSERINFO2(userInfo1));
         });
         PageInfo<TeacherModel> pageInfo=new PageInfo<>();
         pageInfo.setList(models);
@@ -215,9 +352,9 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public PageInfo<StudentModel> getStudentsByCondition(UserInfoForToken userInfo, UserConditionModel model) throws UserServiceException {
-        List<UserInfo> infos=new ArrayList<>();
+        List<StudentInfo> infos=new ArrayList<>();
         int count=0;
-        if (StringUtils.isEmpty(model.getUserName())){
+       /* if (StringUtils.isEmpty(model.getUserName())){
             infos=userInfoRepository.findByRole("Student");
             count=userInfoRepository.countByRole("Student");
         }else{
@@ -227,6 +364,12 @@ public class UserInfoServiceImpl implements UserInfoService {
         List<StudentModel> models = new ArrayList<StudentModel>();
         infos.forEach(userInfo1 -> {
             models.add(MappingEntity2ModelCoverter.CONVERTERFROMUSERINFOTOSTUDENT(userInfo1));
+        });*/
+        infos=studentInfoRespository.findByNameLike("%"+model.getUserName()+"%");
+        count=studentInfoRespository.countByNameLike("%"+model.getUserName()+"%");
+        List<StudentModel> models = new ArrayList<StudentModel>();
+        infos.forEach(userInfo1 -> {
+            models.add(MappingEntity2ModelCoverter.CONVERTERFROMUSERINFOTOSTUDENT2(userInfo1));
         });
         PageInfo<StudentModel> pageInfo=new PageInfo<>();
         pageInfo.setList(models);
@@ -293,10 +436,11 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public List<TeacherModel> getAllTeacher() {
-        List<UserInfo> infos=userInfoRepository.findByRole("Teacher");
+       /* List<UserInfo> infos=userInfoRepository.findByRole("Teacher");*/
+        List<TeacherInfo> infos=teacherInfoRepository.findAll();
         List<TeacherModel> models = new ArrayList<TeacherModel>();
         infos.forEach(userInfo1 -> {
-            models.add(MappingEntity2ModelCoverter.CONVERTERFROMUSERINFO(userInfo1));
+            models.add(MappingEntity2ModelCoverter.CONVERTERFROMUSERINFO2(userInfo1));
         });
         return models;
     }
@@ -359,8 +503,65 @@ public class UserInfoServiceImpl implements UserInfoService {
         userInfo.setStatus(Status.ACTIVATE.getName());
         return userInfo;
     }
-
-    private UserInfo saveRowStudent(HSSFRow row,List<String> accounts) throws UserServiceException{
+    private TeacherInfo saveRowTeacher2(HSSFRow row,List<String> accounts) throws UserServiceException{
+        TeacherInfo userInfo=new TeacherInfo();
+        String account = "";
+        String userName = "";
+        String sexStr = "";
+        String subject = "";
+        String schoolName = "";
+        String pwd = "";
+        int physicalNumberOfCells = row.getPhysicalNumberOfCells();
+        for (int i = 0; i < physicalNumberOfCells; i++) {
+            switch (i) {
+                case 0:
+                    account = getCellString(row.getCell(i));
+                    break;
+                case 1:
+                    userName = getCellString(row.getCell(i));
+                    break;
+                case 2:
+                    sexStr = getCellString(row.getCell(i));
+                    break;
+                case 3:
+                    subject = getCellString(row.getCell(i));
+                    break;
+                case 4:
+                    schoolName = getCellString(row.getCell(i));
+                    break;
+                case 5:
+                    pwd = getCellString(row.getCell(i));
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (StringUtils.isEmpty(account)) {
+            throw new UserServiceException(ResultCode.PARAM_MISS_MSG);
+        }
+        if (StringUtils.isEmpty(pwd)) {
+            pwd="abcd1234";
+        }
+        if (accounts.contains(account)) {
+            throw new UserServiceException(ResultCode.USER_IS_EXIST);
+        }
+        /*if ("男".equals(sexStr.trim())) {
+            userInfo.setSex("M");
+        } else {
+            userInfo.setSex("F");
+        }*/
+        userInfo.setSex(sexStr);
+        userInfo.setAccount(account);
+        userInfo.setName(userName);
+        /*userInfo.setSubject(subject);*/
+        userInfo.setSchoolName(schoolName);
+        userInfo.setPwd(Md5Util.encodeByMd5(pwd));
+        userInfo.setRole("Teacher");
+        userInfo.setIntegral(0);
+        userInfo.setStatus(Status.ACTIVATE.getName());
+        return userInfo;
+    }
+   /* private UserInfo saveRowStudent(HSSFRow row,List<String> accounts) throws UserServiceException{
         UserInfo userInfo=new UserInfo();
         String account = "";
         String userName = "";
@@ -402,11 +603,11 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (accounts.contains(account)) {
             throw new UserServiceException(ResultCode.USER_IS_EXIST);
         }
-        /*if ("男".equals(sexStr.trim())) {
+        *//*if ("男".equals(sexStr.trim())) {
             userInfo.setSex("M");
         } else {
             userInfo.setSex("F");
-        }*/
+        }*//*
         userInfo.setSex(sexStr);
         userInfo.setAccount(account);
         userInfo.setName(userName);
@@ -416,8 +617,57 @@ public class UserInfoServiceImpl implements UserInfoService {
         userInfo.setRole("Student");
         userInfo.setStatus(Status.ACTIVATE.getName());
         return userInfo;
-    }
+    }*/
+   private StudentInfo saveRowStudent2(HSSFRow row,List<String> accounts) throws UserServiceException{
+       StudentInfo userInfo=new StudentInfo();
+       String account = "";
+       String userName = "";
+       String phone="";
+       String sexStr = "F";
+       String pwd = "";
+       String studentId = "";
+       int physicalNumberOfCells = row.getPhysicalNumberOfCells();
+       for (int i = 0; i < physicalNumberOfCells; i++) {
+           switch (i) {
+               case 0:
+                   userName = getCellString(row.getCell(i));
+                   break;
+               case 1:
+                   studentId = getCellString(row.getCell(i));
+                   break;
+               case 2:
+                   account = getCellNumber(row.getCell(i));
+                   break;
+               case 3:
+                   phone = getCellString(row.getCell(i));
+                   break;
+               case 4:
+                   pwd = getCellString(row.getCell(i));
+                   break;
+               default:
+                   break;
+           }
+       }
+       if (StringUtils.isEmpty(account)) {
+           throw new UserServiceException(ResultCode.PARAM_MISS_MSG);
+       }
+       if (StringUtils.isEmpty(pwd)) {
+           pwd="abcd1234";
+       }
+       if (accounts.contains(account)) {
+           throw new UserServiceException(ResultCode.USER_IS_EXIST);
+       }
 
+       userInfo.setSex(sexStr);
+       userInfo.setAccount(account);
+       userInfo.setName(userName);
+       userInfo.setPwd(Md5Util.encodeByMd5(pwd));
+       userInfo.setPhone(phone);
+       userInfo.setRole("Student");
+       userInfo.setStatus(Status.ACTIVATE.getName());
+       userInfo.setStudentId(studentId);
+       return userInfo;
+   }
     private String getCellString(HSSFCell cell) throws UserServiceException {
         if (null == cell) {
             throw new UserServiceException(ResultCode.PARAM_MISS_MSG);

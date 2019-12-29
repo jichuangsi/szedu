@@ -41,7 +41,7 @@ public class StudentInfoServiceImpl implements StudentInfoService {
         String user=JSONObject.toJSONString(MappingEntity3ModelCoverter.CONVERTERFROMBACKSTUDENTINFO(userInfo));
         try {
             String acc=backTokenService.createdToken(user);
-            model1=MappingEntity3ModelCoverter.CONVERTERFROMBACKTEACHERINFO(userInfo);
+            model1=MappingEntity3ModelCoverter.CONVERTERFROMBACKSTUDENTMODEL(userInfo);
             model1.setAccessToken(acc);
             return model1;
         }catch (UnsupportedEncodingException e){

@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "courseClassRelation")
-public class CourseClassRelation {
+public class CourseClassRelation {//课堂班级
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

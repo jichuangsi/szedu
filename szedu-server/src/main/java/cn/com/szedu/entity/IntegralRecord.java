@@ -2,10 +2,7 @@ package cn.com.szedu.entity;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "integralrecord")
@@ -19,7 +16,8 @@ public class IntegralRecord {
     private String operatorId;//操作人id
     private String operatorName;//操作名字
     private Integer integra;//积分
-    private String message;//提示信息
+  /*  private String message;//提示信息*/
+    @Column(name = "createTime")
     private long createTime;//操作时间
 
     public String getId() {
@@ -70,13 +68,13 @@ public class IntegralRecord {
         this.integra = integra;
     }
 
-    public String getMessage() {
+  /*  public String getMessage() {
         return message;
     }
 
     public void setMessage(String message) {
         this.message = message;
-    }
+    }*/
 
     public long getCreateTime() {
         return createTime;
@@ -86,14 +84,13 @@ public class IntegralRecord {
         this.createTime = createTime;
     }
 
-    public IntegralRecord(String id,String function, String functionName, String operatorId, String operatorName, Integer integra, String message, long createTime) {
+    public IntegralRecord(String id,String function, String functionName, String operatorId, String operatorName, Integer integra, long createTime) {
         this.id=id;
         this.function = function;
         this.functionName = functionName;
         this.operatorId = operatorId;
         this.operatorName = operatorName;
         this.integra = integra;
-        this.message = message;
         this.createTime = createTime;
     }
 

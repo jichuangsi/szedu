@@ -3,26 +3,25 @@ package cn.com.szedu.entity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.util.Date;
 
 @Entity
 @Table(name = "course")
-@GenericGenerator(name = "jpa-uuid",strategy = "uuid")
-public class Course {
+@GenericGenerator(name = "jpa-uuid", strategy = "uuid")
+public class Course implements Cloneable{
     @Id
     @GeneratedValue(generator = "jpa-uuid")
     private String id;
     private String courseTitle;//课堂名称
-    private String subjectId;//
+    private Integer subjectId;//
     private String subject;//科目
+    private Integer chapterId;//
     private String chapter;//章节
     private String founderId;//
     private String founderName;//创建人
     private String teacherId;
     private String teacherName;
     private String courseTimeLength;
-    private Date startTime;//开课时间
+    private long startTime;//开课时间
     private String content;//简介
     @Lob
     @Basic(fetch = FetchType.LAZY)
@@ -31,13 +30,23 @@ public class Course {
     private String lessonTypeId;//课堂类型
     private String lessonTypeName;//课堂类型
     private String status;//课堂状态
-    private Timestamp endTime;//结束时间
+    private long endTime;//结束时间
 
-    public Timestamp getEndTime() {
+
+
+    public Integer getChapterId() {
+        return chapterId;
+    }
+
+    public void setChapterId(Integer chapterId) {
+        this.chapterId = chapterId;
+    }
+
+    public long getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Timestamp endTime) {
+    public void setEndTime(long endTime) {
         this.endTime = endTime;
     }
 
@@ -65,11 +74,11 @@ public class Course {
         this.status = status;
     }
 
-    public String getSubjectId() {
+    public Integer getSubjectId() {
         return subjectId;
     }
 
-    public void setSubjectId(String subjectId) {
+    public void setSubjectId(Integer subjectId) {
         this.subjectId = subjectId;
     }
 
@@ -129,11 +138,11 @@ public class Course {
         this.courseTimeLength = courseTimeLength;
     }
 
-    public Date getStartTime() {
+    public long getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(long startTime) {
         this.startTime = startTime;
     }
 
@@ -175,5 +184,16 @@ public class Course {
 
     public void setLessonTypeName(String lessonTypeName) {
         this.lessonTypeName = lessonTypeName;
+    }
+
+    @Override
+    public Object clone() {
+        Course course = null;
+        try{
+            course = (Course)super.clone();
+        }catch(CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return course;
     }
 }

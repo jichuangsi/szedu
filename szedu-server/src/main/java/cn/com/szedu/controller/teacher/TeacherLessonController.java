@@ -1,14 +1,13 @@
 package cn.com.szedu.controller.teacher;
 
 import cn.com.szedu.entity.Course;
+import cn.com.szedu.entity.CourseWare;
 import cn.com.szedu.exception.TecherException;
 import cn.com.szedu.model.ResponseModel;
 import cn.com.szedu.model.UserInfoForToken;
-import cn.com.szedu.model.teacher.AttendanceCourseModel;
-import cn.com.szedu.model.teacher.AttendanceModel;
-import cn.com.szedu.model.teacher.TeacherCourseModel;
-import cn.com.szedu.model.teacher.TeacherLessonModel;
+import cn.com.szedu.model.teacher.*;
 import cn.com.szedu.service.TeacherLessonService;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -18,10 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/TeacherLesson")
@@ -35,12 +37,11 @@ public class TeacherLessonController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
-    @PostMapping("/teacherLesson")
-    public ResponseModel<PageInfo<TeacherLessonModel>> TeacherLesson(@ModelAttribute UserInfoForToken userInfo,
-          @RequestParam String name, @RequestParam String lessionType, @RequestParam Date time,
-           @RequestParam int pageNum, @RequestParam int PageSize)throws TecherException {
+    @PostMapping("/getAllLesson")
+    public ResponseModel TeacherLesson(@ModelAttribute UserInfoForToken userInfo,
+                                                     @RequestBody MyAllLessionModel model) throws TecherException {
 
-        return  ResponseModel.sucess("",teacherLessonService.getAllLesson(userInfo, name, lessionType, time, pageNum, PageSize));
+        return ResponseModel.sucess("", teacherLessonService.getAllLesson(userInfo,model));
     }
 
     @ApiOperation(value = "删除课堂", notes = "")
@@ -48,19 +49,21 @@ public class TeacherLessonController {
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @PostMapping("/deleteLesson")
-    public ResponseModel deleteLesson(@ModelAttribute UserInfoForToken userInfo ,@RequestParam String lessonId) throws TecherException{
+    public ResponseModel deleteLesson(@ModelAttribute UserInfoForToken userInfo, @RequestParam String lessonId) throws TecherException {
         teacherLessonService.deleteLession(userInfo, lessonId);
-        return  ResponseModel.sucessWithEmptyData("");
+        return ResponseModel.sucessWithEmptyData("");
     }
+
     @ApiOperation(value = "添加课堂", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @PostMapping("/addLesson")
-    public ResponseModel addLesson(@ModelAttribute UserInfoForToken userInfo ,@RequestBody TeacherLessonModel model) throws TecherException{
-            teacherLessonService.addLesson(userInfo, model);
-        return  ResponseModel.sucessWithEmptyData("");
+    public ResponseModel addLesson(@ModelAttribute UserInfoForToken userInfo, @RequestBody TeacherLessonModel model) throws TecherException {
+        teacherLessonService.addLesson(userInfo, model);
+        return ResponseModel.sucessWithEmptyData("");
     }
+
     @ApiOperation(value = "上传课堂图片", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
@@ -68,8 +71,8 @@ public class TeacherLessonController {
     @PostMapping("/uploadCourseImg")
     public ResponseModel uploadQuestionImg(@RequestParam MultipartFile file, @ModelAttribute UserInfoForToken userInfo) {
         try {
-            return ResponseModel.sucess("",teacherLessonService.addCourseImg(file));
-        }catch (IOException e) {
+            return ResponseModel.sucess("", teacherLessonService.addCourseImg(file));
+        } catch (IOException e) {
             return ResponseModel.fail("", e.getMessage());
         }
     }
@@ -80,19 +83,19 @@ public class TeacherLessonController {
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @PostMapping("/getCourseDetail")
-    public ResponseModel<TeacherLessonModel> getCourseDetail(@ModelAttribute UserInfoForToken userInfo, @RequestParam String courseId) throws TecherException{
+    public ResponseModel<TeacherLessonModel> getCourseDetail(@ModelAttribute UserInfoForToken userInfo, @RequestParam String courseId) throws TecherException {
         teacherLessonService.getCourseDetail(userInfo, courseId);
-        return  ResponseModel.sucessWithEmptyData("");
+        return ResponseModel.sucessWithEmptyData("");
     }
 
     @ApiOperation(value = "改变课堂状态", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
-    @PostMapping("/updateCourseStatus")
-    public ResponseModel updateCourseStatus(@ModelAttribute UserInfoForToken userInfo, @RequestParam String courseId, @RequestParam String staus) throws TecherException{
-        teacherLessonService.updateCourseStatus(userInfo, courseId,staus);
-        return  ResponseModel.sucessWithEmptyData("");
+    @GetMapping("/updateCourseStatus")
+    public ResponseModel updateCourseStatus(@ModelAttribute UserInfoForToken userInfo, @RequestParam String courseId, @RequestParam String staus) throws TecherException {
+        teacherLessonService.updateCourseStatus(userInfo, courseId, staus);
+        return ResponseModel.sucessWithEmptyData("");
     }
 
     @ApiOperation(value = "复制课堂", notes = "")
@@ -100,9 +103,19 @@ public class TeacherLessonController {
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @PostMapping("/copyLession")
-    public ResponseModel copyLession(@ModelAttribute UserInfoForToken userInfo, @RequestBody Course course) throws TecherException{
-        teacherLessonService.copyLession(userInfo,course);
-        return  ResponseModel.sucessWithEmptyData("");
+    public ResponseModel copyLession(@ModelAttribute UserInfoForToken userInfo,@RequestParam String id) throws TecherException {
+        teacherLessonService.copyLession(userInfo, id);
+        return ResponseModel.sucessWithEmptyData("");
+    }
+
+    @ApiOperation(value = "编辑课堂", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/updateCourse")
+    public ResponseModel updateCourse(@ModelAttribute UserInfoForToken userInfo, @RequestBody TeacherLessonModel course) throws TecherException {
+        teacherLessonService.updateCourse(userInfo, course);
+        return ResponseModel.sucessWithEmptyData("");
     }
 
     @ApiOperation(value = "学生考勤", notes = "")
@@ -110,8 +123,43 @@ public class TeacherLessonController {
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @PostMapping("/getAttendanceByCourse")
-    public ResponseModel<PageInfo<AttendanceCourseModel>> getAttendanceByCourse(@ModelAttribute UserInfoForToken userInfo,@RequestParam String couseId,@RequestParam int pageNum, @RequestParam int PageSize) throws TecherException{
-        return ResponseModel.sucess("",teacherLessonService.getAttendanceByCourse(userInfo, couseId, pageNum, PageSize));
+    public ResponseModel<PageInfo<AttendanceCourseModel>> getAttendanceByCourse(@ModelAttribute UserInfoForToken userInfo, @RequestParam String couseId, @RequestParam int pageNum, @RequestParam int PageSize) throws TecherException {
+        return ResponseModel.sucess("", teacherLessonService.getAttendanceByCourse(userInfo, couseId, pageNum, PageSize));
     }
 
+   /* @ApiOperation(value = "根据课堂查出上课资源", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/getResoureByCourse")
+    public ResponseModel<List<CourseWare>> getResoureByCourse(@ModelAttribute UserInfoForToken userInfo, @RequestParam String couseId) throws TecherException {
+        return ResponseModel.sucess("", teacherLessonService.getResoureByCourse(userInfo, couseId));
+    }
+
+    @ApiOperation(value = "根据课堂查出推送资源", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/getPushResoureByCourse")
+    public ResponseModel<List<CourseWare>> getPushResoureByCourse(@ModelAttribute UserInfoForToken userInfo, @RequestParam String couseId) throws TecherException {
+        return ResponseModel.sucess("", teacherLessonService.getPushResoureByCourse(userInfo, couseId));
+    }*/
+
+   /* @ApiOperation(value = "我的资源", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/getMyResoure")
+    public ResponseModel<List<CourseWare>> getMyResoure(@ModelAttribute UserInfoForToken userInfo) throws TecherException {
+        return ResponseModel.sucess("", teacherLessonService.getMyResoure(userInfo));
+    }*/
+
+    @ApiOperation(value = "导师等级", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/getMyGrade")
+    public ResponseModel<String> getMyGrade(@ModelAttribute UserInfoForToken userInfo) throws TecherException {
+        return ResponseModel.sucess("", teacherLessonService.getMyGrade(userInfo));
+    }
 }

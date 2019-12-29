@@ -13,6 +13,15 @@ public class TeacherModel {
     private Integer countResource;//资源总数
     private Integer integral;
     private String accessToken;
+    private boolean signin;//签到
+
+    public boolean isSignin() {
+        return signin;
+    }
+
+    public void setSignin(boolean signin) {
+        this.signin = signin;
+    }
 
     public String getAccessToken() {
         return accessToken;

@@ -10,10 +10,11 @@ public class TeacherLessonModel {
     private String lessonId;
     private String lessonName;
     private String lessonContent;
-    private Date teachTime;//开课 时间
+    private long teachTime;//开课 时间
     private String teachTimeLength;
-    private String subjectId;//科目
+    private Integer subjectId;//科目
     private String subjectName;
+    private Integer chapterId;//章节id
     private String chapter;//章节
     private String classRoom;//班级
     private String teacherId;
@@ -28,9 +29,24 @@ public class TeacherLessonModel {
     private List<CourseWare> pushcourseWares;//推送资源资源
     private List<ClassModel> classModelList;//班级
     private Integer sum;
-    private Timestamp endTime;//结束时间
+    private long endTime;//结束时间
     private List<StudentCourseScoreModel> score;//课堂评分
 
+    public Integer getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(Integer subjectId) {
+        this.subjectId = subjectId;
+    }
+
+    public Integer getChapterId() {
+        return chapterId;
+    }
+
+    public void setChapterId(Integer chapterId) {
+        this.chapterId = chapterId;
+    }
 
     public List<CourseWare> getPushcourseWares() {
         return pushcourseWares;
@@ -48,11 +64,11 @@ public class TeacherLessonModel {
         this.score = score;
     }
 
-    public Timestamp getEndTime() {
+    public long getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Timestamp endTime) {
+    public void setEndTime(long endTime) {
         this.endTime = endTime;
     }
 
@@ -104,11 +120,11 @@ public class TeacherLessonModel {
         this.lessonContent = lessonContent;
     }
 
-    public Date getTeachTime() {
+    public long getTeachTime() {
         return teachTime;
     }
 
-    public void setTeachTime(Date teachTime) {
+    public void setTeachTime(long teachTime) {
         this.teachTime = teachTime;
     }
 
@@ -119,15 +135,6 @@ public class TeacherLessonModel {
     public void setTeachTimeLength(String teachTimeLength) {
         this.teachTimeLength = teachTimeLength;
     }
-
-    public String getSubjectId() {
-        return subjectId;
-    }
-
-    public void setSubjectId(String subjectId) {
-        this.subjectId = subjectId;
-    }
-
     public String getSubjectName() {
         return subjectName;
     }
