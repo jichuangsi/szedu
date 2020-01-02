@@ -1,12 +1,13 @@
 package cn.com.szedu.service.impl;
 
 import cn.com.szedu.commons.Md5Util;
+import cn.com.szedu.constant.LoginMap;
 import cn.com.szedu.constant.ResultCode;
 import cn.com.szedu.dao.mapper.IClassInfoMapper;
 import cn.com.szedu.entity.*;
+import cn.com.szedu.entity.IntermediateTable.CourseUserRelation;
 import cn.com.szedu.entity.IntermediateTable.MessageUserRelation;
 import cn.com.szedu.entity.IntermediateTable.ResourceTeacherInfoRelation;
-import cn.com.szedu.entity.IntermediateTable.TeacherCourseRelation;
 import cn.com.szedu.exception.UserServiceException;
 import cn.com.szedu.model.IDNameModel;
 import cn.com.szedu.model.SandMessageModel;
@@ -14,31 +15,24 @@ import cn.com.szedu.model.UserInfoForToken;
 import cn.com.szedu.model.teacher.MessageModel;
 import cn.com.szedu.model.teacher.TeacherModel;
 import cn.com.szedu.repository.*;
+import cn.com.szedu.repository.IntermediateTableRepository.ICourseUserRelationRepository;
 import cn.com.szedu.repository.IntermediateTableRepository.IMessageUserRelationRepository;
 import cn.com.szedu.repository.IntermediateTableRepository.IResourceTeacherInfoRelationRepository;
-import cn.com.szedu.repository.IntermediateTableRepository.ITeacherCouseRelationRepository;
 import cn.com.szedu.service.BackTokenService;
-import cn.com.szedu.service.IFastDFSClientService;
 import cn.com.szedu.service.TeacherInfoService;
 import cn.com.szedu.util.MappingEntity3ModelCoverter;
 import com.alibaba.fastjson.JSONObject;
-import org.hibernate.Session;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -50,8 +44,6 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
     private ITeacherInfoRepository teacherInfoRepository;
     @Resource
     private BackTokenService backTokenService;
-    @Resource
-    private ITeacherCouseRelationRepository teacherCouseRelationRepository;
     @Resource
     private IResourceTeacherInfoRelationRepository resourceTeacherInfoRelationRepository;
     @Resource
@@ -66,6 +58,10 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
     private IIntegralRuleRepository integralRuleRepository;
     @Resource
     private IClassInfoMapper classInfoMapper;
+    @Resource
+    private ICourseUserRelationRepository courseUserRelationRepository;
+    //记录登录用户
+
 
     @Override
     /**
@@ -80,7 +76,7 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
         if (userInfo == null) {
             throw new UserServiceException(ResultCode.ACCOUNT_NOTEXIST_MSG);
         }
-        List<TeacherCourseRelation> tcr = teacherCouseRelationRepository.findAllByTecherId(userInfo.getId());//老师课堂
+        List<CourseUserRelation> tcr = courseUserRelationRepository.findAllByUid(userInfo.getId());//老师课堂
         List<ResourceTeacherInfoRelation> trr = resourceTeacherInfoRelationRepository.findByTeacherId(userInfo.getId());//老师资源
         String user = JSONObject.toJSONString(MappingEntity3ModelCoverter.CONVERTERFROMBACKUSERUSER(userInfo));
         try {
@@ -96,14 +92,9 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
                 model1.setSignin(true);//能签
             }
 
-
-            //保存用户信息
-            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-                    .getRequestAttributes()).getRequest();
-            HttpSession session = request.getSession();
-            session.setAttribute("userId", userInfo.getId());
-            session.setAttribute("time", System.currentTimeMillis() / 1000);//保存用户登录时间
-          
+          Map<String,Long> p=new HashMap<>();
+            p.put(userInfo.getId(), System.currentTimeMillis() / 1000);
+            LoginMap.setMap(p);
             return model1;
         } catch (UnsupportedEncodingException e) {
             throw new UserServiceException(e.getMessage());
@@ -334,7 +325,7 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
      */
     private TeacherModel getTeacherDetail(TeacherInfo userInfo) {
         TeacherModel model1 = null;
-        List<TeacherCourseRelation> tcr = teacherCouseRelationRepository.findAllByTecherId(userInfo.getId());//老师课堂
+        List<CourseUserRelation> tcr = courseUserRelationRepository.findAllByUid(userInfo.getId());//老师课堂
         //List<ResourceTeacherInfoRelation> trr = resourceTeacherInfoRelationRepository.findByTeacherId(userInfo.getId());//老师资源
         //List<CourseWare> trr=
         model1 = MappingEntity3ModelCoverter.CONVERTERFROMBACKTEACHERINFO(userInfo);
@@ -367,6 +358,7 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
 
     /**
      * 获取互动消息(根据用户，不分发送接收者)
+     *
      * @param userInfo
      * @param pageNum
      * @param pageSize
@@ -405,13 +397,14 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
 
     /**
      * 修改积分规则(积分内容，积分，次数)
+     *
      * @param userInfo
      * @param integralRule
      */
     @Override
     public void updateintegralRule(UserInfoForToken userInfo, IntegralRule integralRule) {
-       IntegralRule integralRule1=integralRuleRepository.findFirstById(integralRule.getId());
-        if (integralRule1!=null){
+        IntegralRule integralRule1 = integralRuleRepository.findFirstById(integralRule.getId());
+        if (integralRule1 != null) {
             integralRule1.setContent(integralRule.getContent());//类容
             integralRule1.setCount(integralRule.getCount());//次数
             integralRule1.setIntegral(integralRule.getIntegral());//积分
@@ -422,18 +415,36 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
 
     /**
      * 获取除了自己以外的所有老师
+     *
      * @param userInfo
      * @return
      */
     @Override
     public List<TeacherModel> getAllTeacher(UserInfoForToken userInfo) {
-        List<TeacherModel> modelList=new ArrayList<TeacherModel>();
-        List<TeacherInfo> teacherInfo=teacherInfoRepository.findByIdNot(userInfo.getUserId());//除了自己
-        for (TeacherInfo t:teacherInfo) {
-            TeacherModel teacherModel=MappingEntity3ModelCoverter.CONVERTERFROMBACKTEACHERINFO(t);
+        List<TeacherModel> modelList = new ArrayList<TeacherModel>();
+        List<TeacherInfo> teacherInfo = teacherInfoRepository.findByIdNot(userInfo.getUserId());//除了自己
+        for (TeacherInfo t : teacherInfo) {
+            TeacherModel teacherModel = MappingEntity3ModelCoverter.CONVERTERFROMBACKTEACHERINFO(t);
             modelList.add(teacherModel);
         }
         return modelList;
+    }
+
+    @Override
+    public void addMessage(UserInfoForToken userInfo, MessageModel message) {
+        Message message1=MappingEntity3ModelCoverter.CONVERTERFROMBACKMESSAGE(userInfo,message);
+        messageRepository.save(message1);
+    }
+
+    /***
+     * 积分
+     * @param userInfo
+     * @param integralRecord
+     */
+    @Override
+    public void addintegral(UserInfoForToken userInfo, IntegralRecord integralRecord) {
+        integralRecord.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+        integralRecordRepository.save(integralRecord);
     }
 }
 

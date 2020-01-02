@@ -96,4 +96,14 @@ public class IntegralRecord {
 
     public IntegralRecord() {
     }
+
+    public IntegralRecord(String function, String functionName, String operatorId, String operatorName, Integer integra, long createTime) {
+
+        this.function = function;
+        this.functionName = functionName;
+        this.operatorId = operatorId;
+        this.operatorName = operatorName;
+        this.integra = integra;
+        this.createTime = createTime;
+    }
 }

@@ -27,21 +27,27 @@ public interface TeacherInfoService {
 
     Integer getTeacherMessageCount(UserInfoForToken userInfo) throws UserServiceException;
 
-   /* void getUserLogin(UserInfoForToken userInfo) throws UserServiceException;*/
-   void getUserLogin( String userId);
+    /* void getUserLogin(UserInfoForToken userInfo) throws UserServiceException;*/
+    void getUserLogin(String userId);
 
     void updateTeacherMessage(UserInfoForToken userInfo) throws UserServiceException;
 
-    Page<IntegralRule> integralRule(int pageNum,int pageSize) throws UserServiceException;
+    Page<IntegralRule> integralRule(int pageNum, int pageSize) throws UserServiceException;
 
     @Transactional
-    Integer sendMessageByTeacher( UserInfoForToken userInfo);
+    Integer sendMessageByTeacher(UserInfoForToken userInfo);
 
-    List<Message> getTeacherInteractionMessage(UserInfoForToken userInfo, int pageNum, int pageSize)throws UserServiceException;
+    List<Message> getTeacherInteractionMessage(UserInfoForToken userInfo, int pageNum, int pageSize) throws UserServiceException;
 
-    void addInteractionMessage(UserInfoForToken userInfo,SandMessageModel model)throws UserServiceException;
+    void addInteractionMessage(UserInfoForToken userInfo, SandMessageModel model) throws UserServiceException;
+
     //修改积分规则
-    void updateintegralRule(UserInfoForToken userInfo,IntegralRule integralRule);
+    void updateintegralRule(UserInfoForToken userInfo, IntegralRule integralRule);
+
     //查看所有老师
-    List<TeacherModel> getAllTeacher(UserInfoForToken userInfo)throws UserServiceException;
+    List<TeacherModel> getAllTeacher(UserInfoForToken userInfo) throws UserServiceException;
+
+    public void addMessage(UserInfoForToken userInfo, MessageModel message);
+
+    public void addintegral(UserInfoForToken userInfo, IntegralRecord integralRecord);
 }

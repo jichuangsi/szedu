@@ -269,7 +269,7 @@ public class MappingEntity3ModelCoverter {
     }*/
 
     /**
-     *
+     *互动消息
      * @param info
      * @param model
      * @return
@@ -280,8 +280,25 @@ public class MappingEntity3ModelCoverter {
         message.setSenderName(info.getUserName());
         message.setMessage(model.getMessage());
         message.setAlreadyRead(false);
-        message.setReply(message.getReply());
-        message.setSend("Y");//已发送
+        message.setReply(model.getReply());
+        message.setSend(model.getSend());//已发送
+        return message;
+    }
+    /**
+     *
+     * @param info
+     * @param model
+     * @return
+     */
+    public final static Message CONVERTERFROMBACKMESSAGE(UserInfoForToken info,MessageModel model) {
+        Message message=new Message();
+        message.setSenderid(info.getUserId());//发送
+        message.setSenderName(info.getUserName());
+        message.setMessage(model.getMessage());//消息
+        message.setAlreadyRead(false);//已读
+        message.setRecipientId(model.getRecipientId());//接收
+        message.setRecipientName(model.getRecipientName());
+        message.setSend(model.getSend());//已发送
         return message;
     }
 }

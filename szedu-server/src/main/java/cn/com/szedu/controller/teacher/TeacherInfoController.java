@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.List;
-
+@SessionAttributes
 @RestController
 @RequestMapping("/teacherInfo")
 @Api("老师相关的api")
@@ -60,7 +60,7 @@ public class TeacherInfoController {
         return ResponseModel.sucess("", teacherInfoService.getTeacherIntegral(userInfo, pageNum, pageSize));
     }
 
-    @ApiOperation(value = "查看老师系统消息", notes = "")
+    @ApiOperation(value = "查看老师系统消息(老师学生通用)", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
@@ -70,7 +70,7 @@ public class TeacherInfoController {
         return ResponseModel.sucess("", teacherInfoService.getTeacherMessage(userInfo, pageNum, pageSize));
     }
 
-    @ApiOperation(value = "查看老师消息未读数", notes = "")
+    @ApiOperation(value = "查看老师消息未读数(系统+互动)", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
@@ -109,7 +109,7 @@ public class TeacherInfoController {
         return ResponseModel.sucess("", teacherInfoService.integralRule(pageNum,pageSize));
     }
 
-    @ApiOperation(value = "给老师发送系统消息", notes = "")
+    @ApiOperation(value = "给老师发送系统消息(定时，返回发送信息数量)", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
@@ -119,7 +119,7 @@ public class TeacherInfoController {
         return ResponseModel.sucess("", teacherInfoService.sendMessageByTeacher(userInfo));
     }
 
-    @ApiOperation(value = "查看老师互动消息", notes = "")
+    @ApiOperation(value = "查看(老师,学生)互动消息", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
@@ -128,7 +128,7 @@ public class TeacherInfoController {
     return ResponseModel.sucess("", teacherInfoService.getTeacherInteractionMessage(userInfo, pageNum, pageSize));
     }
 
-    @ApiOperation(value = "发送互动消息", notes = "")
+    @ApiOperation(value = "发送互动消息（老师学生通用）", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
@@ -154,6 +154,27 @@ public class TeacherInfoController {
     @GetMapping("/getAllTeacher")
     public ResponseModel<List<TeacherInfo>> getAllTeacher(@ModelAttribute UserInfoForToken userInfo)throws UserServiceException{
         teacherInfoService.getAllTeacher(userInfo);
+        return ResponseModel.sucessWithEmptyData("");
+    }
+
+    //消息
+    @ApiOperation(value = "发送信息", notes = "")
+   /* @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })*/
+    @GetMapping("/addMessage")
+    public ResponseModel addMessage(UserInfoForToken userInfo,MessageModel message)throws UserServiceException{
+        teacherInfoService.addMessage(userInfo,message);
+        return ResponseModel.sucessWithEmptyData("");
+    }
+    //积分
+    @ApiOperation(value = "积分", notes = "")
+   /* @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })*/
+    @GetMapping("/addintegral")
+    public ResponseModel addintegral(UserInfoForToken userInfo,IntegralRecord integralRecord)throws UserServiceException{
+        teacherInfoService.addintegral(userInfo,integralRecord);
         return ResponseModel.sucessWithEmptyData("");
     }
 }

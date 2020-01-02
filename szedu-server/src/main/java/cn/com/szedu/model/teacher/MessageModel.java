@@ -8,8 +8,17 @@ public class MessageModel {
     private String recipientName;//接收者名字；
     private String message;//消息详情
     private long time=new Date().getTime();
-    private boolean alreadyRead=false;//是否已读
-    private Integer unreadCount;//未读消息
+    private boolean alreadyRead=false;//是否已读(否)
+    private Integer unreadCount;//未读消息数
+    private String send;//是否发送N没Y已发送
+
+    public String getSend() {
+        return send;
+    }
+
+    public void setSend(String send) {
+        this.send = send;
+    }
 
     public Integer getId() {
         return id;
