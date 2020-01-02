@@ -1,6 +1,7 @@
 package cn.com.szedu.service;
 
 import cn.com.szedu.constant.ResultCode;
+import cn.com.szedu.entity.Course;
 import cn.com.szedu.entity.Exam;
 import cn.com.szedu.entity.IntermediateTable.ExamClassRelation;
 import cn.com.szedu.exception.TecherException;
@@ -13,10 +14,15 @@ import cn.com.szedu.repository.IExamRepository;
 import cn.com.szedu.repository.IntermediateTableRepository.IClassExamRelationRepository;
 import cn.com.szedu.util.MappingEntity3ModelCoverter;
 import com.github.pagehelper.PageInfo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +44,7 @@ public class TeacherAchievementService {
      * @return
      * @throws TecherException
      */
-   public PageInfo<ExamModel> getExamByClass(UserInfoForToken userInfo,String classId , int pageNum1 ,int pageSize1)throws TecherException {
+   public Page<Exam> getExamByClass(UserInfoForToken userInfo,String classId , int pageNum1 ,int pageSize1)throws TecherException {
         if (StringUtils.isEmpty(userInfo) ||StringUtils.isEmpty(classId)){throw  new TecherException(ResultCode.PARAM_MISS_MSG);}
         int pageNum=pageNum1==0?1:pageNum1;
         int pageSize=pageSize1==0?5:pageSize1;
@@ -47,19 +53,44 @@ public class TeacherAchievementService {
         Exam exam=null;
         List<ExamClassRelation> examClassRelation=classExamRelationRepository.findByClassId(classId);
         if (examClassRelation.size()<=0){throw new TecherException(ResultCode.SELECT_NULL_MSG);}
-        for (ExamClassRelation e:examClassRelation) {
+
+       /* for (ExamClassRelation e:examClassRelation) {
             exam=examRepository.findFirstByid(e.getExamId());
             model=new ExamModel();
             model.setExamId(exam.getId());
             model.setExamName(exam.getExamName());
             elist.add(model);
-        }
-        PageInfo<ExamModel> pageInfo=new PageInfo<ExamModel>();
+        }*/
+
+      /*  PageInfo<ExamModel> pageInfo=new PageInfo<ExamModel>();
         pageInfo.setList(elist);
         pageInfo.setPageNum(pageNum);
         pageInfo.setPageSize(pageSize);
         pageInfo.setTotal(elist.size());
-        return pageInfo;
+        return pageInfo;*/
+       Sort sort=new Sort(new Sort.Order(Sort.Direction.ASC, "startTime"));
+       Pageable pageable=new PageRequest(pageNum-1,pageSize,sort);
+       Page<Exam> exam2=examRepository.findAll((Root<Exam> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder)->{
+           List<Predicate> predicateList = new ArrayList<>();
+           Path<Object> path = root.get("id");
+           CriteriaBuilder.In<Object> in = criteriaBuilder.in(path);
+           for (ExamClassRelation e:examClassRelation) {
+               in.value(e.getExamId());
+           }
+           predicateList.add(criteriaBuilder.and(criteriaBuilder.and(in)));
+          /* if(!StringUtils.isEmpty(mmodel.getSubjectId())){
+               predicateList.add(criteriaBuilder.equal(root.get("subjectId").as(Integer.class),mmodel.getSubjectId()));
+           }
+           if(!StringUtils.isEmpty(mmodel.getLessionType())){
+               predicateList.add(criteriaBuilder.equal(root.get("lessonTypeName").as(String.class),mmodel.getLessionType()));
+           }
+           if(mmodel.getTime()!=0){
+               predicateList.add(criteriaBuilder.equal(root.get("startTime").as(long.class),mmodel.getTime()));
+           }*/
+           //predicateList.add(criteriaQuery.orderBy(criteriaBuilder.desc(root.get("startTime"))));
+           return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
+       },pageable);
+       return exam2;
     }
 
     /**

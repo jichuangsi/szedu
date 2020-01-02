@@ -13,4 +13,6 @@ public interface IStudentClassRelationRepository extends JpaRepository<StudentCl
     List<StudentClassRelation> findByClassIdIn(List<String> classId);
 
     StudentClassRelation findByClassIdAndStudentId(String classId,String studentId);
+
+    List<StudentClassRelation> findByStudentId(String studentId);
 }

@@ -1,28 +1,24 @@
 package cn.com.szedu.service;
 
 import cn.com.szedu.constant.ResultCode;
-import cn.com.szedu.dao.mapper.IClassInfoMapper;
 import cn.com.szedu.entity.AttendanceInClass;
-import cn.com.szedu.entity.ClassInfo;
 import cn.com.szedu.entity.Course;
 import cn.com.szedu.entity.IntermediateTable.ClassRelation;
 import cn.com.szedu.entity.IntermediateTable.CourseClassRelation;
+import cn.com.szedu.entity.IntermediateTable.CourseUserRelation;
 import cn.com.szedu.entity.IntermediateTable.StudentClassRelation;
-import cn.com.szedu.entity.IntermediateTable.TeacherCourseRelation;
 import cn.com.szedu.entity.StudentInfo;
-import cn.com.szedu.exception.TecherException;
 import cn.com.szedu.exception.UserServiceException;
 import cn.com.szedu.model.StudentModel;
 import cn.com.szedu.model.UserInfoForToken;
 import cn.com.szedu.model.teacher.AttendanceModel;
-import cn.com.szedu.model.teacher.ClassModel;
 import cn.com.szedu.repository.IAttendanceRepository;
 import cn.com.szedu.repository.IClassInfoRepository;
 import cn.com.szedu.repository.ICourseRepository;
 import cn.com.szedu.repository.IStudentInfoRespository;
 import cn.com.szedu.repository.IntermediateTableRepository.IClassCourseRelationRepository;
+import cn.com.szedu.repository.IntermediateTableRepository.ICourseUserRelationRepository;
 import cn.com.szedu.repository.IntermediateTableRepository.IStudentClassRelationRepository;
-import cn.com.szedu.repository.IntermediateTableRepository.ITeacherCouseRelationRepository;
 import cn.com.szedu.repository.IntermediateTableRepository.TecherClassRelationRepository;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
@@ -37,8 +33,8 @@ public class AttendanceInClassService {
     private IAttendanceRepository attendanceRepository;
     @Resource
     private TecherClassRelationRepository techerClassRelationRepository;
-    @Resource
-    private ITeacherCouseRelationRepository teacherCouseRelationRepository;
+    /*@Resource
+    private ITeacherCouseRelationRepository teacherCouseRelationRepository;*/
     @Resource
     private IClassCourseRelationRepository classCourseRelationRepository;
     @Resource
@@ -51,6 +47,8 @@ public class AttendanceInClassService {
     private IClassInfoMapper classInfoMapper;*/
    @Resource
    private IClassInfoRepository classInfoRepository;
+   @Resource
+   private ICourseUserRelationRepository courseUserRelationRepository;
 
 
     /**
@@ -75,9 +73,9 @@ public class AttendanceInClassService {
         if (list.size()<=0){throw new UserServiceException(ResultCode.SELECT_NULL_MSG);}
 
        List<ClassRelation> clist=techerClassRelationRepository.findByTecherId(userInfo.getUserId());//根据老师id查询班级
-        List<TeacherCourseRelation> listt=teacherCouseRelationRepository.findAllByTecherId(userInfo.getUserId());//根据老师查询课堂
+        List<CourseUserRelation> listt=courseUserRelationRepository.findAllByUid(userInfo.getUserId());//根据老师查询课堂
         if (listt.size()<=0){throw new UserServiceException(ResultCode.SELECT_NULL_MSG);}
-        for (TeacherCourseRelation t:listt) {//循环课堂
+        for (CourseUserRelation t:listt) {//循环课堂
             Date time=new Date();//考勤时间
             Course course=courseRepository.findFirstById(t.getCourseId());
             if (StringUtils.isEmpty(course)){throw new UserServiceException(ResultCode.SELECT_NULL_MSG);

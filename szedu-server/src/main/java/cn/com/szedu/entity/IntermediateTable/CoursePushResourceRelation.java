@@ -11,6 +11,15 @@ public class CoursePushResourceRelation {
     private String courseId;
     private String pushresourceid;
     private String push;//是否推送Y是N否
+    private long pushTime;//发布时间
+
+    public long getPushTime() {
+        return pushTime;
+    }
+
+    public void setPushTime(long pushTime) {
+        this.pushTime = pushTime;
+    }
 
     public String getPush() {
         return push;

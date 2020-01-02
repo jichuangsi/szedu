@@ -75,4 +75,16 @@ public class MessageModel {
     public void setUnreadCount(Integer unreadCount) {
         this.unreadCount = unreadCount;
     }
+
+    public MessageModel(String recipientId, String recipientName, String message, long time, boolean alreadyRead, String send) {
+        this.recipientId = recipientId;
+        this.recipientName = recipientName;
+        this.message = message;
+        this.time = time;
+        this.alreadyRead = alreadyRead;
+        this.send = send;
+    }
+
+    public MessageModel() {
+    }
 }

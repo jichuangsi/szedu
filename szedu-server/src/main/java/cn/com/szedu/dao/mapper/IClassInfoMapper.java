@@ -1,9 +1,6 @@
 package cn.com.szedu.dao.mapper;
 
-import cn.com.szedu.entity.ClassInfo;
-import cn.com.szedu.entity.Course;
-import cn.com.szedu.entity.Message;
-import cn.com.szedu.entity.TeacherInfo;
+import cn.com.szedu.entity.*;
 import cn.com.szedu.model.StudentModel;
 import cn.com.szedu.model.teacher.ClassModel;
 import cn.com.szedu.model.teacher.StudentCourseScoreModel;
@@ -52,4 +49,10 @@ public interface IClassInfoMapper {
     @Select("<script> SELECT m.* FROM `message` m,`messageuserrelation` mu WHERE m.id=mu.`m_id`\n" +
             "  AND `u_id`=#{userId}  LIMIT #{num},#{size}</script>")
     List<Message> getMessageByUser(@Param("userId")String userId ,@Param("num") int num,@Param("size") int size);
+    @Select("<script> SELECT cw.* FROM `courseware` cw INNER JOIN `course_push_resource_relation` cp ON cw.id=cp.`pushresourceid`\n" +
+            "INNER JOIN `course_class_relation` cc ON cc.id=cp.`course_id` INNER JOIN `student_class_relation` sc \n" +
+            "ON sc.id=cc.`class_id` INNER JOIN `student_info` s ON s.id=sc.`student_id` WHERE s.id=#{studentId}" +
+            "AND cw.`subject`=#{subjectId} AND cw.`label`=#{type} AND cp.`push_time`=#{time}</script>")
+    List<CourseWare> getPushResourseByStudent(@Param("studentId")String studentId ,@Param("subjectId")Integer subjectId ,
+                                              @Param("type")String type ,@Param("time")long time );
 }

@@ -383,6 +383,8 @@ public class TeacherLessonService {
          /*   Double count= Double.valueOf(((model1.getScoure1()*1+model1.getScoure2()*2+model1.getScoure3()*3+model1.getScoure4()*4
                     +model1.getScoure5()*5)/sum));*/
                 model1.setAvg(count);
+               // List<StudentCourseRelation> list=studentCourseScoreRepository.findByCourseId(courseId);
+                model1.setSum(sum);//总人数
             }
 
         }
@@ -494,13 +496,12 @@ public class TeacherLessonService {
      * @param userInfo
      * @return
      * @throws TecherException
-     *//*
-    public List<CourseWare> getMyResoure(UserInfoForToken userInfo) throws TecherException {
+     */
+    public List<CourseWare> getMyResoure(UserInfoForToken userInfo,String type) throws TecherException {
         List<String> wareId = new ArrayList<String>();
-        List<CourseWare> list = courseWareRespository.findByTeacheridAndIsCheck(userInfo.getUserId(), "2");
-
+        List<CourseWare> list = courseWareRespository.findByTeacheridAndIsCheckAndType(userInfo.getUserId(), "2",type);
         return list;
-    }*/
+    }
 
     /**
      * 教师等级
@@ -563,7 +564,7 @@ public class TeacherLessonService {
         long day1 = date.getTime() / tmp;
         long day2 = date2.getTime() / tmp;
 
-        if (day2 - day1 == 1) {
+        if (day2 - day1 >= 1) {
             return true;
         } else {
             return false;

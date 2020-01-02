@@ -610,4 +610,6 @@ public class CourseWareConsoleService {
         });
         resourceClassRelationRepository.saveAll(resourceClassRelations);
     }
+
+
 }

@@ -6,7 +6,16 @@ public class SandMessageModel {
     private Integer messageId;//消息id
     private List<IDNameModel> recipient;//接受者
     private String message;//消息内容
-    private String reply;//回复消息id
+    private Integer reply;//回复消息id
+    private String send;//是否发送
+
+    public String getSend() {
+        return send;
+    }
+
+    public void setSend(String send) {
+        this.send = send;
+    }
 
     public Integer getMessageId() {
         return messageId;
@@ -32,11 +41,11 @@ public class SandMessageModel {
         this.message = message;
     }
 
-    public String getReply() {
+    public Integer getReply() {
         return reply;
     }
 
-    public void setReply(String reply) {
+    public void setReply(Integer reply) {
         this.reply = reply;
     }
 }

@@ -1,5 +1,6 @@
 package cn.com.szedu.controller.teacher;
 
+import cn.com.szedu.entity.Exam;
 import cn.com.szedu.exception.TecherException;
 import cn.com.szedu.model.ResponseModel;
 import cn.com.szedu.model.UserInfoForToken;
@@ -8,6 +9,7 @@ import cn.com.szedu.model.teacher.ExamClassResultModel;
 import cn.com.szedu.model.teacher.ExamModel;
 import cn.com.szedu.service.BackExamService;
 import cn.com.szedu.service.TeacherAchievementService;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -34,7 +36,7 @@ public class TeacherAchievementController {
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @PostMapping("/getClassByTeacherId")
-    public ResponseModel<PageInfo<ExamModel>> getExamByClass(@ModelAttribute UserInfoForToken userInfo, @RequestParam String classId , @RequestParam int pageNum , @RequestParam int pageSize)throws TecherException {
+    public ResponseModel getExamByClass(@ModelAttribute UserInfoForToken userInfo, @RequestParam String classId , @RequestParam int pageNum , @RequestParam int pageSize)throws TecherException {
         return  ResponseModel.sucess("",teacherAchievementService.getExamByClass(userInfo, classId, pageNum, pageSize));
     }
 

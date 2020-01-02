@@ -20,4 +20,7 @@ public interface IStudentInfoRespository extends JpaRepository<StudentInfo,Integ
     StudentInfo findByAccountAndPhone(String acount,String phone);
     List<StudentInfo> findByNameLike(String name);
     int countByNameLike(String name);
+
+    //
+    StudentInfo findById(String id);
 }

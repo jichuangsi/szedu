@@ -7,6 +7,15 @@ public class StudentCourseScoreModel {
         private Integer scoure4; //四颗星
         private Integer scoure5;//五颗星
         private Double avg;//评分
+        private Integer sum;//总人数
+
+    public Integer getSum() {
+        return sum;
+    }
+
+    public void setSum(Integer sum) {
+        this.sum = sum;
+    }
 
     public Integer getScoure1() {
         return scoure1;

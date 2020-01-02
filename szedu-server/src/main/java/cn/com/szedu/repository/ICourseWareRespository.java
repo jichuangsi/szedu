@@ -18,6 +18,7 @@ public interface ICourseWareRespository extends JpaRepository<CourseWare,String>
     int countByTeacherid(String teacherId);
     void deleteByid(String id);
     List<CourseWare> findByidIn(List<String> courseWareId);
+    List<CourseWare> findBySubjectAndLabelAndIdIn(Integer subject,String lable,List<String> courseWareId);
     CourseWare findByid(String id);
 
     @Transactional
@@ -34,4 +35,6 @@ public interface ICourseWareRespository extends JpaRepository<CourseWare,String>
     @Modifying
     @Query(value = "UPDATE CourseWare SET integral=?2 where id=?1")
     void updateIntegral(String id,Integer integral);
+
+    List<CourseWare> findByTeacheridAndIsCheckAndType(String teacherId,String check,String type);
 }

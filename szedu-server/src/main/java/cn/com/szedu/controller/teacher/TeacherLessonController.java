@@ -19,12 +19,13 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
+@SessionAttributes
 @RestController
 @RequestMapping("/TeacherLesson")
 @Api("教师课堂相关的api")
@@ -39,7 +40,7 @@ public class TeacherLessonController {
     })
     @PostMapping("/getAllLesson")
     public ResponseModel TeacherLesson(@ModelAttribute UserInfoForToken userInfo,
-                                                     @RequestBody MyAllLessionModel model) throws TecherException {
+                                    @RequestBody MyAllLessionModel model) throws TecherException {
 
         return ResponseModel.sucess("", teacherLessonService.getAllLesson(userInfo,model));
     }

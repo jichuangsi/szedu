@@ -16,12 +16,13 @@ public interface ICourseRepository extends JpaRepository<Course,String>,JpaSpeci
 
     Course findOneById(String id);
 
-
-   // List<Course> findBySubjectAndLessonTypeNameAndStartTime(String subject, String type, Date time);
-
-    List<Course> findBySubjectAndLessonTypeNameAndStartTimeAndIdIn(String subject, String type, String time,List<String> courseId);
+    //List<Course> findBySubjectIdAndLessonTypeNameAndStartTimeAndIdInOrderByStartTimeIdDesc(Integer subject, String type, long time,List<String> courseId);
+  /* // List<Course> findBySubjectAndLessonTypeNameAndStartTime(String subject, String type, Date time);
+   List<Course> findBySubjectIdAndLessonTypeNameAndStartTimeAndIdInOrderByStartTimeIdDesc(Integer subject, String type, long time,List<String> courseId);
+   // List<Course> findBySubjectIdAndLessonTypeNameAndStartTimeAndIdInAndOrderByStartTimeIdDesc(Integer subject, String type, long time,List<String> courseId);
     List<Course> findBySubjectAndLessonTypeNameAndIdIn(String subject, String type,List<String> classId);
     Course findBySubjectAndLessonTypeNameAndStartTime(String subject, String type, Date time);
     List<Course> getBySubjectAndLessonTypeNameAndStartTimeAndIdIn(String subject, String type, String time,List<String> courseId);
-
+*/
+    List<Course> findBySubjectIdAndLessonTypeNameAndStartTimeAndIdIn(Integer subject, String type, long time,List<String> courseId);
 }

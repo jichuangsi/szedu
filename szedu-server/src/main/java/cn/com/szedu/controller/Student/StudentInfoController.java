@@ -19,16 +19,17 @@ import javax.annotation.Resource;
 public class StudentInfoController {
 
 
-  /*  @Resource
-    private StudentInfoService studentInfoService;*/
-   /* @ApiOperation("登录")
+    @Resource
+    private StudentInfoService studentInfoService;
+
+    @ApiOperation("登录")
     @ApiImplicitParams({})
-    @PostMapping("/teacherLogin")
+    @PostMapping("/studentLogin")
     public ResponseModel<StudentInfoModel> loginBackUser(@RequestBody StudentInfoModel model)throws UserServiceException{
         try {
             return ResponseModel.sucess("",studentInfoService.loginStudent(model));
         }catch (UserServiceException e){
             return ResponseModel.fail("",e.getMessage());
         }
-    }*/
+    }
 }

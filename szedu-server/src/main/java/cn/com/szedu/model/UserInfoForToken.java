@@ -11,6 +11,15 @@ public class UserInfoForToken {
 	private String userId;
 	private String userName;
 	private String roleId;
+	private long loginTime;
+
+	public long getLoginTime() {
+		return loginTime;
+	}
+
+	public void setLoginTime(long loginTime) {
+		this.loginTime = loginTime;
+	}
 
 	public String getUserId() {
 		return userId;

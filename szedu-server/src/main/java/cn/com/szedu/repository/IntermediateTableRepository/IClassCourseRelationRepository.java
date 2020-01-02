@@ -11,4 +11,6 @@ public interface IClassCourseRelationRepository extends JpaRepository<CourseClas
     Integer deleteByCourseId(String courseId);
     List<CourseClassRelation> findByCourseId(String courseId);
     //Integer deleteByCourseId(String courseId);
+
+    List<CourseClassRelation> findByClassIdIn(List<String> classId);
 }

@@ -120,18 +120,21 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
         if (integral <= 0) {
             teacherInfo.setIntegral(teacherInfo.getIntegral() + 1);//老师等级积分
             teacherInfoRepository.save(teacherInfo);
-            //积分记录
-            IntegralRecord integralRecord = new IntegralRecord(UUID.randomUUID().toString().replaceAll("-", ""),
+            //积分记录UUID.randomUUID().toString().replaceAll("-", ""),
+            IntegralRecord integralRecord = new IntegralRecord(
                     "签到", "老师登录签到", userInfo.getUserId(), userInfo.getUserName(),
                     1, System.currentTimeMillis());
-            integralRecordRepository.save(integralRecord);
+            addintegral(userInfo,integralRecord);
+            //integralRecordRepository.save(integralRecord);
             //系统信息
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
             String s = df.format(new Date());// new Date()为获取当前系统时间
 
             String messages = "您今日已成功签到获得1积分。" + s;
-            Message message = new Message(teacherInfo.getId(), teacherInfo.getName(), messages, "N");
-            messageRepository.save(message);
+           // Message message = new Message(teacherInfo.getId(), teacherInfo.getName(), messages, "N");
+            MessageModel message=new MessageModel();
+            addMessage(userInfo,message);
+            //messageRepository.save(message);
         }/*else {
             throw new UserServiceException(ResultCode.SIGNIN_IS_EXIST);
         }*/

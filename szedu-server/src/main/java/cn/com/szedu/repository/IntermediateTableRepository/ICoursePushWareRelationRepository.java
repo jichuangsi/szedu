@@ -14,8 +14,10 @@ public interface ICoursePushWareRelationRepository extends JpaRepository<CourseP
     Integer deleteByCourseId(String courseId);
 
     List<CoursePushResourceRelation> findByCourseId(String courseId);
+    List<CoursePushResourceRelation> findByCourseIdInAndPushAndPushTime(List<String> courseId,String push,long time);
     @Transactional
     @Modifying
     @Query(value = " UPDATE `course_push_resource_relation` SET push=Y WHERE `course_id`:courseId",nativeQuery = true)
     void updateByCourseId(@Param("courseId") String courseId);
+
 }

@@ -22,9 +22,16 @@ public class StudentInfoModel {
     private String address;
     private long createTime = new Date().getTime();
     private long updateTime = new Date().getTime();
-
+    private boolean signin;//是否已签到
     private String accessToken;
 
+    public boolean isSignin() {
+        return signin;
+    }
+
+    public void setSignin(boolean signin) {
+        this.signin = signin;
+    }
 
     public String getAccessToken() {
         return accessToken;

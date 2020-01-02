@@ -11,4 +11,6 @@ public interface IStudentCourseScoreRepository extends JpaRepository<StudentCour
     Integer countByCourseIdAndScorse(String courseId,Integer count);
     Integer countByCourseId(String courseId);
 
+    List<StudentCourseRelation> findByStudentId(String studentId);
+
 }
