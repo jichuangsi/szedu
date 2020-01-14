@@ -30,7 +30,8 @@
 
 	<body>
 		<div class="x-nav">
-			<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right;" href="javascript:location.replace(location.href);" title="刷新">
+			<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right;" href="javascript:location.replace(location.href);"
+			 title="刷新">
 				<i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
 		</div>
 		<div class="x-body">
@@ -40,20 +41,17 @@
 					<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
 						<ul class="layui-tab-title">
 							<li class="layui-this">课程</li>
-							<li>视频</li>
+							<!-- 	<li>视频</li>
 							<li>实训</li>
-							<li>图片</li>
+							<li>图片</li> -->
 						</ul>
 						<div class="layui-tab-content">
 							<div class="layui-tab-item layui-show">
-								<form class="layui-form layui-form-pane" autocomplete="off" lay-filter="curriculum" enctype="multipart/form-data">
+								<form class="layui-form layui-form-pane" autocomplete="off" enctype="multipart/form-data">
 									<div class="layui-form-item">
 										<label class="layui-form-label">课程标题:</label>
 										<div class="layui-input-block">
 											<input type="hidden" name="id" />
-											<input type="hidden" name="fullPath" />
-											<input type="hidden" name="filegroup" />
-											<input type="hidden" name="filepath" />
 											<input type="text" name="curriculumName" required lay-verify="required" placeholder="请输入" class="layui-input">
 										</div>
 									</div>
@@ -64,14 +62,16 @@
 										</div>
 									</div>
 									<div class="layui-form-item">
-										<label class="layui-form-label">关联标签：</label>
+										<label class="layui-form-label">关联科目：</label>
 										<div class="layui-input-block">
-											<div name="subjectId" multiple="multiple" class="multipleSelect0 xm-select-demo" lay-filter="status" lay-search="">
-											</div>
+											<!-- <div name="subjectId" multiple="multiple" class="multipleSelect0 xm-select-demo" lay-filter="status"
+											 lay-search="">
+											</div> -->
+											<select id="subject" name="subjectId" lay-search=""></select>
 										</div>
 									</div>
 									<div class="layui-form-item">
-										<label class="layui-form-label">详情图:</label>
+										<label class="layui-form-label">封面:</label>
 										<div class="layui-input-block">
 											<button type="button" class="layui-btn imgLoad">上传图片</button>
 											<div class="layui-upload-list">
@@ -80,176 +80,16 @@
 											</div>
 										</div>
 									</div>
-									<div class="layui-form-item">
-										<label class="layui-form-label">文件名称:</label>
-										<div class="layui-input-block">
-											<input type="text" name="filename" required lay-verify="required" placeholder="请输入" class="layui-input">
-										</div>
-									</div>
+
 									<div class="layui-form-item">
 										<div class="layui-input-block">
 											<div class="layui-btn" lay-submit lay-filter="formCurriculum" id="imgSubmit">立即提交</div>
 											<button type="reset" class="layui-btn layui-btn-primary">重置</button>
-											<button type="button" class="layui-btn uploadFile"><i class="layui-icon">&#xe67c;</i>上传课程附件</button>
-											<div class="layui-form-mid layui-word-aux" id="error"></div>
 										</div>
+									</div>
+								</form>
+							</div>
 
-									</div>
-								</form>
-							</div>
-							<div class="layui-tab-item">
-								<form class="layui-form layui-form-pane" autocomplete="off" lay-filter="couresVideo">
-									<div class="layui-form-item">
-										<label class="layui-form-label">课程标题:</label>
-										<div class="layui-input-block">
-											<input type="hidden" name="id" />
-											<input type="hidden" name="fullPath" />
-											<input type="hidden" name="filegroup" />
-											<input type="hidden" name="filepath" />
-											<input type="text" name="curriculumName" required lay-verify="required" placeholder="请输入" class="layui-input">
-										</div>
-									</div>
-									<div class="layui-form-item layui-form-text">
-										<label class="layui-form-label ">课程简介:</label>
-										<div class="layui-input-block">
-											<textarea name="content" required lay-verify="required" placeholder="请输入" class="layui-textarea"></textarea>
-										</div>
-									</div>
-									<div class="layui-form-item">
-										<label class="layui-form-label">关联标签：</label>
-										<div class="layui-input-block">
-											<div name="subjectId" multiple="multiple" class="multipleSelect1 xm-select-demo" lay-filter="status" lay-search="">
-											</div>
-										</div>
-									</div>
-									<div class="layui-form-item">
-										<label class="layui-form-label">详情图:</label>
-										<div class="layui-input-block">
-											<button type="button" class="layui-btn imgLoad">上传图片</button>
-											<div class="layui-upload-list">
-												<img class="layui-upload-img demo1">
-												<p id="demoText"></p>
-											</div>
-										</div>
-									</div>
-									<div class="layui-form-item">
-										<label class="layui-form-label">文件名称:</label>
-										<div class="layui-input-block">
-											<input type="text" name="title" required lay-verify="required" placeholder="请输入" class="layui-input">
-										</div>
-									</div>
-									<div class="layui-form-item">
-										<div class="layui-input-block">
-											<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
-											<button type="reset" class="layui-btn layui-btn-primary">重置</button>
-											<button type="button" class="layui-btn uploadVideo"><i class="layui-icon">&#xe67c;</i>上传课程视频</button>
-											<div class="layui-form-mid layui-word-aux" id="error"></div>
-										</div>
-									</div>
-								</form>
-							</div>
-							<div class="layui-tab-item">
-								<form class="layui-form layui-form-pane" autocomplete="off" lay-filter="training">
-									<div class="layui-form-item">
-										<label class="layui-form-label">课程标题:</label>
-										<div class="layui-input-block">
-											<input type="hidden" name="id" />
-											<input type="hidden" name="fullPath" />
-											<input type="hidden" name="filegroup" />
-											<input type="hidden" name="filepath" />
-											<input type="text" name="curriculumName" required lay-verify="required" placeholder="请输入" class="layui-input">
-										</div>
-									</div>
-									<div class="layui-form-item layui-form-text">
-										<label class="layui-form-label ">课程简介:</label>
-										<div class="layui-input-block">
-											<textarea name="content" required lay-verify="required" placeholder="请输入" class="layui-textarea"></textarea>
-										</div>
-									</div>
-									<div class="layui-form-item">
-										<label class="layui-form-label">关联标签：</label>
-										<div class="layui-input-block">
-											<div name="subjectId" multiple="multiple" class="multipleSelect2 xm-select-demo" lay-filter="status" lay-search="">
-											</div>
-										</div>
-									</div>
-									<div class="layui-form-item">
-										<label class="layui-form-label">详情图:</label>
-										<div class="layui-input-block">
-											<button type="button" class="layui-btn imgLoad">上传图片</button>
-											<div class="layui-upload-list">
-												<img class="layui-upload-img demo1">
-												<p id="demoText"></p>
-											</div>
-										</div>
-									</div>
-									<div class="layui-form-item">
-										<label class="layui-form-label">文件名称:</label>
-										<div class="layui-input-block">
-											<input type="text" name="title" required lay-verify="required" placeholder="请输入" class="layui-input">
-										</div>
-									</div>
-									<div class="layui-form-item">
-										<div class="layui-input-block">
-											<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
-											<button type="reset" class="layui-btn layui-btn-primary">重置</button>
-											<button type="button" class="layui-btn uploadFile" ><i class="layui-icon">&#xe67c;</i>上传课程附件</button>
-											<div class="layui-form-mid layui-word-aux" id="error"></div>
-										</div>
-									</div>
-								</form>
-							</div>
-							<div class="layui-tab-item">
-								<form class="layui-form layui-form-pane" autocomplete="off" lay-filter="couresPic">
-									<div class="layui-form-item">
-										<label class="layui-form-label">课程标题:</label>
-										<div class="layui-input-block">
-											<input type="hidden" name="id" />
-											<input type="hidden" name="fullPath" />
-											<input type="hidden" name="filegroup" />
-											<input type="hidden" name="filepath" />
-											<input type="text" name="curriculumName" required lay-verify="required" placeholder="请输入" class="layui-input">
-										</div>
-									</div>
-									<div class="layui-form-item layui-form-text">
-										<label class="layui-form-label ">课程简介:</label>
-										<div class="layui-input-block">
-											<textarea name="content" required lay-verify="required" placeholder="请输入" class="layui-textarea"></textarea>
-										</div>
-									</div>
-									<div class="layui-form-item">
-										<label class="layui-form-label">关联标签：</label>
-										<div class="layui-input-block">
-											<div name="subjectId" multiple="multiple" class="multipleSelect3 xm-select-demo" lay-filter="status" lay-search="">
-											</div>
-										</div>
-									</div>
-									<div class="layui-form-item">
-										<label class="layui-form-label">详情图:</label>
-										<div class="layui-input-block">
-											<button type="button" class="layui-btn imgLoad">上传图片</button>
-											<div class="layui-upload-list">
-												<img class="layui-upload-img demo1">
-												<p id="demoText"></p>
-											</div>
-										</div>
-									</div>
-									<div class="layui-form-item">
-										<label class="layui-form-label">文件名称:</label>
-										<div class="layui-input-block">
-											<input type="text" name="title" required lay-verify="required" placeholder="请输入" class="layui-input">
-										</div>
-									</div>
-									<div class="layui-form-item">
-										<div class="layui-input-block">
-											<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
-											<button type="reset" class="layui-btn layui-btn-primary">重置</button>
-											<button type="button" class="layui-btn uploadFile"><i class="layui-icon">&#xe67c;</i>上传图片</button>
-											<div class="layui-form-mid layui-word-aux" id="error"></div>
-										</div>
-									</div>
-								</form>
-							</div>
 						</div>
 					</div>
 				</div>

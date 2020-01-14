@@ -14,25 +14,30 @@ layui.use(['form', 'table'], function() {
 				}, {
 					field: 'name',
 					title: '考试名称',
-					align: 'center'
+					align: 'center',
+					width:'150'
 				},
 				{
 					field: 'type',
 					title: '考试类型',
-					align: 'center'
+					align: 'center',
+					width:'100'
 				},
 				{
 					field: 'Semester',
 					title: '学期',
-					align: 'center'
+					align: 'center',
+					width:'100'
 				}, {
 					field: 'createTime',
 					title: '考试时间',
-					align: 'center'
+					align: 'center',
+					width:'150'
 				}, {
 					field: 'subject',
 					title: '科目',
-					align: 'center'
+					align: 'center',
+					width:'100'
 				}, {
 					field: 'acc',
 					title: '正确率',
@@ -43,7 +48,8 @@ layui.use(['form', 'table'], function() {
 						} else {
 							return d.acc
 						}
-					}
+					},
+					width:'100'
 				}, {
 					field: 'Average',
 					title: '平均分',
@@ -55,6 +61,7 @@ layui.use(['form', 'table'], function() {
 							return d.Average
 						}
 					}
+					,width:'100'
 				}, {
 					field: 'rank',
 					title: '等级',

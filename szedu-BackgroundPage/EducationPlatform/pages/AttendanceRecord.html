@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>到课情况</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../css/index.css" />
+		<link rel="stylesheet" href="../css/administration.css" />
+		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
+		<script src="../lib/js/jquery.min.js"></script>
+		<script src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/util.js" ></script>
+		<script type="text/javascript" src="../js/Configuration.js" ></script>
+		<script type="text/javascript" src="../js/AttendanceRecord.js" ></script>
+		
+	</head>
+	<style>
+		.kq {
+			padding: 20px 10px;
+			font-size: 20px;
+			color: cornflowerblue;
+		}
+		.kq span{
+			margin: auto 5px;
+		}
+	</style>
+
+	<body>
+		<iframe src="../head.html" frameborder="0" scrolling="no" class="x-iframe"></iframe>
+		<div class="layui-row">
+			<div class="layui-row" style="background-color: #F9F9F9;height: 30px;line-height: 30px;">
+				<div class="layui-col-md8 layui-col-md-offset2" style="text-align: center;">
+					<a href="javascript:history.back(-1)"><i class="layui-icon layui-icon-left" style="float: left;"></i> </a>
+					<span>到 课情况</span>
+				</div>
+
+			</div>
+			<div class="layui-col-md8 layui-col-md-offset2 kq">
+				
+				<hr />
+				<table id="demo" lay-filter="demo"></table>
+			</div>
+		</div>
+
+	</body>
+
+</html>

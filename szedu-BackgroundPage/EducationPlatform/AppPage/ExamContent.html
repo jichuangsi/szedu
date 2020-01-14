@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>试卷内容</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../css/app/index.css" />
+		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
+		<script src="../lib/js/jquery.min.js"></script>
+		<script src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/Configuration.js"></script>
+		<script type="text/javascript" src="../js/AppJs/util.js"></script>
+		<script type="text/javascript" src="../js/AppJs/ExamContent.js"></script>
+
+	</head>
+	<style>
+		.exam {
+			margin-top: 10px;
+			padding: 10px;
+		}
+		
+		.exam span {
+			margin-left: 20px;
+		}
+		
+		.exam-content {
+			margin-top: 10px;
+			letter-spacing: 1px;
+		}
+		
+		.layui-form-item {
+			margin-bottom: 0px
+		}
+	</style>
+
+	<body>
+		<div class="layui-row" id="nav">
+		</div>
+		<div class="layui-row">
+			<div class="layui-col-xs12 layui-col-sm12 nav-title">
+				<a href="#" onclick="signOutExam()"><i class="layui-icon layui-icon-left" style="float: left;"></i> </a>
+				<span class="exam-name">汽车维修理论课</span>
+			</div>
+		</div>
+		<div class="exam">
+			<span> 试卷名称：<span class="exam-name">汽车维修理论课</span></span> <span id="timer">倒计时：0</span>
+			<hr />
+		</div>
+		<form class="layui-form" id="exam" style="padding: 0 15px 15px 15px;">
+			<h1>单选题</h1>
+			<div class="exam-content">
+				1，试卷题目，试卷题目，试卷名称，试卷题目，试卷名称试卷题目，试卷名称试卷题目，试卷名称试卷题目，试卷名称，试卷题目，试卷名称
+				<div class="option layui-form">
+					<div class="layui-form-item">
+						<input type="radio" name="sex" value="女" title="这个是一个正确的选项">
+					</div>
+					<div class="layui-form-item">
+						<input type="radio" name="sex" value="女" title="这个是一个正确的选项" checked>
+					</div>
+					<div class="layui-form-item">
+						<input type="radio" name="sex" value="女" title="这个是一个正确的选项">
+					</div>
+					<div class="layui-form-item">
+						<input type="radio" name="sex" value="女" title="这个是一个正确的选项">
+					</div>
+					<hr />
+				</div>
+			</div>
+			<div class="exam-content">
+				2，试卷题目，试卷题目，试卷名称，试卷题目，试卷名称试卷题目，试卷名称试卷题目，试卷名称试卷题目，试卷名称，试卷题目，试卷名称
+				<div class="option layui-form">
+					<div class="layui-form-item">
+						<input type="radio" name="sex" value="女" title="这个是一个正确的选项">
+					</div>
+					<div class="layui-form-item">
+						<input type="radio" name="sex" value="女" title="这个是一个正确的选项" checked>
+					</div>
+					<div class="layui-form-item">
+						<input type="radio" name="sex" value="女" title="这个是一个正确的选项">
+					</div>
+					<div class="layui-form-item">
+						<input type="radio" name="sex" value="女" title="这个是一个正确的选项">
+					</div>
+				</div>
+				<hr />
+			</div>
+			<div class="exam-content">
+				3，试卷题目，试卷题目，试卷名称，试卷题目，试卷名称试卷题目，试卷名称试卷题目，试卷名称试卷题目，试卷名称，试卷题目，试卷名称
+				<div class="option layui-form">
+					<div class="layui-form-item">
+						<input type="radio" name="sex" value="女" title="这个是一个正确的选项">
+					</div>
+					<div class="layui-form-item">
+						<input type="radio" name="sex" value="女" title="这个是一个正确的选项" checked>
+					</div>
+					<div class="layui-form-item">
+						<input type="radio" name="sex" value="女" title="这个是一个正确的选项">
+					</div>
+					<div class="layui-form-item">
+						<input type="radio" name="sex" value="女" title="这个是一个正确的选项">
+					</div>
+				</div>
+				<hr />
+			</div>
+			<h1>多选题</h1>
+			<div class="exam-content">
+				1，试卷题目，试卷题目，试卷名称，试卷题目，试卷名称试卷题目，试卷名称试卷题目，试卷名称试卷题目，试卷名称，试卷题目，试卷名称
+				<div class="option layui-form">
+					<div class="layui-form-item">
+						<input type="checkbox" name="sex1" value="女" title="这个是一个正确的选项" lay-skin="primary">
+					</div>
+					<div class="layui-form-item">
+						<input type="checkbox" name="sex1" value="女" title="这个是一个正确的选项" lay-skin="primary" checked>
+					</div>
+					<div class="layui-form-item">
+						<input type="checkbox" name="sex1" value="女" title="这个是一个正确的选项" lay-skin="primary">
+					</div>
+					<div class="layui-form-item">
+						<input type="checkbox" name="sex1" value="女" title="这个是一个正确的选项" lay-skin="primary">
+					</div>
+					<hr />
+				</div>
+			</div>
+		</form>
+	</body>
+
+</html>

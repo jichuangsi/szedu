@@ -28,7 +28,15 @@
 			font-size: 24px;
 			margin-right: 10px;
 		}
-		.class-this{
+		
+		.layui-box {
+			width: 45%;
+			 height: 30px; 
+			/* box-shadow: 2px 3px 5px 0px #aaa; */
+			margin: 0 0px 0 20px;
+			 float: inherit; 
+		}	
+		.class-this {
 			color: #3C94FF !important;
 			background-color: white !important;
 		}
@@ -39,7 +47,7 @@
 		<div class="layui-row">
 			<div class="layui-row" style="background-color: #F9F9F9;height: 30px;line-height: 30px;">
 				<div class="layui-col-md8 layui-col-md-offset2" style="text-align: center;">
-					<i class="layui-icon layui-icon-left" style="float: left;"></i>
+					<a href="javascript:history.back(-1)"><i class="layui-icon layui-icon-left" style="float: left;"></i> </a>
 					<span>课堂详情</span>
 				</div>
 			</div>
@@ -48,21 +56,52 @@
 					<!--导航-->
 					<div class="layui-col-md2" style="float: right;">
 						<ul class="class-nav">
-							<li><i class="layui-icon layui-icon-file"></i>PPT资源</li>
+							<li><i class="layui-icon layui-icon-file"></i>课件</li>
 							<li class="class-this"><i class="layui-icon layui-icon-play"></i>视频</li>
 							<li><i class="layui-icon layui-icon-form"></i>实训</li>
 							<li><i class="layui-icon layui-icon-picture"></i>图片</li>
 							<li><i class="layui-icon layui-icon-tabs"></i>精品课程</li>
 						</ul>
 					</div>
-					<div class="layui-col-md10"style="height: 760px;">
-						<div></div>
+					<div class="layui-col-md10" style="text-align: center;">
+						<section class="layui-card">
+							<div class="layui-card-body">
+								<div class="video" id="video" data-url="http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4" style="width: 100%;"></div>
+							</div>
+						</section>
+						<div id="demo2"></div>
 					</div>
 				</div>
 			</div>
 
 		</div>
 
+		<script type="text/javascript">
+			layui.config({
+				base: '../js/modules/ckplayer/'
+			}).extend({
+				xmSelect: 'ckplayer'
+			}).use(['jquery', 'ckplayer', 'laypage'], function() {
+				var $ = layui.$,
+					laypage = layui.laypage,
+					ckplayer = layui.ckplayer;
+				var vUrl = $('#video').data('url'),
+					videoObject = {
+						container: '#video',
+						loop: true,
+						autoplay: false,
+						video: [
+							[vUrl, 'video/mp4']
+						]
+					};
+				var player = new ckplayer(videoObject);
+				laypage.render({
+					elem: 'demo2',
+					count: 30,
+					theme: '#1E9FFF'
+				});
+			});
+		</script>
 	</body>
 
 </html>

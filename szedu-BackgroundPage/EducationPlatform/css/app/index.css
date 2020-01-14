@@ -20,7 +20,7 @@
 	left: -5.5rem;
 	/*background-color: transparent;*/
 	background-color: white;
-	    z-index: 999;
+	z-index: 999;
 }
 
 .layui-nav .layui-this:after,
@@ -42,11 +42,12 @@
 	max-height: 64.5px;
 	display: block;
 	z-index: 999;
-	position:relative;
+	position: relative;
 }
 
 .lyb-title {
 	padding: 0 10px;
+	letter-spacing: 1px;
 }
 
 .lyb-title>span,
@@ -54,8 +55,9 @@
 	font-size: 1.4rem;
 	letter-spacing: 4px;
 }
-.res-box{
-		display: block;
+
+.res-box {
+	display: block;
 	float: left;
 	margin-right: 1.332%;
 	width: 98%;
@@ -68,6 +70,7 @@
 	padding-top: 0;
 	min-height: 300px;
 }
+
 .common_block_title {
 	padding: 5px 15px;
 	-moz-border-radius-topleft: 5px;
@@ -75,9 +78,120 @@
 	border-top-left-radius: 0px;
 	border-top-right-radius: 0px;
 	color: #333333;
-	font-size: 16px;
+	font-size: 1.4rem;
+	font-weight: 600;
 	margin: 5px 0 10px 10px;
 	border-left: 5px solid #3d72fe;
 	letter-spacing: 2px;
 	font-weight: normal;
+}
+
+.layui-icon-left {
+	float: left;
+	font-size: 1.5rem;
+}
+
+.nav-title {
+	text-align: center;
+	line-height: 2.5rem;
+	padding-left: 10px;
+	font-size: 1.4rem;
+}
+
+.menu {
+	position: fixed;
+	bottom: 0;
+	color: #888888;
+	width: 100%;
+	height: 45px;
+	box-shadow: 0 -3px 4px rgba(0, 0, 0, .12);
+	background-color: white;
+}
+
+.menu ul {
+	list-style: none;
+}
+
+.menu ul li {
+	display: inline-block;
+	/*margin: 5px 1rem;*/
+	width: 19%;
+	text-align: center;
+	line-height: 45px;
+}
+
+.menu ul li a {
+	font-size: 1.2rem;
+}
+
+.menu-this a {
+	color: #3C94FF;
+}
+
+
+/*试卷列表*/
+
+.widths {
+	width: 24%;
+}
+
+.layui-unselect {
+	border-radius: 20px 20px;
+}
+
+.Exam-box {
+	width: 95%;
+	height: 300px;
+	border: 1px solid #b2b2b2;
+	margin: 5px;
+}
+
+.Exam-box:hover {
+	box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+	z-index: 20;
+	top: -1px;
+}
+
+.box-pig {
+	width: 100%;
+	text-align: center;
+	height: 140px;
+	border-bottom: solid #cccccc 1px;
+	background: #fff;
+	overflow: hidden;
+}
+
+.box-pig img {
+	width: 100%;
+	height: 100%;
+}
+
+
+}
+.box-pig>a img:hover {
+	cursor: pointer;
+	transition: all 0.6s;
+	-webkit-transform: scale(1.1, 1.1)
+}
+.box-content {
+	padding: 10px;
+}
+.box-content-title {
+	font-size: 1rem;
+	line-height: 1.5rem;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.box-content-des {
+	font-size: 0.8rem;
+	color: #737383;
+}
+.box-content-des>ul li {
+	line-height: 1rem;
+}
+.box-content-btn {
+	text-align: center;
+	margin-top: 6px;
+	font-size: 1rem;
 }

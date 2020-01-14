@@ -12,6 +12,8 @@
 		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
 		<script src="../lib/js/jquery.min.js"></script>
 		<script src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/Configuration.js" ></script>
+		<script type="text/javascript" src="../js/AppJs/util.js" ></script>
 		<script type="text/javascript" src="../js/AppJs/CourseDetails.js"></script>
 	</head>
 	<style>
@@ -49,23 +51,59 @@
 		.rate {
 			display: block;
 		}
+		
+		.rmb-product {
+			width: 100%;
+			text-align: center;
+			height: 160px;
+			border-bottom: solid #cccccc 1px;
+			background: #fff;
+			overflow: hidden;
+		}
+		
+		.rmb-product-title {
+			font-size: 1.4rem;
+			padding: 0 10px;
+			line-height: 2rem;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+		
+		.iconfont {
+			font-size: 1.4rem;
+		}
+		
+		.rmb-product-content {
+			margin-top: 10px;
+			padding: 0 10px;
+			font-size: 1rem;
+			color: #333333;
+			line-height: 1.5rem;
+			/*字体颜色*/
+		}
+		
+		.res-box {
+			min-height: 280px !important;
+		}
 	</style>
 
 	<body>
-		<iframe src="../AppPage/header.html" frameborder="0" scrolling="no" class="x-iframe"></iframe>
+		<div class="layui-row" id="nav">
+		</div>
 		<div class="layui-row">
-			<div class="layui-col-xs12 layui-col-sm12" style="text-align: center;line-height: 1.5rem;padding-left: 10px;">
-				<i class="layui-icon layui-icon-left" style="float: left;"></i>
+			<div class="layui-col-xs12 layui-col-sm12 nav-title">
+				<a href="javascript:history.back(-1)"><i class="layui-icon layui-icon-left" style="float: left;"></i> </a>
 				<span>汽车维修理论课</span>
 			</div>
 		</div>
 		<div class="layui-row">
-			<div class="common_block_title" style="margin-top: 30px;">
+			<div class="common_block_title" style="margin-top: 10px;">
 				课堂详情
 			</div>
 			<hr />
 			<div class="cour-content">
-				<ul>
+				<ul id="details">
 					<li>
 						<span>课堂名称</span>汽车维修理论课程
 					</li>
@@ -99,7 +137,48 @@
 				推送资源
 			</div>
 			<hr />
-
+			<div class="layui-row">
+				<div class="layui-col-xs6 layui-col-sm3">
+					<div class="res-box">
+						<div class="rmb-product">
+							<a href="#"><img src="../img/微信图片_20191113143904_WPS图片.png" /></a>
+						</div>
+						<div class="rmb-product-title">
+							<span>汽车维修理论课</span><i class="iconfont layui-icon-extendxin1" style="color: #999999;float: right;"></i>
+						</div>
+						<div class="rmb-product-content">
+							<ul>
+								<li>推送者：王木木老师</li>
+								<li>资源类型：文档资源</li>
+								<li>推送时间:2019-12-21 8:30</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-xs6 layui-col-sm3">
+					<div class="res-box">
+						<div class="rmb-product">
+							<a href="#"><img src="../img/微信图片_20191113143904_WPS图片.png" /></a>
+						</div>
+						<div class="rmb-product-title">
+							<span>汽车维修理论课</span><i class="iconfont layui-icon-extendxin1" style="color: #ff0000;float: right;"></i>
+						</div>
+						<div class="rmb-product-content">
+							<ul>
+								<li>推送者：王木木老师</li>
+								<li>资源类型：文档资源</li>
+								<li>推送时间:2019-12-21 8:30</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-xs6 layui-col-sm3">
+					<div class="res-box"></div>
+				</div>
+				<div class="layui-col-xs6 layui-col-sm3">
+					<div class="res-box"></div>
+				</div>
+			</div>
 			<div class="common_block_title" style="margin-top: 30px;">
 				课堂评分
 			</div>
@@ -113,12 +192,38 @@
 				</div>
 			</div>
 			<div class="layui-row" style="padding: 0 10px;">
-
-				<div class="rate"></div>
-				<div class="rate"></div>
-				<div class="rate"></div>
-				<div class="rate"></div>
-				<div class="rate"></div>
+				<div class="layui-col-xs4 layui-col-sm2">
+					<div class="rate"></div>
+					<div class="rate"></div>
+					<div class="rate"></div>
+					<div class="rate"></div>
+					<div class="rate"></div>
+				</div>
+				<div class="layui-col-xs8" style="height: 43px;">
+					<div class="layui-progress layui-progress-big" lay-showPercent="true" style="margin-top: 10px;">
+						<div class="layui-progress-bar" lay-percent="70%"></div>
+					</div>
+				</div>
+				<div class="layui-col-xs8" style="height: 43px;">
+					<div class="layui-progress layui-progress-big" lay-showPercent="true" style="margin-top: 10px;">
+						<div class="layui-progress-bar layui-bg-blue" lay-percent="80%"></div>
+					</div>
+				</div>
+				<div class="layui-col-xs8" style="height: 43px;">
+					<div class="layui-progress layui-progress-big" lay-showPercent="true" style="margin-top: 10px;">
+						<div class="layui-progress-bar layui-bg-orange" lay-percent="60%"></div>
+					</div>
+				</div>
+				<div class="layui-col-xs8" style="height: 43px;">
+					<div class="layui-progress layui-progress-big" lay-showPercent="true" style="margin-top: 10px;">
+						<div class="layui-progress-bar layui-bg-cyan" lay-percent="50%"></div>
+					</div>
+				</div>
+				<div class="layui-col-xs8" style="height: 43px;">
+					<div class="layui-progress layui-progress-big" lay-showPercent="true" style="margin-top: 10px;">
+						<div class="layui-progress-bar layui-bg-red" lay-percent="20%"></div>
+					</div>
+				</div>
 			</div>
 
 		</div>

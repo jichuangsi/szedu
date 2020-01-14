@@ -14,7 +14,7 @@
 		<script src="../lib/js/jquery.min.js"></script>
 		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
 		<script type="text/javascript" src="../js/xadmin.js"></script>
-		<script type="text/javascript" src="../js/util.js" ></script>
+		<script type="text/javascript" src="../js/util.js"></script>
 		<script type="text/javascript" src="../js/Configuration.js"></script>
 		<script type="text/javascript" src="../js/pagejs/TeacherAccount.js"></script>
 	</head>
@@ -23,7 +23,7 @@
 			display: none;
 			margin-top: 10px;
 		}
-		
+
 		#modifyPwd {
 			display: none;
 			margin-top: 10px;
@@ -32,7 +32,8 @@
 
 	<body>
 		<div class="x-nav">
-			<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right;" href="javascript:location.replace(location.href);" title="刷新">
+			<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right;" href="javascript:location.replace(location.href);"
+			 title="刷新">
 				<i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
 		</div>
 		<div class="x-body">
@@ -43,9 +44,17 @@
 						<div class="layui-field-box">
 							<form class="layui-form" action="">
 								<div class="layui-form-item">
+									<label class="layui-form-label">选择学校</label>
+									<div class="layui-input-block widths">
+										<select class="layui-select" name="schoolId" id="school">
+										</select>
+									</div>
+								</div>
+								<div class="layui-form-item">
 									<label class="layui-form-label">账户名</label>
 									<div class="layui-input-block widths">
-										<input type="text" name="account" required lay-verify="username|required" placeholder="请输入数字和字母组合的登录名" autocomplete="off" class="layui-input">
+										<input type="text" name="account" required lay-verify="username|required" placeholder="请输入数字和字母组合的登录名"
+										 autocomplete="off" class="layui-input">
 									</div>
 								</div>
 								<div class="layui-form-item">
@@ -61,18 +70,19 @@
 										<input type="radio" name="sex" value="女" title="女">
 									</div>
 								</div>
-								<div class="layui-form-item">
-									<label class="layui-form-label">科目</label>
+								<!-- <div class="layui-form-item">
+									<label class="layui-form-label">生日</label>
 									<div class="layui-input-block widths">
 										<input type="text" name="subject" required lay-verify="required" placeholder="请输入科目" autocomplete="off" class="layui-input">
 									</div>
-								</div>
-								<div class="layui-form-item">
+								</div> -->
+							<!-- 	<div class="layui-form-item">
 									<label class="layui-form-label">任教学校</label>
 									<div class="layui-input-block widths">
-										<input type="text" name="schoolName" required lay-verify="required" placeholder="请输入学校名称" autocomplete="off" class="layui-input">
+										<input type="text" name="schoolName" required lay-verify="required" placeholder="请输入学校名称" autocomplete="off"
+										 class="layui-input">
 									</div>
-								</div>
+								</div> -->
 								<div class="layui-form-item">
 									<label class="layui-form-label">密码</label>
 									<div class="layui-input-block widths">
@@ -82,7 +92,8 @@
 								<div class="layui-form-item">
 									<label class="layui-form-label">确认密码</label>
 									<div class="layui-input-block widths">
-										<input type="password" name="savePwd" required lay-verify="required" placeholder="请输入确认密码" autocomplete="off" class="layui-input">
+										<input type="password" name="savePwd" required lay-verify="required" placeholder="请输入确认密码" autocomplete="off"
+										 class="layui-input">
 									</div>
 								</div>
 								<div class="layui-form-item">
@@ -150,7 +161,7 @@
 		</script>
 	</body>
 	<!--修改密码-->
-	<div id="modifyPwd" class="layui-fluid" >
+	<div id="modifyPwd" class="layui-fluid">
 		<form class="layui-form" autocomplete="off" lay-filter="pwd">
 			<div class="layui-form-item">
 				<label class="layui-form-label">输入新密码</label>

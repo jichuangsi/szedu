@@ -5,56 +5,51 @@ layui.use(['form', 'table', 'upload', 'xmSelect'], function() {
 		table = layui.table;
 	//获取关联标签列表
 	function getLabel() {
+		$('#subject').empty();
+		var str ='';
+			str='<option value"-1">请选择</option>'
 		var label = []
 		$.ajax({
 			type: "get",
-			url: httpUrl() + "/TreeMenu/getAllTreeMenu",
+			url: httpUrl() + "/TreeMenu/getTreeMenuByPid?pid=0", //获取科目
 			async: false,
 			headers: {
 				'accessToken': getToken()
 			},
 			contentType: 'application/json',
 			success: function(res) {
-				if(res.code == '0010') {
+				if (res.code == '0010') {
 					var arr = res.data;
-					for(var i = 0; i < arr.length; i++) {
-						label.push({
-							name: arr[i].title,
-							value: arr[i].id
-						});
-					}
+					$.each(arr,function(index,item){
+						str+='<option value="'+item.id+'">'+item.title+'</option>';
+					});
+					$('#subject').append(str);
+					form.render();
 				}
 			}
 		});
 		return label;
 	}
 
-	function updateName(array) {
-		var keyMap = {
-			tname: 'name',
-			type: 'children'
-		}
-		for(var i = 0; i < array.length; i++) {
-			var obj = array[i];
-			for(var key in obj) {
-				var newKey = keyMap[key];
-				if(newKey) {
-					obj[newKey] = obj[key];
-					delete obj[key];
-				}
-			}
-		}
-	}
 	form.on('submit(formCurriculum)', function(data) {
+		var param = data.field;
+		var url='/BackCurriculum/saveCurriculum';
+		if(param.subjectId==-1){
+			return layer.msg("请选择科目");
+		}
+		ajaxPOST(url, param);
+	});
+	//
+	form.on('submit(formDemo)', function(data) {
 		var param = data.field;
 		var curriculumKnowledges = [];
 		var obj = param.select.split(',');
-		for(var i = 0; i < obj.length; i++) {
+		for (var i = 0; i < obj.length; i++) {
 			curriculumKnowledges.push({
 				knowledgesId: obj[i]
 			})
 		}
-		param.curriculumKnowledges=curriculumKnowledges;
+		param.curriculumKnowledges = curriculumKnowledges;
 		var url = '/BackCurriculum/saveCurriculum';
 		ajaxPOST(url, param);
 	});
@@ -86,28 +81,14 @@ layui.use(['form', 'table', 'upload', 'xmSelect'], function() {
 		size: 1024 * 5,
 		done: function(res) {
 			//如果上传失败
-			if(res.code == '0050') {
+			if (res.code == '0050') {
 				return layer.msg('上传失败');
 			} else {
 				setMsg('图片上传成功!', 6);
 				var str = $('.layui-field-box').find('ul').find('.layui-this').html();
-				if(str == '课程') {
-					form.val('curriculum', {
-						"id": res.data
-					});
-				} else if(str == '视频') {
-					form.val('couresVideo', {
-						"id": res.data
-					});
-				} else if(str == '实训') {
-					form.val('training', {
-						"id": res.data
-					});
-				} else if(str == '图片') {
-					form.val('couresPic', {
-						"id": res.data
-					});
-				}
+				form.val('curriculum', {
+					"id": res.data
+				});
 			}
 		},
 		error: function() {
@@ -117,53 +98,6 @@ layui.use(['form', 'table', 'upload', 'xmSelect'], function() {
 			demoText.find('.demo-reload').on('click', function() {
 				uploadInst.upload();
 			});
-		}
-	});
-
-	//*上传课程文件*/
-	upload.render({
-		elem: '.uploadFile',
-		url: httpUrl() + '/BackCurriculum/uploadCurriculumResource',
-		accept: 'file',
-		size: 1024 * 10,
-		done: function(res) {
-			if(res.code == '0010') {
-				setMsg('上传成功!', 6);
-					form.val('curriculum', {
-					"fullPath": res.data.fullPath,
-					"filegroup": res.data.group,
-					"filepath": res.data.path
-				});
-				form.val('training', {
-					"fullPath": res.data.fullPath,
-					"filegroup": res.data.group,
-					"filepath": res.data.path
-				});
-				form.val('couresPic', {
-					"fullPath": res.data.fullPath,
-					"filegroup": res.data.group,
-					"filepath": res.data.path
-				});
-			}
-		}
-	});
-	//上传视频
-	upload.render({
-		elem: '.uploadVideo',
-		url: httpUrl() + '/BackCurriculum/uploadCurriculumResource',
-		accept: 'file',
-		accept: 'audio',
-		done: function(res) {
-			if(res.code == '0010') {
-				setMsg('上传成功!', 6);
-				form.val('couresVideo', {
-					"fullPath": res.data.fullPath,
-					"group": res.data.group,
-					"path": res.data.path
-				});
-			} else {
-				setMsg('上传失败!', 5);
-			}
 		}
 	});
 

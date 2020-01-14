@@ -41,11 +41,25 @@
       "unicode_decimal": 58967
     },
     {
+      "icon_id": "3523963",
+      "name": "收到邮件",
+      "font_class": "receive-mail",
+      "unicode": "e646",
+      "unicode_decimal": 58950
+    },
+    {
       "icon_id": "8922346",
       "name": "锁",
       "font_class": "suo3",
       "unicode": "e60a",
       "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "8946548",
+      "name": "发送邮件",
+      "font_class": "fasongyoujian",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
     }
   ]
 }

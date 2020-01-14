@@ -12,6 +12,7 @@
 		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
 		<script src="../lib/js/jquery.min.js"></script>
 		<script src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/AppJs/util.js"></script>
 	</head>
 	<style>
 		.lyb-title img {
@@ -67,14 +68,14 @@
 	</style>
 
 	<body>
-		<iframe src="../AppPage/header.html" frameborder="0" scrolling="no" class="x-iframe"></iframe>
+		<div class="layui-row" id="nav"></div>
 		<!--导航-->
-		<div class="layui-row">
-			<div class="layui-col-xs12 layui-col-sm12" style="text-align: center;line-height: 1.5rem;padding-left: 10px;">
-				<i class="layui-icon layui-icon-left" style="float: left;"></i>
-				<span>新建考试</span>
+		<!--<div class="layui-row">
+			<div class="layui-col-xs12 layui-col-sm12 nav-title">
+				<a href="javascript:history.back(-1)"><i class="layui-icon layui-icon-left" style="float: left;"></i> </a>
+				<span>新闻资讯</span>
 			</div>
-		</div>
+		</div>-->
 		<div class="layui-row">
 			<div class="layui-col-xs12 layui-col-sm6 " style="margin-top: 20px;">
 				<div class="lyb-title">
@@ -122,6 +123,26 @@
 					</div>
 				</div>
 			</div>
+		</div>
+
+		<div class="layui-row menu">
+			<ul>
+				<li>
+					<a href="index.html">主页</a>
+				</li>
+				<li >
+					<a href="CourseList.html">课堂</a>
+				</li>
+				<li>
+					<a href="ExamList.html">考试</a>
+				</li>
+				<li>
+					<a href="Resources.html">学习资料</a>
+				</li>
+				<li class="menu-this">
+					<a href="News.html">新闻</a>
+				</li>
+			</ul>
 		</div>
 	</body>
 

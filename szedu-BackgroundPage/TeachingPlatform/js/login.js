@@ -4,7 +4,7 @@ layui.use('form', function() {
 	form.on('submit(login)', function(data) {
 		var param = data.field;
 		$.ajax({
-			url: httpUrl() + '/UserInfoConsole/loginBackUser',
+			url: httpUrl() + '/backuser/loginBackUser',
 			type: "post",
 			async: false,
 			dataType: 'JSON',

@@ -12,6 +12,9 @@
 		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
 		<script src="../lib/js/jquery.min.js"></script>
 		<script src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/util.js" ></script>
+		<script type="text/javascript" src="../js/Configuration.js" ></script>
+		<script type="text/javascript" src="../js/AppJs/util.js"></script>
 		<script type="text/javascript" src="../js/AppJs/SendMsg.js"></script>
 	</head>
 	<style>
@@ -28,50 +31,27 @@
 		.rmb-msg span {
 			margin: 5px;
 		}
+		
+		.layui-tab-content {
+			padding: 0px;
+		}
+		
+		.layui-card-header>span:last-child {
+			float: right;
+		}
+		#SendMessage {
+			display: none;
+			margin-top: 10px;
+		}
 	</style>
 
 	<body>
-		<div class="layui-row">
-			<ul class="layui-nav" lay-filter="">
-				<li class="layui-nav-item">
-					<a href="#">信力达</a>
-				</li>
-				<li class="layui-nav-item">
-					<a href="#">智能.互联.引领未来</a>
-				</li>
-				<li class="layui-nav-item" style="float: right;margin-right: 3%;">
-					<i class="layui-icon layui-icon-shrink-right"></i>
-					<dl class="layui-nav-child">
-						<!-- 二级菜单 -->
-						<dd>
-							<a href="">我的收藏</a>
-						</dd>
-						<dd>
-							<a href="">成绩分析</a>
-						</dd>
-						<dd>
-							<a href="">账号与设置</a>
-						</dd>
-						<dd>
-							<a href="">帮助与反馈</a>
-						</dd>
-						<dd>
-							<a href="">退出</a>
-						</dd>
-					</dl>
-				</li>
+		<div class="layui-row" id="nav">
 
-				<li class="layui-nav-item" style="float: right;">
-					<a href="#">积分：<span>5562</span></a>
-				</li>
-				<li class="layui-nav-item" style="float: right;">
-					<a href="#">王木木<img src="//t.cn/RCzsdCq" class="layui-nav-img"></a>
-				</li>
-			</ul>
 		</div>
 		<div class="layui-row">
-			<div class="layui-col-xs12 layui-col-sm12" style="text-align: center;line-height: 1.5rem;padding-left: 10px;">
-				<i class="layui-icon layui-icon-left" style="float: left;"></i>
+			<div class="layui-col-xs12 layui-col-sm12 nav-title">
+				<a href="javascript:history.back(-1)"><i class="layui-icon layui-icon-left" style="float: left;"></i> </a>
 				<span>消息</span>
 			</div>
 		</div>
@@ -82,8 +62,11 @@
 					<li class="layui-this">互动信息</li>
 					<li>系统信息</li>
 				</ul>
+				<div class="" style="margin:20px 20px 10px auto ;text-align: right;">
+					<div class="layui-btn layui-btn-radius layui-btn-normal" onclick="sedMsg()">发信息</div>
+				</div>
 				<div class="layui-tab-content">
-					<div class="layui-tab-item layui-show">
+					<div class="layui-tab-item layui-show" id="studentMsg">
 						<div class="rmb-msg">
 							<div class="layui-card">
 								<div class="layui-card-header">
@@ -129,7 +112,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="layui-tab-item">
+					<div class="layui-tab-item" id="studentSysMsg">
 						<div class="rmb-msg">
 							<div class="layui-card">
 								<div class="layui-card-header">
@@ -145,5 +128,41 @@
 			</div>
 		</div>
 	</body>
+	<script>
+		function sedMsg() {
+			index = layer.open({
+				type: 1,
+				area: ['400px', '600px'],
+				anim: 2,
+				title: '发信息',
+				maxmin: true,
+				shadeClose: true, //点击遮罩关闭
+				content: $('#SendMessage')
+			});
+		}
+	</script>
+	<div id="SendMessage" class="layui-fluid">
+		<form class="layui-form layui-form-pane">
+			<div class="layui-form-item" pane>
+				<label class="layui-form-label">通讯录</label>
+				<div class="layui-input-block">
+					<div name="id" class="ClassOption xm-select-demo" id="book" lay-search="">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item layui-form-text">
+				<label class="layui-form-label">信息内容</label>
+				<div class="layui-input-block">
+					<textarea placeholder="请输入内容" name='message' lay-verify="required" class="layui-textarea"></textarea>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<div class="layui-btn" lay-submit lay-filter="formShareDemo">发送</div>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+	</div>
 
 </html>

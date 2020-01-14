@@ -3,17 +3,132 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>我的题库</title>
+		<title>我的题库（组卷改）</title>
 		<meta name="renderer" content="webkit">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
 		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all" />
 		<link rel="stylesheet" href="../css/index.css" />
-		<link rel="stylesheet" href="../css/Examination.css" />
+		<link rel="stylesheet" href="../css/administration.css" />
 		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
 		<script src="../lib/js/jquery.min.js"></script>
+		<link rel="stylesheet" href="../css/Examination.css" />
 		<script src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/util.js"></script>
+		<script type="text/javascript" src="../js/Configuration.js"></script>
+		<script type="text/javascript" src="../js/ItemBank.js"></script>
 	</head>
+	<style>
+		.layui-tab {
+			margin: 0;
+			text-align: left!important;
+		}
+		
+		.xs {
+			display: block;
+		}
+		
+		.yc {
+			display: none;
+		}
+		
+		.layui-form-select dl dd.layui-this {
+			background-color: #3C94FF;
+		}
+		
+		.layui-tab {
+			margin: 0 0 0 20px;
+		}
+		
+		.layui-tab-title {
+			position: relative;
+			left: 0;
+			height: 40px;
+			white-space: nowrap;
+			font-size: 0;
+			border-bottom-width: 0px;
+			border-top-width: 0px !important;
+			transition: all .2s;
+		}
+		
+		.exam-list {
+			margin-top: 15px;
+			display: block;
+			float: left;
+			margin-right: 1.332%;
+			width: 23%;
+			position: relative;
+			padding: 5px 0;
+			transition: left .2s ease, border .5s, z-index .5s;
+			padding-bottom: 15px;
+			top: 1px;
+			background-color: #fff;
+			border: 1px solid #cccccc;
+			padding-top: 0;
+			min-height: 300px;
+		}
+		
+		.widths {
+			width: 300px;
+		}
+		
+		.layui-form-select .layui-input {
+			padding-right: 30px;
+			border-radius: 40px;
+		}
+		
+		.layui-tab-title .layui-this:after {
+			border-width: 0px;
+			border-left-width: 1px;
+			border-right-width: 1px;
+		}
+		
+		.box-pig {
+			width: 100%;
+			text-align: center;
+			height: 160px;
+			border-bottom: solid #cccccc4d 1px;
+			background: #fff;
+			overflow: hidden;
+		}
+		
+		.exam-list:hover {
+			box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+			z-index: 20;
+			top: -1px;
+		}
+		
+		.box-pig>a>img {
+			max-width: 100%;
+			margin: auto;
+			vertical-align: middle;
+		}
+		
+		.box-pig>a img:hover {
+			cursor: pointer;
+			transition: all 0.6s;
+			-webkit-transform: scale(1.1, 1.1)
+		}
+		
+		.box-content-title {
+			font-size: 18px;
+			line-height: 25px
+		}
+		
+		.box-content {
+			padding: 5px 10px;
+		}
+		
+		.box-content-des {
+			color: darkgray;
+			line-height: 20px;
+			margin-bottom: 10px;
+		}
+		
+		.box-content-btn {
+			text-align: center;
+		}
+	</style>
 
 	<body>
 		<iframe src="../head.html" frameborder="0" scrolling="no" class="x-iframe"></iframe>
@@ -21,13 +136,319 @@
 			<div class="layui-col-md8 layui-col-md-offset2">
 				<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
 					<ul class="layui-tab-title">
-						<li class="layui-this">我的题库</li>
-						<li>组卷</li>
-						<li>我的考试</li>
+						<li class="layui-this" value="1">我的题库</li>
+						<li value="2">组卷</li>
+						<li value="3">我的考试</li>
 					</ul>
 				</div>
 			</div>
 		</div>
+		<div class="layui-row">
+			<div class="layui-col-md8 layui-col-md-offset2 one xs">
+				<div class="layui-tab" lay-filter="tabDemo">
+					<ul class="layui-tab-title" style="background-color: #3C94FF;color:white;text-align: center;">
+						<li class="layui-this">单选题</li>
+						<li>多选题</li>
+						<li>判断题</li>
+					</ul>
+					<!--单选题-->
+					<div class="layui-tab-content">
+						<div class="layui-tab-item layui-show">
+							<div class="layui-form" style="margin-top: 20px;">
+								<div class="layui-input-inline">
+									<select name="city" lay-verify="" class="layui-btn-radius">
+										<option value="">试卷类型</option>
+										<option value="010">北京</option>
+										<option value="021">上海</option>
+										<option value="0571">杭州</option>
+									</select>
+								</div>
+								<div class="layui-btn layui-btn-radius layui-btn-normal load" style="float: right;margin-left: 10px;" id="load">批量上传</div>
+								<div class="layui-btn layui-btn-radius layui-btn-normal" style="float: right;">下载模板</div>
+								<div class="layui-btn layui-btn-radius layui-btn-normal" onclick="window.location.href = 'TeseQuestions.html'" style="float: right;margin-right: 10px;">新建试题</div>
+							</div>
+							<div id="LAY_demo1" class="LAY_demo1"></div>
+							<!--<div class="layui-row layui-form" style="margin-top: 30px;">
+								
+								<div checked style="float: left;">
+									<input type="checkbox" name="" lay-skin="primary">
+								</div>
+								<div class="layui-row exam-rmb">
+									<p class="exam-title">一.这是一道题目，这个是题目的标题，下面是题目的内容，接下来是题目的选项，剩下的就是题目的编辑还有题目的删除,这是一道题目，这个是题目的标题，下面是题目的内容，接下来是题目的选项，剩下的就是题目的编辑还有题目的删除</p>
+								</div>
+								<div class="layui-row exam-rmb" style="margin:20px 0 0 40px;">
+									<div class="layui-form-item exam-rmb">
+										<input type="radio" name="ex" title="这是一个选项" checked>
+									</div>
+									<div class="layui-form-item exam-rmb">
+										<input type="radio" name="ex" title="这是一个选项">
+									</div>
+									<div class="layui-form-item exam-rmb">
+										<input type="radio" name="ex" title="这是一个选项">
+									</div>
+									<div class="layui-form-item exam-rmb">
+										<input type="radio" name="ex" title="这是一个选项">
+									</div>
+									<div class="layui-form-item">
+										<span style="font-size: 20px;">正确答案:</span><samp style="font-size: 20px;">A</samp>
+									</div>
+									<div class="layui-form-item">
+										<p style="font-size: 20px;">解析：这是一段解析。。。。。。。。。。。</p>
+									</div>
+								</div>
+								<div class="layui-form-item" style="float: right;margin-right: 10%;">
+									<span class="layui-btn layui-btn-radius layui-btn-primary">编辑</span>
+									<span class="layui-btn layui-btn-radius layui-btn-primary">删除</span>
+								</div>
+								<hr />
+							</div>-->
+						</div>
+						<!--多选题-->
+						<div class="layui-tab-item">
+							<div class="layui-form" style="margin-top: 20px;">
+								<div class="layui-input-inline">
+									<select name="city" lay-verify="" class="layui-btn-radius">
+										<option value="">试卷类型</option>
+										<option value="010">北京</option>
+										<option value="021">上海</option>
+										<option value="0571">杭州</option>
+									</select>
+								</div>
+								<div class="layui-btn layui-btn-radius layui-btn-normal load" style="float: right;margin-left: 10px;" id="load2">批量上传</div>
+								<div class="layui-btn layui-btn-radius layui-btn-normal" style="float: right;">下载模板</div>
+								<div class="layui-btn layui-btn-radius layui-btn-normal" onclick="window.location.href = 'TeseQuestions.html'" style="float: right;margin-right: 10px;">新建试题</div>
+							</div>
+							<div  class="LAY_demo2"></div>
+							<!--<div class="layui-row layui-form" style="margin-top: 30px;">
+								<div checked style="float: left;">
+									<input type="checkbox" name="" lay-skin="primary">
+								</div>
+								<div class="layui-row exam-rmb">
+									<p class="exam-title">一.这是一道题目，这个是题目的标题，下面是题目的内容，接下来是题目的选项，剩下的就是题目的编辑还有题目的删除,这是一道题目，这个是题目的标题，下面是题目的内容，接下来是题目的选项，剩下的就是题目的编辑还有题目的删除</p>
+								</div>
+								<div class="layui-row exam-rmb" style="margin:20px 0 0 40px;">
+									<div class="layui-form-item exam-rmb">
+										<input type="checkbox" name="ex" title="这是一个选项" checked lay-skin="primary">
+									</div>
+									<div class="layui-form-item exam-rmb">
+										<input type="checkbox" name="ex" title="这是一个选项" lay-skin="primary">
+									</div>
+									<div class="layui-form-item exam-rmb">
+										<input type="checkbox" name="ex" title="这是一个选项" lay-skin="primary">
+									</div>
+									<div class="layui-form-item exam-rmb">
+										<input type="checkbox" name="ex" title="这是一个选项" lay-skin="primary">
+									</div>
+									<div class="layui-form-item">
+										<span style="font-size: 20px;">正确答案:</span><samp style="font-size: 20px;">A</samp>
+									</div>
+									<div class="layui-form-item">
+										<p style="font-size: 20px;">解析：这是一段解析。。。。。。。。。。。</p>
+									</div>
+								</div>
+								<div class="layui-form-item" style="float: right;margin-right: 10%;">
+									<span class="layui-btn layui-btn-radius layui-btn-primary">编辑</span>
+									<span class="layui-btn layui-btn-radius layui-btn-primary">删除</span>
+								</div>
+								<hr />
+							</div>-->
+						</div>
+						<!--判断题-->
+						<div class="layui-tab-item">
+							<div class="layui-form" style="margin-top: 20px;">
+								<div class="layui-input-inline">
+									<select name="city" lay-verify="" class="layui-btn-radius">
+										<option value="">试卷类型</option>
+										<option value="010">北京</option>
+										<option value="021">上海</option>
+										<option value="0571">杭州</option>
+									</select>
+								</div>
+								<div class="layui-btn layui-btn-radius layui-btn-normal load" style="float: right;margin-left: 10px;"id="load3">批量上传</div>
+								<div class="layui-btn layui-btn-radius layui-btn-normal" style="float: right;">下载模板</div>
+								<div class="layui-btn layui-btn-radius layui-btn-normal" onclick="window.location.href = 'TeseQuestions.html'" style="float: right;margin-right: 10px;">新建试题</div>
+							</div>
+							<div  class="LAY_demo3"></div>
+							<!--<div class="layui-row layui-form" style="margin-top: 30px;">
+								<div checked style="float: left;">
+									<input type="checkbox" name="" lay-skin="primary">
+								</div>
+								<div class="layui-row exam-rmb">
+									<p class="exam-title">一.这是一道题目，这个是题目的标题，下面是题目的内容，接下来是题目的选项，剩下的就是题目的编辑还有题目的删除,这是一道题目，这个是题目的标题，下面是题目的内容，接下来是题目的选项，剩下的就是题目的编辑还有题目的删除</p>
+								</div>
+								<div class="layui-row exam-rmb" style="margin:20px 0 0 40px;">
+									<div class="layui-form-item exam-rmb">
+										<input type="radio" name="ex" title="否" checked>
+									</div>
+									<div class="layui-form-item exam-rmb">
+										<input type="radio" name="ex" title="是">
+									</div>
+									<div class="layui-form-item">
+										<span style="font-size: 20px;">正确答案:</span><samp style="font-size: 20px;">A</samp>
+									</div>
+									<div class="layui-form-item">
+										<p style="font-size: 20px;">解析：这是一段解析。。。。。。。。。。。</p>
+									</div>
+								</div>
+								<div class="layui-form-item" style="float: right;margin-right: 10%;">
+									<span class="layui-btn layui-btn-radius layui-btn-primary">编辑</span>
+									<span class="layui-btn layui-btn-radius layui-btn-primary">删除</span>
+								</div>
+								<hr />
+							</div>-->
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--组卷-->
+			<div class="layui-col-md8 layui-col-md-offset2 two yc">
+				<div class="layui-form" style="margin-top: 20px;">
+					<div class="layui-input-inline">
+						<select name="city" lay-verify="" class="layui-btn-radius">
+							<option value="">试卷类型</option>
+							<option value="010">北京</option>
+							<option value="021">上海</option>
+							<option value="0571">杭州</option>
+						</select>
+
+					</div>
+					<div class="layui-btn layui-btn-radius layui-btn-normal" style="float: right;" onclick="window.location.href='TestPaper.html'">新增试卷</div>
+				</div>
+				<table id="demo" lay-filter="demo"></table>
+			</div>
+			<!--我的考试-->
+			<div class="layui-col-md8 layui-col-md-offset2 three yc" style="padding: 0 4%;">
+				<div class="layui-row layui-form" style="margin-top: 20px;">
+					<div class="layui-form-item  layui-input-inline">
+						<select name="city" lay-verify="" class="layui-btn-radius">
+							<option value="">科目</option>
+							<option value="010">北京</option>
+							<option value="021">上海</option>
+							<option value="0571">杭州</option>
+						</select>
+					</div>
+					<div class="layui-form-item  layui-input-inline ">
+						<select name="city" lay-verify="" class="layui-btn-radius">
+							<option value="">考试类型</option>
+							<option value="010">北京</option>
+							<option value="021">上海</option>
+							<option value="0571">杭州</option>
+						</select>
+					</div>
+					<div class="layui-form-item  layui-input-inline ">
+						<select name="city" lay-verify="" class="layui-btn-radius ">
+							<option value="">考试时间</option>
+							<option value="010">北京</option>
+							<option value="021">上海</option>
+							<option value="0571">杭州</option>
+						</select>
+					</div>
+					<div class="layui-form-item  layui-input-inline" style="float: right;">
+						<span class="layui-btn layui-btn-radius layui-btn-normal" onclick="window.location.href='NewExam.html'">新建考试</span>
+					</div>
+				</div>
+				<!--考试列表-->
+				<div id="box"></div>
+				<!--<div class="exam-list">
+					<div class="box-pig">
+						<a href="#"><img src="../img/微信图片_20191113143904_WPS图片.png" /></a>
+					</div>
+					<div class="box-content">
+						<div class="box-content-title">
+							<a href="#">汽车维修理论期末考试</a>
+						</div>
+						<div class="box-content-des">
+							<ul>
+								<li><span>科目：</span>汽车</li>
+								<li><span>考试类型：</span>期末考试</li>
+								<li><span>开考时间：</span>2019-12-08 8：30</li>
+								<li><span>考试时长：</span>120分钟</li>
+								<li><span>考试状态：</span>未发布</li>
+							</ul>
+						</div>
+						<div class="box-content-btn">
+							<div class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius ">发布</div>
+							<div class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius ">预览</div>
+							<div class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius ">删除</div>
+						</div>
+					</div>
+				</div>
+				<div class="exam-list">
+					<div class="box-pig">
+						<a href="#"><img src="../img/微信图片_20191113143904_WPS图片.png" /></a>
+					</div>
+					<div class="box-content">
+						<div class="box-content-title">
+							<a href="#">汽车维修理论期末考试</a>
+						</div>
+						<div class="box-content-des">
+							<ul>
+								<li><span>科目：</span>汽车</li>
+								<li><span>考试类型：</span>期末考试</li>
+								<li><span>开考时间：</span>2019-12-08 8：30</li>
+								<li><span>考试时长：</span>120分钟</li>
+								<li><span>考试状态：</span>准备考试 </li>
+							</ul>
+						</div>
+						<div class="box-content-btn">
+							<div class="layui-btn layui-btn-disabled layui-btn-sm layui-btn-radius ">查看成绩</div>
+							<div class="layui-btn layui-btn-disabled layui-btn-sm layui-btn-radius ">公布答案</div>
+						</div>
+					</div>
+				</div>
+				<div class="exam-list">
+					<div class="box-pig">
+						<a href="#"><img src="../img/微信图片_20191113143904_WPS图片.png" /></a>
+					</div>
+					<div class="box-content">
+						<div class="box-content-title">
+							<a href="#">汽车维修理论期末考试</a>
+						</div>
+						<div class="box-content-des">
+							<ul>
+								<li><span>科目：</span>汽车</li>
+								<li><span>考试类型：</span>期末考试</li>
+								<li><span>开考时间：</span>2019-12-08 8：30</li>
+								<li><span>考试时长：</span>120分钟</li>
+								<li><span>考试状态：</span>正在考试 </li>
+							</ul>
+						</div>
+						<div class="box-content-btn">
+							<div class="layui-btn layui-btn-disabled layui-btn-sm layui-btn-radius ">查看成绩</div>
+							<div class="layui-btn layui-btn-disabled layui-btn-sm layui-btn-radius ">公布答案</div>
+						</div>
+					</div>
+				</div>
+				<div class="exam-list">
+					<div class="box-pig">
+						<a href="#"><img src="../img/微信图片_20191113143904_WPS图片.png" /></a>
+					</div>
+					<div class="box-content">
+						<div class="box-content-title">
+							<a href="#">汽车维修理论期末考试</a>
+						</div>
+						<div class="box-content-des">
+							<ul>
+								<li><span>科目：</span>汽车</li>
+								<li><span>考试类型：</span>期末考试</li>
+								<li><span>开考时间：</span>2019-12-08 8：30</li>
+								<li><span>考试时长：</span>120分钟</li>
+								<li><span>考试状态：</span>已结束</li>
+							</ul>
+						</div>
+						<div class="box-content-btn">
+							<div class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius ">查看成绩</div>
+							<div class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius ">公布答案</div>
+						</div>
+					</div>
+				</div>-->
+			</div>
+		</div>
+		<script type="text/html" id="operation">
+			<span class="layui-btn layui-btn-sm layui-btn-radius layui-btn-primary">预览</span>
+			<span class="layui-btn layui-btn-sm layui-btn-radius layui-btn-primary">编辑</span>
+			<span class="layui-btn layui-btn-sm layui-btn-radius layui-btn-primary">分享</span>
+		</script>
 	</body>
 
 </html>

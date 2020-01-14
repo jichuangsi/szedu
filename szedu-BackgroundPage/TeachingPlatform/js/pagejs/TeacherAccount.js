@@ -32,11 +32,7 @@ layui.use(['form', 'upload', 'element', 'table'], function() {
 					field: 'sex',
 					title: '性别',
 					align: 'center'
-				}, {
-					field: 'subject',
-					title: '科目',
-					align: 'center'
-				},
+				}, 
 				{
 					field: 'integral',
 					title: '积分',
@@ -118,6 +114,7 @@ layui.use(['form', 'upload', 'element', 'table'], function() {
 			$("input[name=savePwd]").addClass("layui-form-danger");
 			setMsg("两次密码不相同", 2);
 		} else {
+			param.schoolName=$("#school option:checked").text();
 			$("input[name=savePwd]").removeClass("layui-form-danger")
 			ajaxPOST(url, param);
 			table.reload('teacher');
@@ -207,4 +204,26 @@ layui.use(['form', 'upload', 'element', 'table'], function() {
 			layer.closeAll('loading');
 		}
 	})
+	getSchoolInfo();
+	function getSchoolInfo(){
+		var url='/UserInfoConsole/getAllSchool';
+		var arr=getAjaxData(url);
+		console.log(arr);
+		var data;
+		if(arr.code=='0010'){
+			data=arr.data;
+		}
+		var str='';
+		$('#school').empty();
+		str+='<option value="-1">请选择</option>'
+		if(data.length>0){
+			$.each(data,function(index,item){
+				str+='<option value="'+item.id+'">'+item.schoolName+'</option>';
+			});
+			$('#school').append(str);
+			form.render();	
+		}else{
+			return layer.msg('暂无学校,请先去添加学校!');
+		}
+	}
 })

@@ -6,22 +6,54 @@
 				"id": 1,
 				"name":"小林",
 				"school": "南翔技术学校",
-				"class": "三年一班"
+				"class": "三年一班",
+				"status":"使用中",
+				"number":"28",
+				"xz":"3年",
+				"date":"2019-12-1",
+				"xname":"汽车维修",
+				"studentNumber":"0012",
+				"studentName":"xiaoli",
+				"phone":"1985278666"
 			}, {
 				"id": 2,
 				"name":"小王",
 				"school": "南翔技术学校",
-				"class": "三年一班"
+				"class": "三年二班",
+				"status":"使用中",
+				"number":"28",
+				"xz":"3年",
+				"date":"2019-12-1",
+				"xname":"汽车维修",
+				"studentNumber":"0012",
+				"studentName":"xiaoli",
+				"phone":"1985278666"
 			}, {
 				"id": 3,
 				"name": "小强",
 				"school": "南翔技术学校",
-				"class": "三年一班"
+				"class": "三年三班",
+				"status":"使用中",
+				"number":"28",
+				"xz":"3年",
+				"date":"2019-12-1",
+				"xname":"汽车维修",
+				"studentNumber":"0014",
+				"studentName":"xiaoli",
+				"phone":"1985278666"
 			}, {
 				"id": 4,
 				"name": "夏明",
 				"school": "南翔技术学校",
-				"class": "三年二班"
+				"class": "三年四班",
+				"status":"已停用",
+				"number":"28",
+				"xz":"3年",
+				"date":"2019-12-1",
+				"xname":"汽车维修",
+				"studentNumber":"0013",
+				"studentName":"xiaoli",
+				"phone":"1985278666"
 			}
 		],
 		"total": 4,

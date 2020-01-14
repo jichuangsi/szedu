@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>添加课程章节</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="../css/font.css">
+		<link rel="stylesheet" href="../css/xadmin.css">
+		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all">
+		<script src="../lib/js/jquery.min.js"></script>
+		<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/xadmin.js"></script>
+		<script type="text/javascript" src="../js/util.js"></script>
+		<script type="text/javascript" src="../js/Configuration.js"></script>
+		<script src="../js/pagejs/AddChapter.js"></script>
+	</head>
+	<style>
+		#uploadFile {
+			display: none;
+			margin-top: 10px;
+		}
+		.layui-upload{
+			width: 80%;
+			margin: auto;
+		}
+	</style>
+	<body>
+		<div class="x-nav">
+			<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right;" href="javascript:location.replace(location.href);"
+			 title="刷新">
+				<i class="layui-icon" style="line-height:30px">&#xe669;</i></a>
+		</div>
+
+		<div class="x-body">
+			<fieldset class="layui-elem-field">
+				<legend>添加课程章节</legend>
+				<div class="layui-field-box">
+					<form class="layui-form layui-form-pane" autocomplete="off"enctype="multipart/form-data">
+						<div class="layui-form-item">
+							<label class="layui-form-label">绑定课程:</label>
+							<div class="layui-input-block">
+								<select name="subjectId" id="coures" lay-filter="coures"></select>
+								<!-- <input type="text" name="csurriculumName" required lay-verify="required" placeholder="请输入" class="layui-input"> -->
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">选择章节：</label>
+							<div class="layui-input-block">
+								<select name="chapterId" id="chapter">
+									<option value="-1">请先绑定课程</option>
+								</select>
+							</div>
+						</div>
+						<div class="layui-form-item layui-form-text">
+							<label class="layui-form-label">章节简介:</label>
+							<div class="layui-input-block">
+								<textarea name="content" required lay-verify="required" placeholder="请输入" class="layui-textarea"></textarea>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">资源类型:</label>
+							<div class="layui-input-block">
+								<button type="button" class="layui-btn uploadVideo" onclick="openUpload('PPT资源')"><i class="layui-icon">&#xe67c;</i>PPT资源</button>
+								<button type="button" class="layui-btn uploadVideo" onclick="openUpload('视频资源')"><i class="layui-icon">&#xe67c;</i>视频资源</button>
+								<button type="button" class="layui-btn uploadVideo" onclick="openUpload('实训资源')"><i class="layui-icon">&#xe67c;</i>实训资源</button>
+								<button type="button" class="layui-btn uploadVideo" onclick="openUpload('图片资源')"><i class="layui-icon">&#xe67c;</i>图片资源</button>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-input-block">
+								<div class="layui-btn" lay-submit   lay-filter="formDemo" >立即提交</div>
+								<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</fieldset>
+		</div>
+	</body>
+	<div id="uploadFile">
+		<div class="layui-upload">
+			<button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
+			<div class="layui-upload-list">
+				<table class="layui-table">
+					<thead>
+						<tr>
+							<th>文件名</th>
+							<th>大小</th>
+							<th>状态</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody id="demoList"></tbody>
+				</table>
+			</div>
+			<button type="button" class="layui-btn" id="testListAction">开始上传</button>
+		</div>
+	</div>
+</html>
