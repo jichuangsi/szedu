@@ -245,6 +245,7 @@ public class MappingEntity3ModelCoverter {
         model1.setSchoolId(userInfo.getSchoolId());
         model1.setSchoolName(userInfo.getSchoolName());
         model1.setPhone(userInfo.getPhone());
+        model1.setId(userInfo.getId());
         return model1;
     }
 

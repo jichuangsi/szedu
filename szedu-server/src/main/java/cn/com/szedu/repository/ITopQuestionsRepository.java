@@ -11,4 +11,5 @@ public interface ITopQuestionsRepository extends JpaRepository<TopQuestions,Inte
     List<TopQuestions> findAllBySubjectIdOrderByCreateTimeDesc(String subject);
     List<TopQuestions> findAllBySubjectIdIn(List<String> subs);
     List<TopQuestions> findAllBySubjectIdInAndType(List<String> subs,String type);
+    List<TopQuestions> findAllByChapterInAndType(List<String> chapter,String type);
 }

@@ -11,11 +11,14 @@ public class StudentAnswerCollection {
     private Integer id;
     private String studentId;
     private String studentName;
-    private String studentAnswer;
-    private String result;
-    private String questionId;
+    private String studentAnswer;//学生答案
+    private String result;//正确答案
+    private String isTure;//是否正确
+    private Integer questionId;
     private long createdTime = new Date().getTime();
     private String examId;
+    private String testPaperId;
+    private Integer score;//分数
 
     public Integer getId() {
         return id;
@@ -57,11 +60,11 @@ public class StudentAnswerCollection {
         this.result = result;
     }
 
-    public String getQuestionId() {
+    public Integer getQuestionId() {
         return questionId;
     }
 
-    public void setQuestionId(String questionId) {
+    public void setQuestionId(Integer questionId) {
         this.questionId = questionId;
     }
 
@@ -79,5 +82,29 @@ public class StudentAnswerCollection {
 
     public void setExamId(String examId) {
         this.examId = examId;
+    }
+
+    public String getTestPaperId() {
+        return testPaperId;
+    }
+
+    public void setTestPaperId(String testPaperId) {
+        this.testPaperId = testPaperId;
+    }
+
+    public String getIsTure() {
+        return isTure;
+    }
+
+    public void setIsTure(String isTure) {
+        this.isTure = isTure;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
     }
 }

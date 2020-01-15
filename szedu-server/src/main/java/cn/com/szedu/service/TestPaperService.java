@@ -1,6 +1,8 @@
 package cn.com.szedu.service;
 
 import cn.com.szedu.constant.ResultCode;
+import cn.com.szedu.entity.Exam;
+import cn.com.szedu.entity.SelfQuestions;
 import cn.com.szedu.entity.TestPaper;
 import cn.com.szedu.exception.TecherException;
 import cn.com.szedu.model.AddExaminationModel;
@@ -45,7 +47,7 @@ public class TestPaperService {
         testPaper.setTestPaperName(model.getTestPaperName());
         testPaper.setType(model.getType());//考试类型
         TestPaper testPaper1=testPaperRepository.save(testPaper);
-        selfQuestionsService.addExamination(userInfo,model.getSubList(),model.getWay(),testPaper1.getId());
+        selfQuestionsService.addExamination(userInfo,model.getSubList(),model.getChapter(),model.getWay(),testPaper1.getId());
     }
 
     /**
@@ -59,11 +61,13 @@ public class TestPaperService {
 
     /**
      * 根据试卷id查找试卷
-     * @param id
+     * @param testPaperid
+     * @param examId
      * @return
      */
-    public TestPaperModel getTestPaperByid(Integer id){
-        TestPaper testPaper=testPaperRepository.findByid(id);
+    public TestPaperModel getTestPaperByid(Integer testPaperid,String examId){
+        Exam exam=examRepository.findFirstByid(examId);
+        TestPaper testPaper=testPaperRepository.findByid(testPaperid);
         TestPaperModel model=new TestPaperModel();
         model.setCreateTime(testPaper.getCreateTime());
         model.setGrade(testPaper.getGrade());
@@ -74,11 +78,17 @@ public class TestPaperService {
         model.setTestPaperName(testPaper.getTestPaperName());
         model.setType(testPaper.getType());
         model.setUpdateTime(testPaper.getUpdateTime());
+        model.setTestTimeLength(exam.getTestTimeLength());
         List<Integer> questionIds=new ArrayList<>();
         testpaperQuestionRelationRepository.findByTestPaper(testPaper.getId()).forEach(t->{
             questionIds.add(t.getQuestionId());
         });
-        model.setQuestionsModels(selfQuestionsRepository.findByidIn(questionIds));
+        List<SelfQuestions> selfQuestions=selfQuestionsRepository.findByidIn(questionIds);
+        selfQuestions.forEach(selfQuestions1->{
+            selfQuestions1.setAnswer("");
+            selfQuestions1.setAnswerDetail("");
+        });
+        model.setQuestionsModels(selfQuestions);
         return model;
     }
 

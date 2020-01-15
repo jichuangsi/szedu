@@ -9,10 +9,11 @@ public class PurchasedResources {//购买资源表
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String resourceId;
+    private String resourceId;//复制后资源id
     private String resourceName;
     private Integer integral;//积分
     private String teacherId;
+    private String oldResourceId;//原资源id
     private long createTime=new Date().getTime();
 
     public Integer getId() {
@@ -63,11 +64,20 @@ public class PurchasedResources {//购买资源表
         this.createTime = createTime;
     }
 
-    public PurchasedResources(String resourceId, String resourceName, Integer integral, String teacherId) {
+    public String getOldResourceId() {
+        return oldResourceId;
+    }
+
+    public void setOldResourceId(String oldResourceId) {
+        this.oldResourceId = oldResourceId;
+    }
+
+    public PurchasedResources(String resourceId, String resourceName, Integer integral, String teacherId, String oldResourceId) {
         this.resourceId = resourceId;
         this.resourceName = resourceName;
         this.integral = integral;
         this.teacherId = teacherId;
+        this.oldResourceId = oldResourceId;
     }
 
     public PurchasedResources() {

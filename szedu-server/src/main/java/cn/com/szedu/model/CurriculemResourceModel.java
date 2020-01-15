@@ -1,12 +1,8 @@
-package cn.com.szedu.entity;
+package cn.com.szedu.model;
 
-import javax.persistence.*;
+import java.util.List;
 
-@Entity
-@Table(name = "CurriculumResource")
-public class CurriculumResource {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class CurriculemResourceModel {
     private Integer id;
     private Integer curriculumId;
     private String filegroup;
@@ -15,6 +11,7 @@ public class CurriculumResource {
     private String teacherid;
     private Integer subjectId;
     private Integer chapterId;
+    private List<Integer> resourceIds;//资源id
 
     public Integer getId() {
         return id;
@@ -78,5 +75,13 @@ public class CurriculumResource {
 
     public void setChapterId(Integer chapterId) {
         this.chapterId = chapterId;
+    }
+
+    public List<Integer> getResourceIds() {
+        return resourceIds;
+    }
+
+    public void setResourceIds(List<Integer> resourceIds) {
+        this.resourceIds = resourceIds;
     }
 }

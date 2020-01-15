@@ -9,13 +9,11 @@ import cn.com.szedu.entity.IntermediateTable.ResourceClassRelation;
 import cn.com.szedu.exception.CourseWareException;
 import cn.com.szedu.model.*;
 import cn.com.szedu.model.teacher.PushResourceModel;
-import cn.com.szedu.repository.ICourseWareRespository;
-import cn.com.szedu.repository.IResourceRuleRepository;
-import cn.com.szedu.repository.IUploadLabelRepository;
-import cn.com.szedu.repository.IUserInfoRepository;
+import cn.com.szedu.repository.*;
 import cn.com.szedu.repository.IntermediateTableRepository.ICoursewareUserRelationRepository;
 import cn.com.szedu.repository.IntermediateTableRepository.IPurchasedResourcesRepository;
 import cn.com.szedu.repository.IntermediateTableRepository.IResourceClassRelationRepository;
+import cn.com.szedu.util.MappingEntity2ModelCoverter;
 import com.github.pagehelper.PageInfo;
 import com.github.tobato.fastdfs.domain.StorePath;
 import org.slf4j.Logger;
@@ -57,6 +55,8 @@ public class CourseWareConsoleService {
     private IPurchasedResourcesRepository purchasedResourcesRepository;
     @Resource
     private IResourceClassRelationRepository resourceClassRelationRepository;
+    @Resource
+    private ITeacherInfoRepository teacherInfoRepository;
     @Value("${file.uploadFolder}")
     private String uploadPath;
     @Value("${file.imagePath}")
@@ -207,12 +207,32 @@ public class CourseWareConsoleService {
 
     //资源审核列表
     public PageInfo<CourseModel> getCouserWareByPage(int pageNum,int pageSize){
-        List<CourseModel> courseModelList=courseWareMapper.getCheckResourceList();
+        List<CourseModel> courseModelList=courseWareMapper.getCheckResourceList((pageNum-1)*pageSize,pageSize);
         PageInfo<CourseModel> page=new PageInfo<>();
-        page.setTotal(courseModelList.size());
+        int count=courseWareMapper.countAllList();
+        page.setTotal(count);
         page.setList(courseModelList);
         page.setPageNum(pageNum);
         page.setPageSize(pageSize);
+        page.setPages((count + pageSize - 1)/pageSize);
+        return page;
+    }
+
+    /**
+     * 分享审核列表
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    public PageInfo<CourseModel> getShareCouserWareByPage(int pageNum,int pageSize){
+        List<CourseModel> courseModelList=courseWareMapper.getShareCheckResourceList((pageNum-1)*pageSize,pageSize);
+        PageInfo<CourseModel> page=new PageInfo<>();
+        int count=courseWareMapper.countShareList();
+        page.setTotal(count);
+        page.setList(courseModelList);
+        page.setPageNum(pageNum);
+        page.setPageSize(pageSize);
+        page.setPages((count + pageSize - 1)/pageSize);
         return page;
     }
 
@@ -275,15 +295,25 @@ public class CourseWareConsoleService {
         if (courseWare==null){
             throw  new CourseWareException(ResultCode.FILE_ISNOT_EXIST);
         }
-        /*if(status.equalsIgnoreCase("3")){//删除fast资源驳回
-            if(!(StringUtils.isEmpty(courseWare.getFilegroup())|| StringUtils.isEmpty(courseWare.getFilepath()))){
-                fastDFSClientService.deleteFlie(courseWare.getFilegroup(),courseWare.getFilepath());
-            }
-        }
-        if(status.equalsIgnoreCase("2")){//删除fast资源
-            userInfoRepository.updateIntegral(integral,courseWare.getTeacherid());
-        }*/
         courseWareRespository.updateIsShareCheck(resourceId,status);
+    }
+
+    /**
+     * 分享资源
+     * @param resourceId
+     * @param status
+     * @param integral
+     * @throws CourseWareException
+     */
+    public void updateIsShareCheckAndIntegral(String resourceId,String status,Integer integral)throws CourseWareException{
+        if (StringUtils.isEmpty(resourceId) || StringUtils.isEmpty(status)){
+            throw new CourseWareException(ResultCode.PARAM_MISS_MSG);
+        }
+        CourseWare courseWare=courseWareRespository.findByid(resourceId);
+        if (courseWare==null){
+            throw  new CourseWareException(ResultCode.FILE_ISNOT_EXIST);
+        }
+        courseWareRespository.updateIsShareCheckAndIntegral(resourceId,status,integral);
     }
 
     //积分修改
@@ -568,19 +598,23 @@ public class CourseWareConsoleService {
         //获取资源文件后缀名
         String suffixName = courseWare.getFilename().substring(courseWare.getFilename().lastIndexOf("."));
         String newName=UUID.randomUUID()+suffixName;
-        //封面
-        String suffixName2 = courseWare.getFilename().substring(courseWare.getCoverPic().lastIndexOf("."));
-        String newName2=UUID.randomUUID()+suffixName;
-        String path2=courseWare.getCoverPic().substring(1);
+        String newName2="";
         FileChannel input=null;
         FileChannel output=null;
         try{
             input=new FileInputStream(new File(uploadPath+path)).getChannel();
             output=new FileOutputStream(new File(uploadPath+imagePath+newName)).getChannel();
             output.transferFrom(input,0,input.size());
-            input=new FileInputStream(new File(uploadPath+path2)).getChannel();
-            output=new FileOutputStream(new File(uploadPath+imagePath+newName2)).getChannel();
-            output.transferFrom(input,0,input.size());
+            //封面
+            if (!StringUtils.isEmpty(courseWare.getCoverPic())){
+                String suffixName2 = courseWare.getFilename().substring(courseWare.getCoverPic().lastIndexOf("."));
+                newName2=UUID.randomUUID()+suffixName2;
+                String path2=courseWare.getCoverPic().substring(1);
+                input=new FileInputStream(new File(uploadPath+path2)).getChannel();
+                output=new FileOutputStream(new File(uploadPath+imagePath+newName2)).getChannel();
+                output.transferFrom(input,0,input.size());
+            }
+
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -589,10 +623,24 @@ public class CourseWareConsoleService {
             courseWare1.setFilepath(uri+newName);
             courseWare1.setTeacherid(userInfo.getUserId());
             courseWare1.setTeacherName(userInfo.getUserName());
-            courseWare1.setCoverPic(uri+newName2);
-            courseWare1.setWaysToget("1");
+            if (!StringUtils.isEmpty(courseWare.getCoverPic())){
+                courseWare1.setCoverPic(uri+newName2);
+            }
+            courseWare1.setWaysToget("1");//购买
             CourseWare courseWare2=courseWareRespository.save(courseWare1);
-            purchasedResourcesRepository.save(new PurchasedResources(courseWare2.getId(),courseWare2.getFilename(),courseWare2.getIntegral(),userInfo.getUserId()));
+            courseWare.setBuy(courseWare.getBuy()+1);
+            courseWareRespository.save(courseWare);
+            //购买记录
+            purchasedResourcesRepository.save(new PurchasedResources(courseWare2.getId(),courseWare2.getFilename(),courseWare2.getIntegral(),userInfo.getUserId(),courseWare.getId()));
+            //添加作者积分（扣除购买者积分）
+            TeacherInfo autor=teacherInfoRepository.findByid(courseWare.getTeacherid());
+            autor.setIntegral(Integer.valueOf(autor.getIntegral())+Integer.valueOf(courseWare.getIntegral()));
+            teacherInfoRepository.updateIntegral(autor.getId(),(Integer.valueOf(autor.getIntegral())+Integer.valueOf(courseWare.getIntegral())));
+            //teacherInfoRepository.save(autor);
+            TeacherInfo mine=teacherInfoRepository.findByid(userInfo.getUserId());
+            mine.setIntegral(Integer.valueOf(mine.getIntegral())-Integer.valueOf(courseWare.getIntegral()));
+            teacherInfoRepository.updateIntegral(mine.getId(),(Integer.valueOf(mine.getIntegral())-Integer.valueOf(courseWare.getIntegral())));
+            //teacherInfoRepository.save(mine);
         }
     }
 
@@ -604,12 +652,116 @@ public class CourseWareConsoleService {
     @Transactional(rollbackFor = Exception.class)
     public void pushResouceToClass(UserInfoForToken userInfo, PushResourceModel model){
         List<ResourceClassRelation> resourceClassRelations=new ArrayList<>();
-        model.getClassId().forEach(c->{
+        model.getClassid().forEach(c->{
             ResourceClassRelation relation=new ResourceClassRelation(model.getResourceId(),c,userInfo.getUserId());
             resourceClassRelations.add(relation);
         });
         resourceClassRelationRepository.saveAll(resourceClassRelations);
     }
 
+    /**
+     * 公共资源
+     * @param userInfo
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    public PageInfo<CourseModel> getPublicResource(UserInfoForToken userInfo,int pageNum,int pageSize){
+        //资源类型
+        List<ResourcesRule> rr =resourceRuleRepository.findAll();
+        //上传标签
+        //List<UploadLabel> uploadLabels=uploadLabelRepository.findAll();
+        TeacherInfo teacherInfo=teacherInfoRepository.findByid(userInfo.getUserId());
+        //查询已购买
+        List<PurchasedResources> purchasedResources = purchasedResourcesRepository.findByTeacherId(userInfo.getUserId());
+        //获得校内全部教师
+        List<TeacherInfo> teacherInfos=teacherInfoRepository.findBySchoolId(teacherInfo.getSchoolId());
+        List<String> teacherIds=new ArrayList<>();
+        teacherInfos.forEach(teacherInfo1 -> {
+            teacherIds.add(teacherInfo1.getId());
+        });
+        //查询公共资源
+        List<CourseWare> courseWares=courseWareRespository.getTeacheridInAndIsShareCheck(teacherIds,"2",(pageNum-1)*pageSize,pageSize);
+        List<CourseModel> models=new ArrayList<>();
+        courseWares.forEach(c->{
+            CourseModel model=MappingEntity2ModelCoverter.CONVERTERFROMCOURSEWARETOCOURSEMODEL(c);;
+            rr.forEach(r->{
+                if (c.getType().equalsIgnoreCase(r.getId().toString())){
+                    model.setResourceType(r.getTypeName());
+                }
+            });
+            purchasedResources.forEach(purchasedResources1 -> {
+                if(purchasedResources1.getOldResourceId().equals(c.getId())){
+                    model.setIsBuy("1");
+                }
+            });
+            /*uploadLabels.forEach(u->{
+                if (c.getLabel().equalsIgnoreCase(u.getId().toString())){
+                    model.setResourceLabel(u.getName());
+                }
+            });*/
+            models.add(model);
+        });
+        PageInfo<CourseModel> page=new PageInfo<>();
+        int count=courseWareRespository.countByTeacheridInAndIsShareCheck(teacherIds,"2");
+        page.setTotal(count);
+        page.setList(models);
+        page.setPageNum(pageNum);
+        page.setPageSize(pageSize);
+        page.setPages((count + pageSize - 1)/pageSize);
+        return page;
+    }
 
+    /**
+     * 公共资源根据时间排序
+     * @param userInfo
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    public PageInfo<CourseModel> getPublicResourceByTime(UserInfoForToken userInfo,int pageNum,int pageSize){
+        //资源类型
+        List<ResourcesRule> rr =resourceRuleRepository.findAll();
+        //上传标签
+        //List<UploadLabel> uploadLabels=uploadLabelRepository.findAll();
+        TeacherInfo teacherInfo=teacherInfoRepository.findByid(userInfo.getUserId());
+        //查询已购买
+        List<PurchasedResources> purchasedResources = purchasedResourcesRepository.findByTeacherId(userInfo.getUserId());
+        //获得校内全部教师
+        List<TeacherInfo> teacherInfos=teacherInfoRepository.findBySchoolId(teacherInfo.getSchoolId());
+        List<String> teacherIds=new ArrayList<>();
+        teacherInfos.forEach(teacherInfo1 -> {
+            teacherIds.add(teacherInfo1.getId());
+        });
+        //查询公共资源
+        List<CourseWare> courseWares=courseWareRespository.getTeacheridInAndIsShareCheckOrderOrderByCreateTime(teacherIds,"2",(pageNum-1)*pageSize,pageSize);
+        List<CourseModel> models=new ArrayList<>();
+        courseWares.forEach(c->{
+            CourseModel model=MappingEntity2ModelCoverter.CONVERTERFROMCOURSEWARETOCOURSEMODEL(c);;
+            rr.forEach(r->{
+                if (c.getType().equalsIgnoreCase(r.getId().toString())){
+                    model.setResourceType(r.getTypeName());
+                }
+            });
+            purchasedResources.forEach(purchasedResources1 -> {
+                if(purchasedResources1.getOldResourceId().equals(c.getId())){
+                    model.setIsBuy("1");
+                }
+            });
+            /*uploadLabels.forEach(u->{
+                if (c.getLabel().equalsIgnoreCase(u.getId().toString())){
+                    model.setResourceLabel(u.getName());
+                }
+            });*/
+            models.add(model);
+        });
+        PageInfo<CourseModel> page=new PageInfo<>();
+        int count=courseWareRespository.countByTeacheridInAndIsShareCheck(teacherIds,"2");
+        page.setTotal(count);
+        page.setList(models);
+        page.setPageNum(pageNum);
+        page.setPageSize(pageSize);
+        page.setPages((count + pageSize - 1)/pageSize);
+        return page;
+    }
 }

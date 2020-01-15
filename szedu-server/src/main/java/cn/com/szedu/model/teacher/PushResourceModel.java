@@ -4,7 +4,7 @@ import java.util.List;
 
 public class PushResourceModel {
     private String resourceId;
-    private List<String> classId;
+    private List<String> classid;
 
     public String getResourceId() {
         return resourceId;
@@ -14,11 +14,11 @@ public class PushResourceModel {
         this.resourceId = resourceId;
     }
 
-    public List<String> getClassId() {
-        return classId;
+    public List<String> getClassid() {
+        return classid;
     }
 
-    public void setClassId(List<String> classId) {
-        this.classId = classId;
+    public void setClassid(List<String> classid) {
+        this.classid = classid;
     }
 }

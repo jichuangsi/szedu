@@ -13,6 +13,7 @@ public class TestPaperModel {//试卷
     private String remark;//备注
     private String teacherId;
     private String teacherName;
+    private String testTimeLength;//考试时长
     private long createTime=new Date().getTime();
     private long updateTime;
     private List<SelfQuestions> questionsModels;//题目
@@ -71,6 +72,14 @@ public class TestPaperModel {//试卷
 
     public void setTeacherName(String teacherName) {
         this.teacherName = teacherName;
+    }
+
+    public String getTestTimeLength() {
+        return testTimeLength;
+    }
+
+    public void setTestTimeLength(String testTimeLength) {
+        this.testTimeLength = testTimeLength;
     }
 
     public long getCreateTime() {

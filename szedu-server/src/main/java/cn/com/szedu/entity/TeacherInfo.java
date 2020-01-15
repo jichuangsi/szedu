@@ -25,7 +25,7 @@ public class TeacherInfo {
     private String schoolName;
     private String phone;
     private String status = "I";
-    private Integer integral;
+    private Integer integral=0;
     private String jobId;//工号
     private Date birthday;//生日
     private String address;

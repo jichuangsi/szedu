@@ -2,16 +2,21 @@ package cn.com.szedu.controller;
 
 import cn.com.szedu.entity.Article;
 import cn.com.szedu.entity.ArticleCategory;
+import cn.com.szedu.entity.ShowPicture;
+import cn.com.szedu.exception.BackUserException;
 import cn.com.szedu.exception.UserServiceException;
+import cn.com.szedu.model.CurriculemResourceModel;
 import cn.com.szedu.model.ResponseModel;
 import cn.com.szedu.model.UserInfoForToken;
 import cn.com.szedu.service.BackArticleCategoryService;
+import cn.com.szedu.service.ShowPictureService;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 
@@ -22,6 +27,8 @@ import javax.annotation.Resource;
 public class BackInformationDeliveryController {
     @Resource
     private BackArticleCategoryService backArticleCategoryService;
+    @Resource
+    private ShowPictureService showPictureService;
 
     @ApiOperation(value = "添加文章分类", notes = "")
     @ApiImplicitParams({
@@ -123,5 +130,41 @@ public class BackInformationDeliveryController {
     @GetMapping("/getAllArticle")
     public ResponseModel<PageInfo<Article>> getAllArticle(@ModelAttribute UserInfoForToken userInfo, @RequestParam int pageNum , @RequestParam int pageSize) {
         return ResponseModel.sucess("",backArticleCategoryService.getAllArticle(pageNum,pageSize));
+    }
+
+    /*@ApiOperation(value = "查询全部轮播图", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/getAllShowPicture")
+    public ResponseModel<PageInfo<Article>> getAllShowPicture(@ModelAttribute UserInfoForToken userInfo, @RequestParam int pageNum , @RequestParam int pageSize) {
+        return ResponseModel.sucess("",backArticleCategoryService.getAllArticle(pageNum,pageSize));
+    }*/
+
+    @ApiOperation(value = "上传轮播图", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/saveShowPicture")
+    public ResponseModel saveShowPicture(@ModelAttribute UserInfoForToken userInfo, @RequestParam MultipartFile[] file,@RequestParam String way) {
+        try {
+            showPictureService.localUpLoadFiles(userInfo,file,way);
+            return ResponseModel.sucessWithEmptyData("");
+        }catch (Exception e) {
+            return ResponseModel.fail("", e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "查询轮播图", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/getShowPictureByWay")
+    public ResponseModel getShowPictureByWay(@ModelAttribute UserInfoForToken userInfo,@RequestParam String way) {
+        try {
+            return ResponseModel.sucess("", showPictureService.getAllShowPictureByWay(way));
+        }catch (Exception e) {
+            return ResponseModel.fail("", e.getMessage());
+        }
     }
 }

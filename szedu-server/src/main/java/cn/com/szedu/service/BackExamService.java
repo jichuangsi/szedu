@@ -2,21 +2,20 @@ package cn.com.szedu.service;
 
 import cn.com.szedu.constant.ResultCode;
 import cn.com.szedu.dao.mapper.ICourseWareMapper;
-import cn.com.szedu.entity.CourseWare;
-import cn.com.szedu.entity.Exam;
+import cn.com.szedu.entity.*;
 import cn.com.szedu.entity.IntermediateTable.ExamClassRelation;
 import cn.com.szedu.entity.IntermediateTable.ExamUserRelation;
-import cn.com.szedu.entity.OpLog;
-import cn.com.szedu.entity.StudentAnswerCollection;
+import cn.com.szedu.entity.IntermediateTable.StudentClassRelation;
 import cn.com.szedu.exception.UserServiceException;
+import cn.com.szedu.model.CourseModel;
 import cn.com.szedu.model.UserInfoForToken;
+import cn.com.szedu.model.student.StudentAnswerModel;
+import cn.com.szedu.model.student.StudentAnswerModel2;
 import cn.com.szedu.model.teacher.ExamModel;
-import cn.com.szedu.repository.IClassInfoRepository;
-import cn.com.szedu.repository.IExamRepository;
-import cn.com.szedu.repository.IOpLogRepository;
-import cn.com.szedu.repository.IStudentAnswerCollectionRepository;
+import cn.com.szedu.repository.*;
 import cn.com.szedu.repository.IntermediateTableRepository.IExamClassRelationRepository;
 import cn.com.szedu.repository.IntermediateTableRepository.IExamUserRelationRepository;
+import cn.com.szedu.repository.IntermediateTableRepository.IStudentClassRelationRepository;
 import cn.com.szedu.util.MappingEntity2ModelCoverter;
 import com.github.pagehelper.PageInfo;
 import org.springframework.data.domain.Page;
@@ -33,8 +32,11 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+
+import static cn.com.szedu.service.TeacherLessonService.timeStamp2Date;
 
 @Service
 public class BackExamService {
@@ -58,6 +60,18 @@ public class BackExamService {
 
     @Resource
     private IClassInfoRepository classInfoRepository;
+
+    @Resource
+    private ISelfQuestionsRepository selfQuestionsRepository;
+
+    @Resource
+    private IStudentClassRelationRepository studentClassRelationRepository;
+
+    @Resource
+    private IStudentInfoRespository studentInfoRespository;
+
+    @Resource
+    private MessageRepository messageRepository;
 
     //添加考试
     @Transactional(rollbackFor = Exception.class)
@@ -136,11 +150,6 @@ public class BackExamService {
         return page;
     }
 
-    //保存学生回答答案
-    public void saveStudentAnswer(UserInfoForToken userInfo, List<StudentAnswerCollection> collections) throws UserServiceException {
-        studentAnswerCollectionRepository.saveAll(collections);
-    }
-
     //我的考试
     public Page<Exam> getExamListByTeacher(UserInfoForToken userInfo,String name,String subjectId,String examType,int pageNum,int pageSize){
         pageNum=pageNum-1;
@@ -183,15 +192,335 @@ public class BackExamService {
     }
 
     /**
-     * 修改考试状态
+     * 修改考试状态(发布考试)
      * @param examId
      * @param status
      */
     @Transactional(rollbackFor = Exception.class)
-    public void updateExamStatus(String examId,String status){
+    public void updateExamStatus(UserInfoForToken userInfo,String examId,String status){
         Exam exam=examRepository.findFirstByid(examId);
         exam.setStatus(status);
         examRepository.save(exam);
+        List<ExamClassRelation> examClassRelations=examClassRelationRepository.findByExamId(examId);
+        List<String> classIds=new ArrayList<>();
+        examClassRelations.forEach(examClassRelation -> {
+            classIds.add(examClassRelation.getClassId());
+        });
+        Sort sort=new Sort(new Sort.Order(Sort.Direction.ASC, "createTime"));
+        List<ClassInfo> classInfos=classInfoRepository.getClassInfoByIdIn(sort,classIds);
+        classInfos.forEach(classInfo -> {
+            String staertTime=timeStamp2Date(exam.getStartTime(),"yyyy-MM-dd HH:mm:ss");
+            String message = userInfo.getUserName()+"刚发布了 1 门新的考试。考试信息：" + exam.getContent() + "；科目-" + exam.getSubjectName() +
+                    "；开考时间-" +staertTime + "；考试时长-" + exam.getTestTimeLength() + " 分钟。" +
+                    "同时，已向指定班级学生发送考试通知";
+            Message message1 = new Message(userInfo.getUserId(), userInfo.getUserName(), message,"N");
+            messageRepository.save(message1);
+        });
     }
 
+
+    /**
+     * 根据学生获取考试
+     * @param userInfo
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    public PageInfo<Exam> getExamByStudentId(UserInfoForToken userInfo, Integer pageNum, Integer pageSize){
+        //查询学生班级
+       List<StudentClassRelation> studentClassRelations=studentClassRelationRepository.findByStudentId(userInfo.getUserId());
+       List<String> classId=new ArrayList<>();
+       studentClassRelations.forEach(studentClassRelation -> {
+           classId.add(studentClassRelation.getClassId());
+       });
+       //班级拥有的考试
+       List<ExamClassRelation> examClassRelations=examClassRelationRepository.findByClassIdIn(classId);
+       List<String> examIds=new ArrayList<>();
+       examClassRelations.forEach(examClassRelation -> {
+           examIds.add(examClassRelation.getExamId());
+       });
+       List<Exam> examList=examRepository.getidInOrderByCreateTimeDesc(examIds,(pageNum-1)*pageSize,pageSize);
+       examList.forEach(e->{//查询已答题考试
+           if (!(e.getStatus().equalsIgnoreCase("4"))){//非结束状态
+               if (studentAnswerCollectionRepository.countByStudentIdAndExamId(userInfo.getUserId(),e.getId())!=0){
+                   e.setStatus("5");
+               }
+           }
+
+       });
+        PageInfo<Exam> page=new PageInfo<>();
+        int count=examRepository.countByidIn(examIds);
+        page.setTotal(count);
+        page.setList(examList);
+        page.setPageNum(pageNum);
+        page.setPageSize(pageSize);
+        page.setPages((count + pageSize - 1)/pageSize);
+        return page;
+    }
+
+    /**
+     * 保存学生答案
+     * @param userInfo
+     * @param model2
+     * @throws UserServiceException
+     */
+   @Transactional(rollbackFor = Exception.class)
+   public void saveStudentAnswer(UserInfoForToken userInfo, StudentAnswerModel2 model2) throws UserServiceException {
+       if (studentAnswerCollectionRepository.countByStudentIdAndExamId(userInfo.getUserId(),model2.getExamId())!=0){
+           throw new UserServiceException(ResultCode.TEST_IS_EXIST);
+       }
+       List<Integer> questionIds=new ArrayList<>();
+       if (model2.getMultiple()!=null && model2.getMultiple().size()!=0){
+           model2.getMultiple().forEach(m->{
+               questionIds.add(m.getQuestionId());
+           });
+       }
+       if (model2.getSingle()!=null && model2.getSingle().size()!=0){
+           model2.getSingle().forEach(m->{
+               questionIds.add(m.getQuestionId());
+           });
+       }
+       if (model2.getJudge()!=null && model2.getJudge().size()!=0){
+           model2.getJudge().forEach(m->{
+               questionIds.add(m.getQuestionId());
+           });
+       }
+        List<SelfQuestions> questions=selfQuestionsRepository.findByidIn(questionIds);
+        List<StudentAnswerCollection> studentAnswerCollections=new ArrayList<>();
+       if (model2.getMultiple()!=null && model2.getMultiple().size()!=0){//多选
+           model2.getMultiple().forEach(m->{
+               questions.forEach(questions1 -> {
+                   if (m.getQuestionId()==questions1.getId()){
+                       StudentAnswerCollection studentAnswerCollection=new StudentAnswerCollection();
+                       if(StringUtils.isEmpty(m.getAnswer())){//未回答
+                           studentAnswerCollection.setIsTure("P");
+                           studentAnswerCollection.setScore(0);
+                       }else {
+                           if (m.getAnswer().contains(",")){
+                               m.setAnswer(m.getAnswer().substring(m.getAnswer().lastIndexOf(",")-1));
+                           }
+                           if (m.getAnswer().equals(questions1.getAnswer())){//答案相等
+                               studentAnswerCollection.setIsTure("C");
+                               studentAnswerCollection.setScore(3);
+                           }else {//回答错误
+                               studentAnswerCollection.setIsTure("W");
+                               studentAnswerCollection.setScore(0);
+                           }
+                       }
+                       studentAnswerCollection.setQuestionId(m.getQuestionId());
+                       studentAnswerCollection.setStudentAnswer(m.getAnswer());
+                       studentAnswerCollection.setResult(questions1.getAnswer());
+                       studentAnswerCollection.setExamId(model2.getExamId());
+                       studentAnswerCollection.setStudentId(userInfo.getUserId());
+                       studentAnswerCollection.setTestPaperId(model2.getTestPaperId());
+                       studentAnswerCollection.setStudentName(userInfo.getUserName());
+                       studentAnswerCollections.add(studentAnswerCollection);
+                   }
+               });
+           });
+       }
+       if (model2.getSingle()!=null && model2.getSingle().size()!=0){//单选
+           model2.getSingle().forEach(m->{
+               questions.forEach(questions1 -> {
+                   if (m.getQuestionId()==questions1.getId()){
+                       StudentAnswerCollection studentAnswerCollection=new StudentAnswerCollection();
+                       if(StringUtils.isEmpty(m.getAnswer())){//未回答
+                           studentAnswerCollection.setIsTure("P");
+                           studentAnswerCollection.setScore(0);
+                       }else {
+                           if (m.getAnswer().contains(",")){
+                               m.setAnswer(m.getAnswer().substring(m.getAnswer().lastIndexOf(",")-1));
+                           }
+                           if (m.getAnswer().equals(questions1.getAnswer())){//答案相等
+                               studentAnswerCollection.setIsTure("C");
+                               studentAnswerCollection.setScore(2);
+                           }else {//回答错误
+                               studentAnswerCollection.setIsTure("W");
+                               studentAnswerCollection.setScore(0);
+                           }
+                       }
+                       studentAnswerCollection.setQuestionId(m.getQuestionId());
+                       studentAnswerCollection.setStudentAnswer(m.getAnswer());
+                       studentAnswerCollection.setResult(questions1.getAnswer());
+                       studentAnswerCollection.setExamId(model2.getExamId());
+                       studentAnswerCollection.setStudentId(userInfo.getUserId());
+                       studentAnswerCollection.setTestPaperId(model2.getTestPaperId());
+                       studentAnswerCollection.setStudentName(userInfo.getUserName());
+                       studentAnswerCollections.add(studentAnswerCollection);
+                   }
+               });
+           });
+       }
+       if (model2.getJudge()!=null && model2.getJudge().size()!=0){//判断
+           model2.getJudge().forEach(m->{
+               questions.forEach(questions1 -> {
+                   if (m.getQuestionId()==questions1.getId()){
+                       StudentAnswerCollection studentAnswerCollection=new StudentAnswerCollection();
+                       if(StringUtils.isEmpty(m.getAnswer())){//未回答
+                           studentAnswerCollection.setIsTure("P");
+                           studentAnswerCollection.setScore(0);
+                       }else {
+                           if (m.getAnswer().contains(",")){
+                               m.setAnswer(m.getAnswer().substring(m.getAnswer().lastIndexOf(",")-1));
+                           }
+                           if (m.getAnswer().equals(questions1.getAnswer())){//答案相等
+                               studentAnswerCollection.setIsTure("C");
+                               studentAnswerCollection.setScore(2);
+                           }else {//回答错误
+                               studentAnswerCollection.setIsTure("W");
+                               studentAnswerCollection.setScore(0);
+                           }
+                       }
+                       studentAnswerCollection.setQuestionId(m.getQuestionId());
+                       studentAnswerCollection.setStudentAnswer(m.getAnswer());
+                       studentAnswerCollection.setResult(questions1.getAnswer());
+                       studentAnswerCollection.setExamId(model2.getExamId());
+                       studentAnswerCollection.setStudentId(userInfo.getUserId());
+                       studentAnswerCollection.setTestPaperId(model2.getTestPaperId());
+                       studentAnswerCollection.setStudentName(userInfo.getUserName());
+                       studentAnswerCollections.add(studentAnswerCollection);
+                   }
+               });
+           });
+       }
+       studentAnswerCollectionRepository.saveAll(studentAnswerCollections);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void saveStudentResult(UserInfoForToken userInfo, StudentAnswerModel2 model2) throws UserServiceException {
+        if (studentAnswerCollectionRepository.countByStudentIdAndExamId(userInfo.getUserId(),model2.getExamId())!=0){
+            throw new UserServiceException(ResultCode.TEST_IS_EXIST);
+        }
+        List<Integer> questionIds=new ArrayList<>();
+        if (model2.getMultiple()!=null && model2.getMultiple().size()!=0){
+            model2.getMultiple().forEach(m->{
+                questionIds.add(m.getQuestionId());
+            });
+        }
+        if (model2.getSingle()!=null && model2.getSingle().size()!=0){
+            model2.getSingle().forEach(m->{
+                questionIds.add(m.getQuestionId());
+            });
+        }
+        if (model2.getJudge()!=null && model2.getJudge().size()!=0){
+            model2.getJudge().forEach(m->{
+                questionIds.add(m.getQuestionId());
+            });
+        }
+        List<SelfQuestions> questions=selfQuestionsRepository.findByidIn(questionIds);
+        List<StudentAnswerCollection> studentAnswerCollections=new ArrayList<>();
+        if (model2.getMultiple()!=null && model2.getMultiple().size()!=0){//多选
+            model2.getMultiple().forEach(m->{
+                questions.forEach(questions1 -> {
+                    if (m.getQuestionId()==questions1.getId()){
+                        StudentAnswerCollection studentAnswerCollection=new StudentAnswerCollection();
+                        if(StringUtils.isEmpty(m.getAnswer())){//未回答
+                            studentAnswerCollection.setIsTure("P");
+                            studentAnswerCollection.setScore(0);
+                        }else {
+                            if (m.getAnswer().contains(",")){
+                                m.setAnswer(m.getAnswer().substring(m.getAnswer().lastIndexOf(",")-1));
+                            }
+                            if (m.getAnswer().equals(questions1.getAnswer())){//答案相等
+                                studentAnswerCollection.setIsTure("C");
+                                studentAnswerCollection.setScore(3);
+                            }else {//回答错误
+                                studentAnswerCollection.setIsTure("W");
+                                studentAnswerCollection.setScore(0);
+                            }
+                        }
+                        studentAnswerCollection.setQuestionId(m.getQuestionId());
+                        studentAnswerCollection.setStudentAnswer(m.getAnswer());
+                        studentAnswerCollection.setResult(questions1.getAnswer());
+                        studentAnswerCollection.setExamId(model2.getExamId());
+                        studentAnswerCollection.setStudentId(userInfo.getUserId());
+                        studentAnswerCollection.setTestPaperId(model2.getTestPaperId());
+                        studentAnswerCollection.setStudentName(userInfo.getUserName());
+                        studentAnswerCollections.add(studentAnswerCollection);
+                    }
+                });
+            });
+        }
+        if (model2.getSingle()!=null && model2.getSingle().size()!=0){//单选
+            model2.getSingle().forEach(m->{
+                questions.forEach(questions1 -> {
+                    if (m.getQuestionId()==questions1.getId()){
+                        StudentAnswerCollection studentAnswerCollection=new StudentAnswerCollection();
+                        if(StringUtils.isEmpty(m.getAnswer())){//未回答
+                            studentAnswerCollection.setIsTure("P");
+                            studentAnswerCollection.setScore(0);
+                        }else {
+                            if (m.getAnswer().contains(",")){
+                                m.setAnswer(m.getAnswer().substring(m.getAnswer().lastIndexOf(",")-1));
+                            }
+                            if (m.getAnswer().equals(questions1.getAnswer())){//答案相等
+                                studentAnswerCollection.setIsTure("C");
+                                studentAnswerCollection.setScore(2);
+                            }else {//回答错误
+                                studentAnswerCollection.setIsTure("W");
+                                studentAnswerCollection.setScore(0);
+                            }
+                        }
+                        studentAnswerCollection.setQuestionId(m.getQuestionId());
+                        studentAnswerCollection.setStudentAnswer(m.getAnswer());
+                        studentAnswerCollection.setResult(questions1.getAnswer());
+                        studentAnswerCollection.setExamId(model2.getExamId());
+                        studentAnswerCollection.setStudentId(userInfo.getUserId());
+                        studentAnswerCollection.setTestPaperId(model2.getTestPaperId());
+                        studentAnswerCollection.setStudentName(userInfo.getUserName());
+                        studentAnswerCollections.add(studentAnswerCollection);
+                    }
+                });
+            });
+        }
+        if (model2.getJudge()!=null && model2.getJudge().size()!=0){//判断
+            model2.getJudge().forEach(m->{
+                questions.forEach(questions1 -> {
+                    if (m.getQuestionId()==questions1.getId()){
+                        StudentAnswerCollection studentAnswerCollection=new StudentAnswerCollection();
+                        if(StringUtils.isEmpty(m.getAnswer())){//未回答
+                            studentAnswerCollection.setIsTure("P");
+                            studentAnswerCollection.setScore(0);
+                        }else {
+                            if (m.getAnswer().contains(",")){
+                                m.setAnswer(m.getAnswer().substring(m.getAnswer().lastIndexOf(",")-1));
+                            }
+                            if (m.getAnswer().equals(questions1.getAnswer())){//答案相等
+                                studentAnswerCollection.setIsTure("C");
+                                studentAnswerCollection.setScore(2);
+                            }else {//回答错误
+                                studentAnswerCollection.setIsTure("W");
+                                studentAnswerCollection.setScore(0);
+                            }
+                        }
+                        studentAnswerCollection.setQuestionId(m.getQuestionId());
+                        studentAnswerCollection.setStudentAnswer(m.getAnswer());
+                        studentAnswerCollection.setResult(questions1.getAnswer());
+                        studentAnswerCollection.setExamId(model2.getExamId());
+                        studentAnswerCollection.setStudentId(userInfo.getUserId());
+                        studentAnswerCollection.setTestPaperId(model2.getTestPaperId());
+                        studentAnswerCollection.setStudentName(userInfo.getUserName());
+                        studentAnswerCollections.add(studentAnswerCollection);
+                    }
+                });
+            });
+        }
+        studentAnswerCollectionRepository.saveAll(studentAnswerCollections);
+    }
+
+    /*private Integer settleStudentScoreByClass(UserInfoForToken userInfo,String classId,String examId){
+        //查询学生
+        List<StudentClassRelation> studentClassRelations=studentClassRelationRepository.findAllByClassId(classId);
+        List<String> studentIds=new ArrayList<>();
+        studentClassRelations.forEach(studentClassRelation -> {
+            studentIds.add(studentClassRelation.getStudentId());
+        });
+        List<StudentInfo> studentInfos=studentInfoRespository.findByidIn(studentIds);
+        studentInfos.forEach(studentInfo -> {
+            List<StudentAnswerCollection> studentAnswerCollection=studentAnswerCollectionRepository.findByExamIdAndStudentId(examId,studentInfo.getStudentId());
+            studentAnswerCollection.forEach(studentAnswerCollection1 -> {
+
+            });
+        });
+    }*/
 }

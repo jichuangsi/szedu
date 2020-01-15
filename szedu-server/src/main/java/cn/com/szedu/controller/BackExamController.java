@@ -2,11 +2,13 @@ package cn.com.szedu.controller;
 
 import cn.com.szedu.entity.Exam;
 import cn.com.szedu.entity.SelfQuestions;
+import cn.com.szedu.entity.StudentAnswerCollection;
 import cn.com.szedu.exception.TecherException;
 import cn.com.szedu.exception.UserServiceException;
 import cn.com.szedu.model.AddExaminationModel;
 import cn.com.szedu.model.ResponseModel;
 import cn.com.szedu.model.UserInfoForToken;
+import cn.com.szedu.model.student.StudentAnswerModel2;
 import cn.com.szedu.model.teacher.ExamModel;
 import cn.com.szedu.service.BackExamService;
 import cn.com.szedu.service.TestPaperService;
@@ -118,7 +120,7 @@ public class BackExamController {
     })
     @GetMapping("/publishingexamination")
     public ResponseModel publishingexamination(@ModelAttribute UserInfoForToken userInfo,@RequestParam String examId,@RequestParam String status) {
-        backExamService.updateExamStatus(examId,status);
+        backExamService.updateExamStatus(userInfo,examId,status);
         return ResponseModel.sucessWithEmptyData("");
     }
 
@@ -137,8 +139,8 @@ public class BackExamController {
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @GetMapping("/getTestPaperDetailByid")
-    public ResponseModel getTestPaperDetailByid(@ModelAttribute UserInfoForToken userInfo,@RequestParam Integer testPaperId) {
-        return ResponseModel.sucess("",testPaperService.getTestPaperByid(testPaperId));
+    public ResponseModel getTestPaperDetailByid(@ModelAttribute UserInfoForToken userInfo,@RequestParam Integer testPaperId,@RequestParam String examId) {
+        return ResponseModel.sucess("",testPaperService.getTestPaperByid(testPaperId,examId));
     }
 
     @ApiOperation(value = "根据老师id查询老师试卷", notes = "")
@@ -162,5 +164,28 @@ public class BackExamController {
             ResponseModel.fail("",e.getMessage());
         }
         return ResponseModel.sucessWithEmptyData("");
+    }
+
+    @ApiOperation(value = "学生提交试卷", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/submitTestPaper")
+    public ResponseModel submitTestPaper(@ModelAttribute UserInfoForToken userInfo, @RequestBody StudentAnswerModel2 model2) {
+        try {
+            backExamService.saveStudentAnswer(userInfo,model2);
+        }catch (UserServiceException e){
+            ResponseModel.fail("",e.getMessage());
+        }
+        return ResponseModel.sucess("","true");
+    }
+
+    @ApiOperation(value = "根据学生查询考试", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/getExamByStudent")
+    public ResponseModel getExamByStudent(@ModelAttribute UserInfoForToken userInfo,@RequestParam Integer pageNum,@RequestParam Integer pageSize) {
+        return ResponseModel.sucess("",backExamService.getExamByStudentId(userInfo,pageNum,pageSize));
     }
 }

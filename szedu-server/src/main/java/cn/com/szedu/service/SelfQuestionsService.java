@@ -2,7 +2,6 @@ package cn.com.szedu.service;
 
 import cn.com.szedu.constant.ResultCode;
 import cn.com.szedu.entity.*;
-import cn.com.szedu.entity.IntermediateTable.ExamClassRelation;
 import cn.com.szedu.entity.IntermediateTable.TestpaperQuestionRelation;
 import cn.com.szedu.exception.UserServiceException;
 import cn.com.szedu.model.QuestionsModelII;
@@ -12,7 +11,6 @@ import cn.com.szedu.repository.*;
 import cn.com.szedu.repository.IntermediateTableRepository.ITestpaperQuestionRelationRepository;
 import cn.com.szedu.util.MappingEntity2ModelCoverter;
 import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageInfo;
 import com.github.tobato.fastdfs.domain.StorePath;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -85,11 +83,6 @@ public class SelfQuestionsService {
         return questions1.getId();
     }
 
-    //根据id查询图片
-   /* public byte[] getImgByQuestionId(Integer id){
-        return selfQuestionsRepository.findByid(id).getQuestionPic();
-    }*/
-
     @Transactional(rollbackFor = Exception.class)
     public void deleteQuestion(Integer id) {
         questionOptionsRepository.deleteByQuestionId(id);
@@ -103,14 +96,22 @@ public class SelfQuestionsService {
      * @param pageNum
      * @return
      */
-    public PageInfo<SelfQuestions> getQuestion(Integer pageSize,Integer pageNum) {
-        List<SelfQuestions> selfQuestions=selfQuestionsRepository.findAll();
+    public Page<SelfQuestions> getQuestion(Integer pageSize,Integer pageNum) {
+        pageNum=pageNum-1;
+        Pageable pageable=new PageRequest(pageNum,pageSize);
+        Page<SelfQuestions> page=selfQuestionsRepository.findAll((Root<SelfQuestions> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder)->{
+            List<Predicate> predicateList = new ArrayList<>();
+            return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
+        },pageable);
+        //pageNum=pageNum-1;
+        /*List<SelfQuestions> selfQuestions=selfQuestionsRepository.findAllByTeacherIdAndTypeOrderByCreateTime(userInfoForToken.getUserId(),questionType);
         PageInfo<SelfQuestions> pageInfo=new PageInfo<>();
-        pageInfo.setPageSize(selfQuestions.size());
+        pageInfo.setList(selfQuestions);
+        pageInfo.setTotal(selfQuestions.size());
         pageInfo.setPageSize(pageSize);
         pageInfo.setPageNum(pageNum);
-        pageInfo.setList(selfQuestions);
-        return  pageInfo;
+        pageInfo.setPages((selfQuestions.size() + pageSize - 1)/pageSize);*/
+        return  page;
     }
 
     /**
@@ -132,14 +133,6 @@ public class SelfQuestionsService {
             }
             return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
         },pageable);
-        //pageNum=pageNum-1;
-        /*List<SelfQuestions> selfQuestions=selfQuestionsRepository.findAllByTeacherIdAndTypeOrderByCreateTime(userInfoForToken.getUserId(),questionType);
-        PageInfo<SelfQuestions> pageInfo=new PageInfo<>();
-        pageInfo.setList(selfQuestions);
-        pageInfo.setTotal(selfQuestions.size());
-        pageInfo.setPageSize(pageSize);
-        pageInfo.setPageNum(pageNum);
-        pageInfo.setPages((selfQuestions.size() + pageSize - 1)/pageSize);*/
         return  page;
     }
 
@@ -173,7 +166,6 @@ public class SelfQuestionsService {
         return questions1.getId();
     }
 
-
     /**
      * 上传选项图片
      * @param userInfoForToken
@@ -206,6 +198,35 @@ public class SelfQuestionsService {
         SelfQuestions questions1=selfQuestionsRepository.save(questions);
         return questions1.getId();
     }
+
+    /*private void localUploadFile(MultipartFile file)throws CourseWareException{
+        //获取文件名
+        String fileName = file.getOriginalFilename();
+        //获取文件后缀名
+        String suffixName = fileName.substring(fileName.lastIndexOf("."));
+        double fileSize = (double) file.getSize()/1024/1024;//MB
+        if(fileSize>2){
+            throw new CourseWareException("图片过大！");
+        }
+        CourseWare courseWare=new CourseWare();
+        if(!StringUtils.isEmpty(resourceId)){
+            courseWare=courseWareRespository.findByid(resourceId);
+        }
+        courseWare.setTeacherid(userInfoForToken.getUserId());
+        courseWare.setTeacherName(userInfoForToken.getUserName());
+        courseWare.setIsCheck("1");//未审核
+        //重新生成文件名
+        fileName =UUID.randomUUID()+suffixName;
+        File file1=new File(uploadPath+imagePath+fileName);
+        if (!file1.exists()){
+            //创建文件夹
+            file1.getParentFile().mkdir();
+        }
+        file.transferTo(file1);
+        courseWare.setCoverPic(uri+fileName);
+        CourseWare courseWare1=courseWareRespository.save(courseWare);
+        return courseWare1.getId();
+    }*/
 
     /**
      * 保存题目
@@ -548,34 +569,68 @@ public class SelfQuestionsService {
      * @param testType
      * @return
      */
-    public void addExamination(UserInfoForToken userInfo,List<String> subList,String testType,Integer testPaperId){
+    public void addExamination(UserInfoForToken userInfo,List<String> subList,List<String> chapterList,String testType,Integer testPaperId){
         List<Integer> questionsId=new ArrayList<>();
         if(testType.equalsIgnoreCase("1")){//使用精品题库组卷
-            List<TopQuestions> topQuestions=randomQuestion(topQuestionsRepository.findAllBySubjectIdInAndType(subList,"单选题"),10);
-            topQuestions.forEach(t ->{
-                questionsId.add(t.getId());
-            });
-            topQuestions=randomQuestion(topQuestionsRepository.findAllBySubjectIdInAndType(subList,"多选题"),10);
-            topQuestions.forEach(t ->{
-                questionsId.add(t.getId());
-            });
-            topQuestions=randomQuestion(topQuestionsRepository.findAllBySubjectIdInAndType(subList,"判断题"),10);
-            topQuestions.forEach(t ->{
-                questionsId.add(t.getId());
-            });
+            if(subList!=null&&subList.size()!=0){
+                List<TopQuestions> topQuestions=randomQuestion(topQuestionsRepository.findAllBySubjectIdInAndType(subList,"单选题"),10);
+                topQuestions.forEach(t ->{
+                    questionsId.add(t.getId());
+                });
+                topQuestions=randomQuestion(topQuestionsRepository.findAllBySubjectIdInAndType(subList,"多选题"),10);
+                topQuestions.forEach(t ->{
+                    questionsId.add(t.getId());
+                });
+                topQuestions=randomQuestion(topQuestionsRepository.findAllBySubjectIdInAndType(subList,"判断题"),10);
+                topQuestions.forEach(t ->{
+                    questionsId.add(t.getId());
+                });
+            }
+            if(chapterList!=null&&chapterList.size()!=0){//章节
+                List<TopQuestions> topQuestions=randomQuestion(topQuestionsRepository.findAllByChapterInAndType(chapterList,"单选题"),10);
+                topQuestions.forEach(t ->{
+                    questionsId.add(t.getId());
+                });
+                topQuestions=randomQuestion(topQuestionsRepository.findAllByChapterInAndType(chapterList,"多选题"),10);
+                topQuestions.forEach(t ->{
+                    questionsId.add(t.getId());
+                });
+                topQuestions=randomQuestion(topQuestionsRepository.findAllByChapterInAndType(chapterList,"判断题"),10);
+                topQuestions.forEach(t ->{
+                    questionsId.add(t.getId());
+                });
+            }
+
         }else if(testType.equalsIgnoreCase("2")){//我的题库
-            List<SelfQuestions> selfQuestions=randomSelfQuestion(selfQuestionsRepository.findByTeacherIdAndTypeAndSubjectIdIn(userInfo.getUserId(),"单选题",subList),10);
-            selfQuestions.forEach(s->{
-                questionsId.add(s.getId());
-            });
-            selfQuestions=randomSelfQuestion(selfQuestionsRepository.findByTeacherIdAndTypeAndSubjectIdIn(userInfo.getUserId(),"多选题",subList),10);
-            selfQuestions.forEach(s->{
-                questionsId.add(s.getId());
-            });
-            selfQuestions=randomSelfQuestion(selfQuestionsRepository.findByTeacherIdAndTypeAndSubjectIdIn(userInfo.getUserId(),"判断题",subList),10);
-            selfQuestions.forEach(s->{
-                questionsId.add(s.getId());
-            });
+            if(subList!=null&&subList.size()!=0){
+                List<SelfQuestions> selfQuestions=randomSelfQuestion(selfQuestionsRepository.findByTeacherIdAndTypeAndSubjectIdIn(userInfo.getUserId(),"单选题",subList),10);
+                selfQuestions.forEach(s->{
+                    questionsId.add(s.getId());
+                });
+                selfQuestions=randomSelfQuestion(selfQuestionsRepository.findByTeacherIdAndTypeAndSubjectIdIn(userInfo.getUserId(),"多选题",subList),10);
+                selfQuestions.forEach(s->{
+                    questionsId.add(s.getId());
+                });
+                selfQuestions=randomSelfQuestion(selfQuestionsRepository.findByTeacherIdAndTypeAndSubjectIdIn(userInfo.getUserId(),"判断题",subList),10);
+                selfQuestions.forEach(s->{
+                    questionsId.add(s.getId());
+                });
+            }
+            if(chapterList!=null&&chapterList.size()!=0){//章节
+                List<SelfQuestions> selfQuestions=randomSelfQuestion(selfQuestionsRepository.findByTeacherIdAndTypeAndChapterIn(userInfo.getUserId(),"单选题",chapterList),10);
+                selfQuestions.forEach(s->{
+                    questionsId.add(s.getId());
+                });
+                selfQuestions=randomSelfQuestion(selfQuestionsRepository.findByTeacherIdAndTypeAndChapterIn(userInfo.getUserId(),"多选题",chapterList),10);
+                selfQuestions.forEach(s->{
+                    questionsId.add(s.getId());
+                });
+                selfQuestions=randomSelfQuestion(selfQuestionsRepository.findByTeacherIdAndTypeAndChapterIn(userInfo.getUserId(),"判断题",chapterList),10);
+                selfQuestions.forEach(s->{
+                    questionsId.add(s.getId());
+                });
+             }
+
         }
         List<TestpaperQuestionRelation> testpaperQuestionRelations=new ArrayList<>();
         questionsId.forEach(q->{
@@ -586,7 +641,7 @@ public class SelfQuestionsService {
     }
 
     /**
-     * 老师题库随机
+     * 老师题库随机选题
      * @param list
      * @param num
      * @return
@@ -607,7 +662,7 @@ public class SelfQuestionsService {
     }
 
     /**
-     * 精品题库随机
+     * 精品题库随机选题
      * @param list
      * @param num
      * @return
@@ -639,5 +694,25 @@ public class SelfQuestionsService {
         model.setMultipleChoice(selfQuestionsRepository.countBySubjectIdAndTeacherIdAndType(id,userInfoForToken.getUserId(),"多选题"));
         model.setJudgement(selfQuestionsRepository.countBySubjectIdAndTeacherIdAndType(id,userInfoForToken.getUserId(),"判断题题"));
         return model;
+    }
+
+    /**
+     * 根据老师查询全部题目数量
+     * @param userInfoForToken
+     * @return
+     */
+    public List<TestSubjectModel> getAllTestSubjectModel(UserInfoForToken userInfoForToken){
+        List<TestSubjectModel> modelList=new ArrayList<>();
+        List<Menu> subject=menuRepository.findByPid(0);
+        subject.forEach(s->{
+            TestSubjectModel model=new TestSubjectModel();
+            model.setId(s.getId());
+            model.setName(s.getTitle());
+            model.setSingleChoice(selfQuestionsRepository.countBySubjectIdAndTeacherIdAndType(s.getId().toString(),userInfoForToken.getUserId(),"单选题"));
+            model.setMultipleChoice(selfQuestionsRepository.countBySubjectIdAndTeacherIdAndType(s.getId().toString(),userInfoForToken.getUserId(),"多选题"));
+            model.setJudgement(selfQuestionsRepository.countBySubjectIdAndTeacherIdAndType(s.getId().toString(),userInfoForToken.getUserId(),"判断题题"));
+            modelList.add(model);
+        });
+        return modelList;
     }
 }

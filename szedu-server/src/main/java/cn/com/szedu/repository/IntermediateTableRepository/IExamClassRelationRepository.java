@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface IExamClassRelationRepository extends JpaRepository<ExamClassRelation,Integer> {
     List<ExamClassRelation> findByExamId(String examId);
+    List<ExamClassRelation> findByClassIdIn(List<String> classIds);
 }

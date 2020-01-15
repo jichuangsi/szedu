@@ -14,4 +14,8 @@ public interface IExamRepository extends JpaRepository<Exam,String>,PagingAndSor
     void deleteById(String id);
     Exam findFirstByid(String id);
     boolean countByTestPaperId(String testPaperId);
+
+    @Query(value = "SELECT * FROM Exam where id IN ?1 and status !=1 order by create_time LIMIT ?2,?3",nativeQuery = true)
+    List<Exam> getidInOrderByCreateTimeDesc(List<String> examIds,int num,int size);
+    int countByidIn(List<String> examIds);
 }

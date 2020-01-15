@@ -7,14 +7,21 @@ public class CourseModel {
     private String resourceId;
     private String teacherName;//教师名
     private String resourceName;//资源名
+    private String typeid;//资源类型
     private String resourceType;//资源标签
     private Integer integral;//积分
+    private String resourceLabelId;//资源标签
     private String resourceLabel;//资源标签
     private String describes;//描述
     private String isCheck;//是否审核
     private String isShare;//是否分享（通过、不通过）
     private String reason;//审核不通过原因
     private Date updateTime;//修改时间
+    private Integer buy;//购买数量
+    private String waysToget;//获得途径(1.购买 我的资源
+    private String isBuy;//获得途径(1.购买 我的资源
+    private long createTime=new Date().getTime();
+    private String coverPic;//封面
 
     public String getTeacherId() {
         return teacherId;
@@ -110,5 +117,61 @@ public class CourseModel {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getTypeid() {
+        return typeid;
+    }
+
+    public void setTypeid(String typeid) {
+        this.typeid = typeid;
+    }
+
+    public Integer getBuy() {
+        return buy;
+    }
+
+    public void setBuy(Integer buy) {
+        this.buy = buy;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getResourceLabelId() {
+        return resourceLabelId;
+    }
+
+    public void setResourceLabelId(String resourceLabelId) {
+        this.resourceLabelId = resourceLabelId;
+    }
+
+    public String getWaysToget() {
+        return waysToget;
+    }
+
+    public void setWaysToget(String waysToget) {
+        this.waysToget = waysToget;
+    }
+
+    public String getCoverPic() {
+        return coverPic;
+    }
+
+    public void setCoverPic(String coverPic) {
+        this.coverPic = coverPic;
+    }
+
+    public String getIsBuy() {
+        return isBuy;
+    }
+
+    public void setIsBuy(String isBuy) {
+        this.isBuy = isBuy;
     }
 }

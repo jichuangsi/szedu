@@ -20,6 +20,8 @@ public class Curriculum {//课程
     @Basic(fetch = FetchType.LAZY)
     private byte[] curriculumPic;//图片数据0;
 
+    private String chaper;
+
     public Integer getId() {
         return id;
     }
@@ -98,5 +100,13 @@ public class Curriculum {//课程
 
     public void setCurriculumPic(byte[] curriculumPic) {
         this.curriculumPic = curriculumPic;
+    }
+
+    public String getChaper() {
+        return chaper;
+    }
+
+    public void setChaper(String chaper) {
+        this.chaper = chaper;
     }
 }

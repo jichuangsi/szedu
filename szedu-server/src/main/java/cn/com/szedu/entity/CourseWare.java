@@ -25,11 +25,12 @@ public class CourseWare {
     private String describes;
     private String isCheck;//上传审核状态
     private String isShareCheck;//分享审核状态
-    private Integer integral;//积分
+    private Integer integral=0;//积分
     private String reason;//审核不通过原因
     private String type;//资源类型
-    private String waysToget;//获得途径
+    private String waysToget;//获得途径(1.购买
     private String coverPic;//封面
+    private Integer buy=0;//购买数量
     private long createTime=new Date().getTime();
 
     public String getId() {
@@ -166,6 +167,14 @@ public class CourseWare {
 
     public void setCoverPic(String coverPic) {
         this.coverPic = coverPic;
+    }
+
+    public Integer getBuy() {
+        return buy;
+    }
+
+    public void setBuy(Integer buy) {
+        this.buy = buy;
     }
 
     public CourseWare(String filename, String teacherid, String filegroup, String filepath, String subject, String label, String describes, String isCheck, Integer integral, String reason, String type, String waysToget) {

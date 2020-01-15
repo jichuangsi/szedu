@@ -1,9 +1,6 @@
 package cn.com.szedu.model;
 
-import cn.com.szedu.entity.IntermediateTable.Knowledges;
 import cn.com.szedu.entity.QuestionOptions;
-
-import java.util.List;
 
 public class QuestionsModelII {
     private Integer id;
@@ -21,6 +18,7 @@ public class QuestionsModelII {
     private String teacherId;//老师id1
     private String teacherName;//1
     private String chapter;//章节
+    private Integer questionScore;//分数
 
 
     public Integer getId() {
@@ -141,5 +139,13 @@ public class QuestionsModelII {
 
     public void setChapter(String chapter) {
         this.chapter = chapter;
+    }
+
+    public Integer getQuestionScore() {
+        return questionScore;
+    }
+
+    public void setQuestionScore(Integer questionScore) {
+        this.questionScore = questionScore;
     }
 }

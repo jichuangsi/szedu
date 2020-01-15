@@ -31,4 +31,5 @@ public class ResultCode {
 	public static final String STUDENTID_IS_EXIST="学号已存在";
 	public static final String SIGNIN_IS_EXIST="已签到";
 	public static final String COURSE_IS_INVALID="已过上课时间";
+	public static final String TEST_IS_EXIST="不能重复提交试卷";
 }

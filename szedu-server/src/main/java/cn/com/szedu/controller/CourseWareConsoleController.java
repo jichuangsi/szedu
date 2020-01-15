@@ -110,6 +110,15 @@ public class CourseWareConsoleController {
         return ResponseModel.sucess("",courseWareConsoleService.getCouserWareByPage(pageNum,pageSize));
     }
 
+    @ApiOperation(value = "查询分享审核资源列表", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping(value = "/getShareCourseWareList")
+    public ResponseModel<PageInfo<CourseModel>> getShareCourseWareList(@ModelAttribute UserInfoForToken userInfo, @RequestParam int pageNum, @RequestParam int pageSize) {
+        return ResponseModel.sucess("",courseWareConsoleService.getShareCouserWareByPage(pageNum,pageSize));
+    }
+
     @ApiOperation(value = "上传资源审核", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
@@ -118,6 +127,20 @@ public class CourseWareConsoleController {
     public ResponseModel resourceCheck(@ModelAttribute UserInfoForToken userInfo, @RequestParam String resourceId, @RequestParam String status){
         try {
             courseWareConsoleService.updateIsCheck(resourceId,status);
+            return ResponseModel.sucessWithEmptyData("");
+        }catch (CourseWareException e){
+            return ResponseModel.fail("",e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "分享资源", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping(value = "/shareResource")
+    public ResponseModel shareResource(@ModelAttribute UserInfoForToken userInfo, @RequestParam String resourceId, @RequestParam String status,@RequestParam Integer integral){
+        try {
+            courseWareConsoleService.updateIsShareCheckAndIntegral(resourceId,status,integral);
             return ResponseModel.sucessWithEmptyData("");
         }catch (CourseWareException e){
             return ResponseModel.fail("",e.getMessage());
@@ -151,15 +174,6 @@ public class CourseWareConsoleController {
             return ResponseModel.fail("",e.getMessage());
         }
     }
-
-    /*@ApiOperation(value = "查询资源列表", notes = "")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
-    })
-    @GetMapping(value = "/getCourseWareList2")
-    public ResponseModel<PageInfo<CourseModel>> getCourseWareList2(@ModelAttribute UserInfoForToken userInfo,@RequestParam(required = false) String name, @RequestParam int pageNum, @RequestParam int pageSize) {
-        return ResponseModel.sucess("",courseWareConsoleService.getCouserWareByPage2(name,pageNum,pageSize));
-    }*/
 
     @ApiOperation(value = "查询课件模板", notes = "")
     @ApiImplicitParams({
@@ -222,13 +236,10 @@ public class CourseWareConsoleController {
     public void localDownload(@ModelAttribute UserInfoForToken userInfo,@RequestParam String id,HttpServletResponse response) {
         try {
             courseWareConsoleService.localDownLoad(id,response);
-           /* return ResponseModel.sucessWithEmptyData("");*/
         } catch (CourseWareException e) {
             e.printStackTrace();
-            /*return ResponseModel.fail("", e.getMessage());*/
         }catch (Exception e){
             e.printStackTrace();
-            /*return ResponseModel.fail("", e.getMessage());*/
         }
     }
 
@@ -265,12 +276,30 @@ public class CourseWareConsoleController {
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @PostMapping("/pushResourceToClass")
-    public ResponseModel pushResourceToClass(@ModelAttribute UserInfoForToken userInfo,@RequestParam PushResourceModel model) {
+    public ResponseModel pushResourceToClass(@ModelAttribute UserInfoForToken userInfo,@RequestBody PushResourceModel model) {
         try {
             courseWareConsoleService.pushResouceToClass(userInfo,model);
             return ResponseModel.sucessWithEmptyData("");
         }catch (Exception e) {
             return ResponseModel.fail("", e.getMessage());
         }
+    }
+
+    @ApiOperation(value = "公共资源", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping(value = "/getPublicResource")
+    public ResponseModel getPublicResource(@ModelAttribute UserInfoForToken userInfo,@RequestParam int pageNum, @RequestParam int pageSize) {
+        return ResponseModel.sucess("",courseWareConsoleService.getPublicResource(userInfo,pageNum,pageSize));
+    }
+
+    @ApiOperation(value = "公共资源（根据时间）", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping(value = "/getPublicResourceByTime")
+    public ResponseModel getPublicResourceByTime(@ModelAttribute UserInfoForToken userInfo,@RequestParam int pageNum, @RequestParam int pageSize) {
+        return ResponseModel.sucess("",courseWareConsoleService.getPublicResourceByTime(userInfo,pageNum,pageSize));
     }
 }

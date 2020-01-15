@@ -33,8 +33,22 @@ public interface ICourseWareRespository extends JpaRepository<CourseWare,String>
 
     @Transactional
     @Modifying
+    @Query(value = "UPDATE CourseWare SET is_share_check=?2,integral=?3 WHERE id=?1")
+    void updateIsShareCheckAndIntegral(String id,String status,Integer integral);
+
+    @Transactional
+    @Modifying
     @Query(value = "UPDATE CourseWare SET integral=?2 where id=?1")
     void updateIntegral(String id,Integer integral);
 
     List<CourseWare> findByTeacheridAndIsCheckAndType(String teacherId,String check,String type);
+
+    List<CourseWare> findByTeacheridInAndIsShareCheck(List<String> teacherIds,String status);
+    int countByTeacheridInAndIsShareCheck(List<String> teacherIds,String status);
+
+    @Query(value = "SELECT * FROM CourseWare WHERE teacherid IN ?1 AND is_share_check=?2 ORDER BY buy DESC LIMIT ?3,?4",nativeQuery = true)
+    List<CourseWare> getTeacheridInAndIsShareCheck(List<String> teacherIds,String status,int num,int size);
+
+    @Query(value = "SELECT * FROM CourseWare WHERE teacherid IN ?1 AND is_share_check=?2 ORDER BY buy,create_time DESC LIMIT ?3,?4",nativeQuery = true)
+    List<CourseWare> getTeacheridInAndIsShareCheckOrderOrderByCreateTime(List<String> teacherIds,String status,int num,int size);
 }

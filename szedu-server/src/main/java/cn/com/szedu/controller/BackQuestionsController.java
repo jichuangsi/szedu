@@ -76,7 +76,7 @@ public class BackQuestionsController {
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @GetMapping("/getAllQuestions")
-    public ResponseModel<PageInfo<SelfQuestions>> getAllQuestions(@ModelAttribute UserInfoForToken userInfo,@RequestParam Integer pageSize,@RequestParam Integer pageNum) {
+    public ResponseModel<Page<SelfQuestions>> getAllQuestions(@ModelAttribute UserInfoForToken userInfo,@RequestParam Integer pageSize,@RequestParam Integer pageNum) {
         return ResponseModel.sucess("",selfQuestionsService.getQuestion(pageSize,pageNum));
     }
 
@@ -178,4 +178,14 @@ public class BackQuestionsController {
     public ResponseModel getQuestionsBySubjectAndTeacher(@ModelAttribute UserInfoForToken userInfo,@RequestParam String subjectId) {
         return ResponseModel.sucess("",selfQuestionsService.getTestSubjectModel(userInfo,subjectId));
     }
+
+    @ApiOperation(value = "根据老师查询全部科目题数", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/getAllQuestionsNumBySubjectAndTeacher")
+    public ResponseModel getAllQuestionsNumBySubjectAndTeacher(@ModelAttribute UserInfoForToken userInfo) {
+        return ResponseModel.sucess("",selfQuestionsService.getAllTestSubjectModel(userInfo));
+    }
+
 }

@@ -9,6 +9,7 @@ public class AddExaminationModel {
     private String type;//考试类型
     private String remark;//备注
     private List<String> subList;//科目
+    private List<String> chapter;//章节
     private String way;//组卷方式
     private String teacherId;
     private String teacherName;
@@ -83,5 +84,13 @@ public class AddExaminationModel {
 
     public void setTeacherName(String teacherName) {
         this.teacherName = teacherName;
+    }
+
+    public List<String> getChapter() {
+        return chapter;
+    }
+
+    public void setChapter(List<String> chapter) {
+        this.chapter = chapter;
     }
 }

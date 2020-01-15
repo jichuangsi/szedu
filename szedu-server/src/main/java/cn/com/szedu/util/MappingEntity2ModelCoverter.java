@@ -285,4 +285,24 @@ public class MappingEntity2ModelCoverter {
         model.setPhone(userInfo.getPhone());
         return model;
     }
+
+    public static CourseModel CONVERTERFROMCOURSEWARETOCOURSEMODEL(CourseWare courseWare){
+        CourseModel model=new CourseModel();
+        model.setDescribes(courseWare.getDescribes());
+        model.setIntegral(courseWare.getIntegral());
+        model.setIsCheck(courseWare.getIsCheck());
+        model.setIsShare(courseWare.getIsShareCheck());
+        model.setReason(courseWare.getReason());
+        model.setResourceLabelId(courseWare.getLabel());
+        model.setResourceId(courseWare.getId());
+        model.setBuy(courseWare.getBuy());
+        model.setCreateTime(courseWare.getCreateTime());
+        model.setResourceName(courseWare.getFilename());
+        model.setTypeid(courseWare.getType());
+        model.setWaysToget(courseWare.getWaysToget());
+        model.setCoverPic(courseWare.getCoverPic());
+        model.setTeacherId(courseWare.getTeacherid());
+        model.setTeacherName(courseWare.getTeacherName());
+        return model;
+    }
 }

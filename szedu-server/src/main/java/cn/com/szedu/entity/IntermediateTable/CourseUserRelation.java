@@ -39,4 +39,7 @@ public class CourseUserRelation {
         this.courseId = courseId;
         this.uid = uid;
     }
+
+    public CourseUserRelation() {
+    }
 }
