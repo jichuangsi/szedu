@@ -12,9 +12,14 @@
 		<link rel="stylesheet" href="lib/layui/css/modules/layui-icon-extend/iconfont.css" />
 		<script src="./lib/js/jquery.min.js"></script>
 		<script src="./lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="js/Configuration.js"></script>
+
 	</head>
 	<style>
-		body{margin:0; padding:0;}
+		body {
+			margin: 0;
+			padding: 0;
+		}
 	</style>
 
 	<body>
@@ -23,22 +28,22 @@
 			<div class="layui-col-md8 layui-col-md-offset2 layui-col-sm3">
 				<ul class="nav-ul">
 					<li class="">
-						<a href="">信力达</a>
+						<a href="#"><img src="img/home_icon_logo.png" /></a>
+					</li>
+					<li class="" style="margin-left: 20px;">
+						<a href="#">智能 <span class="layui-badge-dot layui-bg-black"></span> 互联 <span class="layui-badge-dot layui-bg-black"></span> 引领未来</a>
 					</li>
 					<li class="">
-						<a href="">智能 <span class="layui-badge-dot layui-bg-black"></span> 互联 <span class="layui-badge-dot layui-bg-black"></span> 引领未来</a>
+						<a href="#">今天是2109年11月11日 星期一</a>
 					</li>
 					<li class="">
-						<a href="">今天是2109年11月11日 星期一</a>
+						<a href="#">欢迎您回来</a>
 					</li>
 					<li class="">
-						<a href="">欢迎您回来</a>
+						<a href="pages/personalCenter.html" target="_blank"><img src="//t.cn/RCzsdCq" class="layui-nav-img"><samp id="name"></samp></a>
 					</li>
 					<li class="">
-						<a href=""><img src="//t.cn/RCzsdCq" class="layui-nav-img">王木木老师</a>
-					</li>
-					<li class="">
-						<a href=""><i class="layui-icon layui-icon-notice"></i><span>(450)</span>条信息</a>
+						<a href="pages/SendMessage.html" target="_parent"><i class="layui-icon layui-icon-notice"></i><span id="msg">(0)</span>条信息</a>
 					</li>
 				</ul>
 			</div>
@@ -46,23 +51,23 @@
 		<!--第二级导航条-->
 		<div class="layui-row">
 			<div class="layui-col-md8 layui-col-md-offset2 layui-col-sm3">
-				<ul class="layui-nav">
-					<li class="layui-nav-item layui-this">
-						<a href="">首页</a>
-					</li>
-					<li class="layui-nav-item ">
-						<a href="">课堂</a>
+				<ul class="layui-nav" lay-filter="demo1">
+					<li class="layui-nav-item">
+						<a href="index.html" target="_parent">首页</a>
 					</li>
 					<li class="layui-nav-item">
-						<a href="">考试</a>
+						<a href="pages/Classroom.html" target="_parent">课堂</a>
 					</li>
 					<li class="layui-nav-item">
-						<a href="">教务</a>
+						<a href="pages/ItemBank.html" target="_parent">考试</a>
+					</li>
+					<li class="layui-nav-item">
+						<a href="pages/administration.html" target="_parent">教务</a>
 					</li>
 				</ul>
 			</div>
 		</div>
-				<script>
+		<script>
 			layui.use(['element', 'carousel'], function() {
 				var element = layui.element,
 					carousel = layui.carousel;
@@ -71,6 +76,12 @@
 					width: '100%',
 					arrow: 'always'
 				});
+				getMsg()
+				//				setInterval("getMsg()",60*1000);
+
+				var user = JSON.parse(sessionStorage.getItem('user'));
+				$('#name').append(user.teacherName);
+				element.on('tab(demo1)', function(data) {});
 				$('.rmb-icon-res').click(function() {
 					$(this).css('color', '#999999');
 				})

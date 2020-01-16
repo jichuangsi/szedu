@@ -27,7 +27,7 @@
 		<div class="layui-row">
 			<div class="layui-row" style="background-color: #F9F9F9;height: 30px;line-height: 30px;">
 				<div class="layui-col-md8 layui-col-md-offset2" style="text-align: center;">
-					<i class="layui-icon layui-icon-left" style="float: left;"></i>
+					<a href="javascript:history.back(-1)"><i class="layui-icon layui-icon-left" style="float: left;"></i> </a>
 					<span>班级成绩</span>
 				</div>
 			</div>
@@ -53,23 +53,38 @@
 
 			// 指定图表的配置项和数据
 			var option = {
-				 color: ['#3398DB'],
+				color: ['#3398DB'],
 				title: {
 					text: '学生成绩统计图'
 				},
 				tooltip: {},
 				legend: {
-					data: ['分数','人数']
+					data: ['分数', '人数']
 				},
 				xAxis: {
-					data: ["90-100", "80-89", "70-79", "60-69", "0-59"]
+					data: ["90-100", "80-89", "70-79", "60-69", "0-59"],
+					itemStyle: {
+						normal: {
+							label: {
+								show: true,
+							}
+						}
+					}
 				},
 				yAxis: {},
 				series: [{
 					name: '人数',
 					type: 'bar',
-					barWidth: '30%',	
-					data: [10, 20, 40, 20, 10,100]
+					barWidth: '30%',
+					data: [10, 20, 40, 20, 10, 100],
+					itemStyle: {
+						normal: {
+							label: {
+								show: true,
+								position: 'top',
+							}
+						}
+					}
 				}]
 			};
 			// 使用刚指定的配置项和数据显示图表。

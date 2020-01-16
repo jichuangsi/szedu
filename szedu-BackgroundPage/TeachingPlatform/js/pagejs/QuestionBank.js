@@ -22,7 +22,7 @@ layui.use(['form', 'table', 'element', 'upload'], function() {
 					title: '试题名称',
 					align: 'center'
 				}, {
-					field: 'subject',
+					field: 'subjectId',
 					title: '关联课程',
 					align: 'center'
 				},
@@ -32,21 +32,27 @@ layui.use(['form', 'table', 'element', 'upload'], function() {
 					align: 'center'
 				},
 				{
-					field: 'jf',
-					title: '积分',
+					field: 'teacherName',
+					title: '创建老师',
 					align: 'center'
+				},
+				{
+					field: 'createTime',
+					title: '创建日期',
+					align: 'center',
+					templet: function(d) {
+						if(d.createTime != 0) {
+							return new Date(+new Date(d.createTime) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+						} else {
+							return "-"
+						}
+					}
 				},
 				{
 					field: 'sc',
 					title: '查看图片',
 					align: 'center',
 					toolbar: '#See'
-				},
-				{
-					field: 'sc',
-					title: '下载文件',
-					align: 'center',
-					toolbar: '#download'
 				},
 				{
 					field: 'certification',
@@ -148,7 +154,7 @@ layui.use(['form', 'table', 'element', 'upload'], function() {
 			setMsg("请选择答案", 7);
 			return false;
 		}
-		if(param.subjectId==-1){
+		if(param.subjectId == -1) {
 			setMsg("请选择科目", 7);
 			return false;
 		}
@@ -157,7 +163,7 @@ layui.use(['form', 'table', 'element', 'upload'], function() {
 			id: 0,
 			questionId: 0
 		};
-		param.subject=$('select[name=subjectId] option:selected').text();
+		param.subject = $('select[name=subjectId] option:selected').text();
 		for(var i = 0; i < arr.length; i++) {
 			options["" + String.fromCharCode(i + 65).toLowerCase() + ""] = param["" + String.fromCharCode(i + 65) + ""]
 		}
@@ -189,7 +195,7 @@ layui.use(['form', 'table', 'element', 'upload'], function() {
 			setMsg("请选择答案", 7);
 			return false;
 		}
-		if(param.subjectId==-1){
+		if(param.subjectId == -1) {
 			setMsg("请选择科目", 7);
 			return false;
 		}
@@ -207,7 +213,7 @@ layui.use(['form', 'table', 'element', 'upload'], function() {
 			options["" + String.fromCharCode(i + 65).toLowerCase() + ""] = param["" + String.fromCharCode(i + 65) + ""]
 		}
 		//获取科目
-		param.subject=$('select[name=subjectId] option:selected');
+		param.subject = $('select[name=subjectId] option:selected');
 		//获取知识点
 		var knowledges = [];
 		var obj = param.select.split(',');
@@ -283,7 +289,7 @@ layui.use(['form', 'table', 'element', 'upload'], function() {
 				}
 			}
 		});
-		  $("select[name=subjectId]").append(options);
+		$("select[name=subjectId]").append(options);
 		form.render('select');
 		updateName(arr)
 		return arr;
@@ -363,12 +369,12 @@ layui.use(['form', 'table', 'element', 'upload'], function() {
 			success: function(res) {
 				if(res.code == '0010') {
 					data = res.data;
-					if(data==null){
-						content='<h1>该题暂未上传图片</h1>'
-					}else{
+					if(data == null) {
+						content = '<h1>该题暂未上传图片</h1>'
+					} else {
 						content += '<img src="data:image/jpeg;base64,' + data + '" />'
 					}
-						$('#pictureView').append(content)
+					$('#pictureView').append(content)
 				} else if(res.code == '0031') {
 					layui.notice.info("提示信息：权限不足");
 				} else if(res.code == '0050') {

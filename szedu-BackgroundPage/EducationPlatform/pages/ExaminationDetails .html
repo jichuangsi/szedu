@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>考试详情</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../css/index.css" />
+		<link rel="stylesheet" href="../css/Examination.css" />
+		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
+		<script src="../lib/js/jquery.min.js"></script>
+		<script src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/util.js"></script>
+		<script type="text/javascript" src="../js/Configuration.js"></script>
+	</head>
+	<style>
+		ul {
+			font-size: 18px;
+			letter-spacing: 2px;
+			padding: 20px 40px;
+		}
+		
+		ul li {
+			line-height: 30px;
+		}
+	</style>
+
+	<body>
+		<iframe src="../head.html" frameborder="0" scrolling="no" class="x-iframe"></iframe>
+		<div class="layui-row">
+			<div class="layui-row" style="background-color: #F9F9F9;height: 30px;line-height: 30px;">
+				<div class="layui-col-md8 layui-col-md-offset2" style="text-align: center;">
+					<a href="javascript:history.back(-1)"><i class="layui-icon layui-icon-left" style="float: left;"></i> </a>
+					<span>查询考试信息</span>
+				</div>
+			</div>
+
+			<div class="layui-col-md8 layui-col-md-offset2" style="margin-top: 20px;">
+				<div class="common_block_title">
+					考试详情
+				</div>
+				<hr />
+				<div class="details">
+					<ul>
+						<li>
+							<span>考试名称：</span><span>2019第一学期第一次考试</span>
+						</li>
+						<li>
+							<span>班级：</span><span>高一(1)班</span>
+						</li>
+						<li>
+							<span>考试类型：</span><span>单元测试</span>
+						</li>
+						<li>
+							<span>科目：</span><span>电池管理系统</span>
+						</li>
+						<li>
+							<span>考试时间：</span><span>2019-10-11 14:10-16:10</span>
+						</li>
+						<li>
+							<span>可提前2分钟进入阅卷</span>
+						</li>
+						<li>
+							<span>标签：</span><span>试题-新能源汽车管理类</span>
+						</li>
+						<li>
+							<span>发布时间：</span><span>2019-10-10 9：00</span>
+						</li>
+						<li>
+							<span>考试简介：</span><span>请同学们认真复习上课讲过的内容，祝大家有个好成绩</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<script>
+			$(function() {
+				$('.details').empty();
+				var str = '';
+				var id = UrlSearch();
+				$.ajax({
+					type: "get",
+					url: httpUrl() + "/backExam/getExamDetailByExamid?examId=" + id,
+					async: false,
+					success: function(res) {
+						console.log(res)
+						var arr = res.data;
+						console.log(arr)
+						str += '<ul>';
+						str += '<li>';
+						str += '<span>考试名称：</span><span>' + arr.examName + '</span>';
+						str += '</li>';
+						str += '<li>';
+						str += '<span>班级：</span>';
+						for(var i = 0; i < arr.classInfos.length; i++) {
+							str+='<span>'+arr.classInfos[i].className+',</span>'
+						}
+						str += '</li>';
+						str += '<li>';
+						str += '<span>考试类型：</span><span>' + arr.examType + '</span>';
+						str += '</li>';
+						str += '<li>';
+						str += '<span>科目：</span><span>' + arr.subjectName + '</span>';
+						str += '</li>';
+						str += '<li>';
+						str += '<span>考试时间：</span><span>' + new Date(+new Date(arr.models[0].startTime) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '') + '</span>';
+						str += '</li>';
+						str += '<li>';
+						str += '<span>可提前' + arr.models[0].tiqian + '分钟进入阅卷';
+						str += '</li>';
+//						str += '<li>';
+//						str += '<span>标签：</span><span>2019第一学期第一次考试</span>';
+//						str += '</li>';
+						str += '<li>';
+						str += '<span>考试时长：</span><span>' + arr.models[0].timeLength + '分钟</span>';
+						str += '</li>';
+						str += '<li>';
+						str += '<span>考试简介：</span><span>' + arr.content + '</span>';
+						str += '</li>';
+						str += '</ul>';
+						$('.details').append(str)
+					}
+				});
+
+			})
+		</script>
+	</body>
+
+</html>

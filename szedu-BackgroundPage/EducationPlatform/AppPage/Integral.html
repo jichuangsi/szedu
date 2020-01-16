@@ -12,6 +12,9 @@
 		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
 		<script src="../lib/js/jquery.min.js"></script>
 		<script src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/Configuration.js" ></script>
+		<script type="text/javascript" src="../js/AppJs/util.js" ></script>
+		<script type="text/javascript" src="../js/AppJs/Integral.js" ></script>
 	</head>
 	<style>
 		.feed-box {
@@ -20,7 +23,7 @@
 			font-size: 1rem;
 			letter-spacing: 2px;
 			line-height: 3rem;
-			border: 1px solid #333333;
+			border: 1px solid #c2c2c2;
 			height: 30rem;
 			overflow-y: auto;
 		}
@@ -52,47 +55,11 @@
 	</style>
 
 	<body>
-		<div class="layui-row">
-			<ul class="layui-nav" lay-filter="">
-				<li class="layui-nav-item">
-					<a href="#">信力达</a>
-				</li>
-				<li class="layui-nav-item">
-					<a href="#">智能.互联.引领未来</a>
-				</li>
-				<li class="layui-nav-item" style="float: right;margin-right: 3%;">
-					<i class="layui-icon layui-icon-shrink-right"></i>
-					<dl class="layui-nav-child">
-						<!-- 二级菜单 -->
-						<dd>
-							<a href="">我的收藏</a>
-						</dd>
-						<dd>
-							<a href="">成绩分析</a>
-						</dd>
-						<dd>
-							<a href="">账号与设置</a>
-						</dd>
-						<dd>
-							<a href="">帮助与反馈</a>
-						</dd>
-						<dd>
-							<a href="">退出</a>
-						</dd>
-					</dl>
-				</li>
-
-				<li class="layui-nav-item" style="float: right;">
-					<a href="#">积分：<span>5562</span></a>
-				</li>
-				<li class="layui-nav-item" style="float: right;">
-					<a href="#">王木木<img src="//t.cn/RCzsdCq" class="layui-nav-img"></a>
-				</li>
-			</ul>
+		<div class="layui-row" id="nav">
 		</div>
 		<div class="layui-row">
-			<div class="layui-col-xs12 layui-col-sm12" style="text-align: center;line-height: 1.5rem;padding-left: 10px;">
-				<i class="layui-icon layui-icon-left" style="float: left;"></i>
+			<div class="layui-col-xs12 layui-col-sm12 nav-title" >
+			<a href="javascript:history.back(-1)"><i class="layui-icon layui-icon-left" style="float: left;"></i> </a>													
 				<span>积分查询</span>
 			</div>
 		</div>
@@ -102,21 +69,21 @@
 					本月学习光荣榜
 				</div>
 				<hr/>
-				<div class="feed-box">
-					<ul>
+				<div class="feed-box" >
+					<ul id="rank">
 						<li>
 							<div class="rmb-rank">
-								<img src="../img/home_icon_headportrait_image.png" />1<img src="../img/home_icon_headportrait_image.png" /> <span class="stuName">王木木</span><span class="ph">15655</span>积分
+								<img src="../img/personal_ranking_icon_one@2x.png" />1<img src="../img/home_icon_headportrait_image.png" /> <span class="stuName">王木木</span><span class="ph">15655</span>积分
 							</div>
 						</li>
 						<li>
 							<div class="rmb-rank">
-								<img src="../img/home_icon_headportrait_image.png" />2<img src="../img/home_icon_headportrait_image.png" /> <span class="stuName">王木木</span><span class="ph">15655</span>积分
+								<img src="../img/personal_ranking_icon_two@2x.png" />2<img src="../img/home_icon_headportrait_image.png" /> <span class="stuName">王木木</span><span class="ph">15655</span>积分
 							</div>
 						</li>
 						<li>
 							<div class="rmb-rank">
-								<img src="../img/home_icon_headportrait_image.png" />3<img src="../img/home_icon_headportrait_image.png" /> <span class="stuName">王木木</span><span class="ph">15655</span>积分
+								<img src="../img/personal_ranking_icon_three@2x.png" />3<img src="../img/home_icon_headportrait_image.png" /> <span class="stuName">王木木</span><span class="ph">15655</span>积分
 							</div>
 						</li>
 						<li>
@@ -133,7 +100,7 @@
 					<div class="" style="padding: 10px;">
 						<span>你的排名</span>
 						<hr />
-						<div class="rmb-rank">
+						<div class="rmb-rank" id="myrank">
 							<img class="w" />10<img src="../img/home_icon_headportrait_image.png" /> <span class="stuName">王木木</span><span class="ph">15655</span>积分
 						</div>
 					</div>
@@ -146,7 +113,7 @@
 				</div>
 				<hr/>
 				<div class="feed-box">
-					<div class="feed-box-content">
+					<div class="feed-box-content" id="rule">
 						1．每日积分：<br /> 首页签到可获得5积分，每日上限1次；查看一份学习资料可获得2积分，每日上限10积分； 查看学习资料时长累计达10分钟可获得5积分，每日上限1次；收藏可获得1积分，每日上限2积分。
 						<br /> 2．课堂积分：
 						<br />上课前按时签到可获得5积分，迟到或缺勤则无法无奖励。<br />3．考试积分：<br />考试等级为A，可获得50积分；考试等级为B，可获得30积分。

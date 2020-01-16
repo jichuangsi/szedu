@@ -12,6 +12,8 @@
 		<link rel="stylesheet" href="lib/layui/css/modules/layui-icon-extend/iconfont.css" />
 		<script src="./lib/js/jquery.min.js"></script>
 		<script src="./lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="js/Configuration.js" ></script>
+		<script type="text/javascript" src="js/index.js" ></script>
 	</head>
 
 	<body>
@@ -19,6 +21,48 @@
 			.layui-input-block {
 				margin-left: 0px;
 				min-height: 0px;
+			}
+			
+			.frame {
+				width: 15%;
+				height: 350px;
+				border: #01AAED 1px solid;
+				position: fixed;
+				top: 200px;
+				right: 10%;
+				background-color: white;
+				z-index: 11;
+			}
+			
+			.img {
+				width: 60px;
+				height: 60px;
+				border-radius: 50%;
+				margin: 20px;
+				float: left;
+			}
+			.content{
+				    margin: 20px auto
+			}
+			.content-dz{
+				color: #737383;
+				font-size: 16px;
+			}
+			.p-data{
+				margin-left: 20px;
+			}
+			.p-data li{
+				line-height: 40px;
+			}
+			.p-data li img{
+				margin-right: 5px;
+			}
+			.p-data-r{
+				float: right;
+				margin-right: 20px;
+			}
+			.rmb-res-buy span{
+				margin: auto 2px;
 			}
 		</style>
 		<script>
@@ -32,6 +76,11 @@
 			if(safariVersion <= DEFAULT_VERSION) {
 				alert('系统检测到您正在使用ie8以下内核的浏览器，不能实现完美体验，请更换或升级浏览器访问！')
 			};
+			
+			function toLog(){
+				sessionStorage.clear();
+				location.href = 'login.html';
+			}
 		</script>
 		<iframe src="head.html" frameborder="0" scrolling="no" class="x-iframe"></iframe>
 		<div class="x-boy ">
@@ -43,6 +92,35 @@
 					<div>条目3</div>
 					<div>条目4</div>
 					<div>条目5</div>
+				</div>
+			</div>
+			<div class="frame">
+				<div class="img">
+					<img src="img/home_icon_headportrait_image.png" />
+				</div>
+				<div class="content">
+					<h3 style="font-size: 18px;font-weight:500;">王木木</h3>
+					<span class="content-dz">山东省</span><span class="content-dz">威海市</span>
+					<br />
+					<span class="content-dz">南翔技术第一个高校</span>
+				</div>
+				<ul class="p-data">
+					<li>
+						<img src="img/floatingwindow_icon_integral.png"/><span>我的积分</span><span class="p-data-r integral" style="font-size: 18px;color: red;">28575</span>
+					</li>
+					<li>
+						<img src="img/floatingwindow_icon_collection.png"/><span>我的收藏</span><span class="p-data-r">123</span>
+					</li>
+					<li>
+						<img src="img/floatingwindow_icon_classroom.png"/><span>我的课堂</span><span class="p-data-r">33</span>
+					</li>
+					<li>
+						<img src="img/floatingwindow_icon_resources.png"/><span>我的资源</span><span class="p-data-r countResource">331</span>
+					</li>
+				</ul>
+				<div style="margin-top: 20px;text-align: center;">
+					<div class="layui-btn layui-btn-radius layui-btn-normal" onclick="SignIn()" id="sing">签到</div>
+					<div class="layui-btn layui-btn-radius layui-btn-primary" onclick="toLog()">退出</div>
 				</div>
 			</div>
 			<!--精品课程-->
@@ -59,7 +137,7 @@
 								</div>
 								<hr>
 							</div>
-							<div class="layui-row" style="margin: 0 auto 20px 20px;">
+							<div class="layui-row" style="margin: 0 auto 20px 20px;" id="coures">
 								<div class="rmb-box">
 									<div class="rmb-product">
 										<a href="">
@@ -141,7 +219,7 @@
 								</div>
 								<hr>
 							</div>
-							<div class="layui-row" style="margin: 0 auto 20px 20px;">
+							<div class="layui-row" style="margin: 0 auto 20px 20px;" id="countResource">
 								<div class="rmb-box">
 									<div class="rmb-product">
 										<a href="">
@@ -233,6 +311,9 @@
 
 							</div>
 						</div>
+						<script>
+							
+						</script>
 						<!--最新资源-->
 						<div class="layui-row layui-border" style="margin-top: 22px;">
 							<div class="layui-row" style="margin: 0 30px 0 20px;">
@@ -244,11 +325,11 @@
 								</div>
 								<hr>
 							</div>
-							<div class="layui-row" style="margin: 0 auto 20px 20px;">
+							<div class="layui-row" style="margin: 0 auto 20px 20px;" id="dateResource">
 								<div class="rmb-box">
 									<div class="rmb-product">
 										<a href="">
-											<img src="img/微信图片_20191113143904_WPS图片.png" />
+											<img src="./img/12.jpg" />
 										</a>
 									</div>
 									<div class="rmb-icon-res"><span><i class="iconfont layui-icon-extendxin1"></i></span></div>

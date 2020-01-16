@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>课堂</title>
+		<title>课堂(gai)</title>
 		<meta name="renderer" content="webkit">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
@@ -13,6 +13,9 @@
 		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
 		<script src="../lib/js/jquery.min.js"></script>
 		<script src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/util.js"></script>
+		<script type="text/javascript" src="../js/Configuration.js"></script>
+		<script type="text/javascript" src="../js/Classroom.js"></script>
 	</head>
 	<style>
 		.layui-form-select dl dd.layui-this {
@@ -27,36 +30,162 @@
 			border-radius: 20px 20px;
 		}
 		
+		.xs {
+			display: block;
+		}
+		
+		.yc {
+			display: none;
+		}
+		
 		.rmb-icon-res {
-			margin: 5px 20px 0 60px;
 			color: #ff0000;
 			float: right;
-			/*margin-right: 20px;*/
-			/* position: absolute; */
-			/* top: 166px; */
-			/* left: 186px; */
+		}
+		
+		.box-content-btn {
+			padding: 5px 10px;
+			text-align: center;
+		}
+		
+		.box-content-btn-left {
+			margin-left: 15px;
+			padding-top: 10px;
+		}
+		
+		.layui-input-block {
+			margin-left: 190px;
+			min-height: 36px;
+		}
+		
+		.layui-form-label {
+			width: 150px;
+		}
+		
+		.widths {
+			width: 300px;
+		}
+		
+		#UploadFile {
+			display: none;
+			margin-top: 10px;
+		}
+		
+		#shareClass {
+			display: none;
+			margin-top: 10px;
+		}
+		
+		.layui-flow-more {
+			clear: both;
+			padding-top: 10px;
+		}
+		
+		.rmb-res-buy :last-child {
+			margin-left: 10px;
+		}
+		
+		.layui-badge {
+			height: 18px;
+			line-height: 18px;
+			border-radius: 50px;
+			margin-right: 10px;
 		}
 	</style>
 
 	<body>
-		<iframe src="../head.html" frameborder="0" scrolling="no" class="x-iframe"></iframe>
+		<iframe src="../head.html" frameborder="0" name="iframe" scrolling="no" class="x-iframe"></iframe>
 		<div class="layui-row" style="background-color: #F3F5F7;margin-top: 10px;">
 			<div class="layui-col-md8 layui-col-md-offset2">
 				<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
 					<ul class="layui-tab-title">
-						<li>信力达精品课程</li>
-						<li>我的资源</li>
-						<li class="layui-this">公共资源</li>
-						<li>我的课堂</li>
+						<li class="layui-this" lay-id="1">信力达精品课程</li>
+						<li lay-id="2">我的资源</li>
+						<li lay-id="3">公共资源</li>
+						<li lay-id="4">我的课堂</li>
 					</ul>
 				</div>
 			</div>
 		</div>
 		<div class="layui-row">
-			<div class="layui-col-md8 layui-col-md-offset2">
-				<div class="layui-form" style="margin: 30px auto 20px 20px;">
+			<!--精品课程-->
+			<div class="layui-col-md8 layui-col-md-offset2 xs one">
+				<div class="layui-row" style="margin: 20px auto;padding: 0 20px;">
+					<div class="rmb-box">
+						<div class="rmb-product">
+							<a href="">
+								<img src="../img/12.jpg" />
+							</a>
+						</div>
+						<div class="rmb-icon-product"><i class="iconfont layui-icon-extendsuo"></i></div>
+						<div class="rmb-product-title">
+							<a href="">电动汽车电池管理系统</a>
+						</div>
+						<div class="rmb-product-res">
+							<span>151</span>课时 <span>150</span>个资源
+						</div>
+						<div class="rmb-product-desc">
+							<a href="">本课程将详细介绍电动车电理系统的基础原理，主要包括</a>
+						</div>
+					</div>
+					<div class="rmb-box">
+						<div class="rmb-product">
+							<a href="">
+								<img src="../img/12.jpg" />
+							</a>
+						</div>
+						<div class="rmb-icon-product"><i class="iconfont layui-icon-extendsuo1"></i></div>
+						<div class="rmb-product-title">
+							<a href="">电动汽车电池管理系统</a>
+						</div>
+						<div class="rmb-product-res">
+							<span>151</span>课时 <span>150</span>个资源
+						</div>
+						<div class="rmb-product-desc">
+							<a href="">本课程将详细介绍电动车电理系统的基础原理，主要包括</a>
+						</div>
+					</div>
+					<div class="rmb-box">
+						<div class="rmb-product">
+							<a href="">
+								<img src="../img/12.jpg" />
+							</a>
+						</div>
+						<div class="rmb-icon-product"><i class="iconfont layui-icon-extendsuo"></i></div>
+						<div class="rmb-product-title">
+							<a href="">电动汽车电池管理系统</a>
+						</div>
+						<div class="rmb-product-res">
+							<span>151</span>课时 <span>150</span>个资源
+						</div>
+						<div class="rmb-product-desc">
+							<a href="">本课程将详细介绍电动车电理系统的基础原理，主要包括</a>
+						</div>
+					</div>
+					<div class="rmb-box">
+						<div class="rmb-product">
+							<a href="">
+								<img src="../img/12.jpg" />
+							</a>
+						</div>
+						<div class="rmb-icon-product"><i class="iconfont layui-icon-extendsuo"></i></div>
+						<div class="rmb-product-title">
+							<a href="">电动汽车电池管理系统</a>
+						</div>
+						<div class="rmb-product-res">
+							<span>151</span>课时 <span>150</span>个资源
+						</div>
+						<div class="rmb-product-desc">
+							<a href="">本课程将详细介绍电动车电理系统的基础原理，主要包括</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--我的资源-->
+			<div class="layui-col-md8 layui-col-md-offset2 yc two">
+				<div class="layui-form" style="margin: 30px auto auto 20px;">
 					<div class="layui-form-item layui-input-inline">
-						<select name="city" lay-verify="" class="layui-btn-radius">
+						<select name="label" lay-filter="qLabe" id="qLabe" class="layui-btn-radius">
 							<option value="">上传标签</option>
 							<option value="010">北京</option>
 							<option value="021">上海</option>
@@ -64,7 +193,111 @@
 						</select>
 					</div>
 					<div class="layui-form-item layui-input-inline">
-						<select name="city" lay-verify="" class="layui-btn-radius">
+						<select name="type" id="qRes" lay-filter="qRes" class="layui-btn-radius">
+							<option value="">资料类型</option>
+							<option value="010">北京</option>
+							<option value="021">上海</option>
+							<option value="0571">杭州</option>
+						</select>
+					</div>
+					<div class="layui-form-item layui-input-inline" style="float: right;margin-right: 20px;">
+						<div class="layui-btn layui-btn-radius layui-btn-normal" onclick="file()">上传资源</div>
+						<div class="layui-btn layui-btn-radius layui-btn-normal">在线制作</div>
+					</div>
+				</div>
+				<div class="layui-row layui-tab-content teacherResources" style="margin: 0 auto 20px 20px;">
+					<div class="rmb-box">
+						<div class="rmb-product">
+							<a href="">
+								<img src="../img/12.jpg" />
+							</a>
+						</div>
+						<div class="rmb-res-title">
+							电动汽车电池管理系统
+						</div>
+						<ul>
+							<li>上传者:<span class="teacherName"> 王*老师</span></li>
+							<li>修改时间:<span class="date"> 2019/11/14</span></li>
+							<li>资源状态:<span style="color: red;">上传待审核</span></li>
+						</ul>
+						<div class="box-content-btn-left">
+							<button class="layui-btn layui-btn-normal layui-btn-radius">删除</button>
+						</div>
+					</div>
+					<div class="rmb-box">
+						<div class="rmb-product">
+							<a href="">
+								<img src="../img/12.jpg" />
+							</a>
+						</div>
+						<div class="rmb-res-title">
+							电动汽车电池管理系统
+						</div>
+						<ul>
+							<li>上传者:<span class="teacherName"> 王*老师</span></li>
+							<li>修改时间:<span class="date"> 2019/11/14</span></li>
+							<li>资源状态:<span style="color: red;">分享待审核</span></li>
+						</ul>
+						<div class="box-content-btn-left">
+							<button class="layui-btn layui-btn-normal layui-btn-radius">取消分享</button>
+							<button class="layui-btn layui-btn-normal layui-btn-radius">删除</button>
+						</div>
+					</div>
+					<div class="rmb-box">
+						<div class="rmb-product">
+							<a href="">
+								<img src="../img/12.jpg" />
+							</a>
+						</div>
+						<div class="rmb-res-title">
+							电动汽车电池管理系统
+						</div>
+						<ul>
+							<li>上传者:<span class="teacherName"> 王*老师</span></li>
+							<li>修改时间:<span class="date"> 2019/11/14</span></li>
+							<li>资源状态:<span style="color: red;">分享通过</span></li>
+						</ul>
+						<div class="box-content-btn-left">
+							<button class="layui-btn layui-btn-normal layui-btn-radius">暂停分享</button>
+							<button class="layui-btn layui-btn-normal layui-btn-radius">推送</button>
+						</div>
+					</div>
+					<div class="rmb-box">
+						<div class="rmb-product">
+							<a href="">
+								<img src="../img/12.jpg" />
+							</a>
+						</div>
+						<div class="rmb-res-title">
+							电动汽车电池管理系统
+						</div>
+						<ul>
+							<li>上传者:<span class="teacherName"> 王*老师</span></li>
+							<li>修改时间:<span class="date"> 2019/11/14</span></li>
+							<li>资源状态:<span style="color: red;">分享不通过</span></li>
+						</ul>
+						<div class="box-content-btn-left">
+							<button class="layui-btn layui-btn-normal layui-btn-radius">分享</button>
+							<button class="layui-btn layui-btn-normal layui-btn-radius">推送</button>
+							<button class="layui-btn layui-btn-normal layui-btn-radius">删除</button>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<!--公共资源-->
+			<div class="layui-col-md8 layui-col-md-offset2 yc three">
+				<div class="layui-form" style="margin: 30px auto auto 20px;">
+					<div class="layui-form-item layui-input-inline">
+						<select name="city" lay-filter="" class="layui-btn-radius">
+							<option value="">上传标签</option>
+							<option value="010">北京</option>
+							<option value="021">上海</option>
+							<option value="0571">杭州</option>
+						</select>
+					</div>
+					<div class="layui-form-item layui-input-inline">
+						<select name="city" lay-filter="" class="layui-btn-radius">
 							<option value="">资料类型</option>
 							<option value="010">北京</option>
 							<option value="021">上海</option>
@@ -73,11 +306,11 @@
 					</div>
 				</div>
 
-				<div class="layui-row layui-tab-content" style="margin: 0 auto 20px 20px;">
+				<div class="layui-row layui-tab-content publicResource" style="margin: 0 auto 20px 20px;">
 					<div class="rmb-box">
 						<div class="rmb-product">
 							<a href="">
-								<img src="../img/微信图片_20191113143904_WPS图片.png" />
+								<img src="../img/12.jpg" />
 							</a>
 						</div>
 						<div class="rmb-icon-res"><span><i class="iconfont layui-icon-extendxin1"></i></span></div>
@@ -99,7 +332,29 @@
 					<div class="rmb-box">
 						<div class="rmb-product">
 							<a href="">
-								<img src="../img/微信图片_20191113143904_WPS图片.png" />
+								<img src="../img/12.jpg" />
+							</a>
+						</div>
+						<div class="rmb-icon-res"><span><i class="iconfont layui-icon-extendxin1"></i></span></div>
+						<div class="rmb-res-title">
+							电动汽车电池管理系统
+						</div>
+						<ul>
+							<li>上传者:<span class="teacherName"> 王*老师</span></li>
+							<li>资源类型:<span class="teacherName"> 视频资源</span></li>
+							<li>发布时间:<span class="date"> 2019/11/14</span></li>
+							<li>购买量:<span class="cont"> 555526</span></li>
+						</ul>
+						<div class="rmb-res-buy">
+							<span class="layui-badge layui-bg-orange">￥</span>
+							<span>25223积分</span>
+							<span class="layui-btn layui-btn-normal layui-btn-radius">购买资源</span>
+						</div>
+					</div>
+					<div class="rmb-box">
+						<div class="rmb-product">
+							<a href="">
+								<img src="../img/12.jpg" />
 							</a>
 						</div>
 						<div class="rmb-icon-res"><span><i class="iconfont layui-icon-extendxin1"></i></span></div>
@@ -121,7 +376,7 @@
 					<div class="rmb-box">
 						<div class="rmb-product">
 							<a href="">
-								<img src="../img/微信图片_20191113143904_WPS图片.png" />
+								<img src="../img/12.jpg" />
 							</a>
 						</div>
 						<div class="rmb-icon-res"><span><i class="iconfont layui-icon-extendxin1"></i></span></div>
@@ -137,40 +392,253 @@
 						<div class="rmb-res-buy">
 							<span class="layui-badge layui-bg-orange">￥</span>
 							<span>252积分</span>
-							<span class="layui-btn layui-btn-normal  layui-btn-radius">购买资源</span>
-						</div>
-					</div>
-					<div class="rmb-box">
-						<div class="rmb-product">
-							<a href="">
-								<img src="../img/微信图片_20191113143904_WPS图片.png" />
-							</a>
-						</div>
-						<div class="rmb-icon-res"><span><i class="iconfont layui-icon-extendxin1"></i></span></div>
-						<div class="rmb-res-title">
-							电动汽车电池管理系统
-						</div>
-						<ul>
-							<li>上传者:<span class="teacherName"> 王*老师</span></li>
-							<li>资源类型:<span class="teacherName"> 视频资源</span></li>
-							<li>发布时间:<span class="date"> 2019/11/14</span></li>
-							<li>购买量:<span class="cont"> 555526</span></li>
-						</ul>
-						<div class="rmb-res-buy">
-							<span class="layui-badge layui-bg-orange">￥</span>
-							<span>252积分</span>
+
 							<span class="layui-btn layui-btn-normal  layui-btn-radius">购买资源</span>
 						</div>
 					</div>
 
 				</div>
 			</div>
+			<!--我的课堂-->
+			<div class="layui-col-md8 layui-col-md-offset2 yc four">
+				<div class="layui-form" style="margin: 30px auto auto 20px;">
+					<div class="layui-form-item layui-input-inline">
+						<select name="city" lay-verify="" class="layui-btn-radius">
+							<option value="">科目</option>
+							<option value="010">北京</option>
+							<option value="021">上海</option>
+							<option value="0571">杭州</option>
+						</select>
+					</div>
+					<div class="layui-form-item layui-input-inline">
+						<select name="city" lay-verify="" class="layui-btn-radius">
+							<option value="">课堂类型</option>
+							<option value="010">北京</option>
+							<option value="021">上海</option>
+							<option value="0571">杭州</option>
+						</select>
+					</div>
+					<div class="layui-form-item layui-input-inline">
+						<select name="city" lay-verify="" class="layui-btn-radius">
+							<option value="">开课时间</option>
+							<option value="010">北京</option>
+							<option value="021">上海</option>
+							<option value="0571">杭州</option>
+						</select>
+					</div>
+					<div class="layui-form-item layui-input-inline">
+						共<span style="color: red;">4门</span>课堂
+					</div>
+					<div class="layui-form-item layui-input-inline" style="float: right;">
+						<div class="layui-btn layui-btn-normal layui-btn-radius toaddClass">新建课堂</div>
+					</div>
+				</div>
+				<div class="layui-row layui-tab-content teacherClass" style="margin: 0 auto 20px 20px;">
+					<!--<div class="rmb-box">
+						<div class="rmb-product">
+							<a href="">
+								<img src="../img/12.jpg" />
+							</a>
+						</div>
+						<div class="rmb-res-title">
+							电动汽车电池管理系统
+						</div>
+						<ul>
+							<li>上传者:<span class="teacherName"> 王*老师</span></li>
+							<li>资源类型:<span class="teacherName"> 视频资源</span></li>
+							<li>发布时间:<span class="date"> 2019/11/14</span></li>
+							<li>购买量:<span class="cont"> 555526</span></li>
+							<li>课堂状态:<span style="color: red;"> 未发布</span></li>
+						</ul>
+						<div class="box-content-btn">
+							<button class="layui-btn layui-btn-normal layui-btn-radius">发布</button>
+							<button class="layui-btn layui-btn-normal layui-btn-radius">复制</button>
+							<button class="layui-btn layui-btn-normal layui-btn-radius">删除</button>
+						</div>
+					</div>-->
+					<!--<div class="rmb-box">
+						<div class="rmb-product">
+							<a href="">
+								<img src="../img/12.jpg" />
+							</a>
+						</div>
+						<div class="rmb-res-title">
+							电动汽车电池管理系统
+						</div>
+						<ul>
+							<li>上传者:<span class="teacherName"> 王*老师</span></li>
+							<li>资源类型:<span class="teacherName"> 视频资源</span></li>
+							<li>发布时间:<span class="date"> 2019/11/14</span></li>
+							<li>购买量:<span class="cont"> 555526</span></li>
+							<li>课堂状态:<span style="color: red;">准备上课</span></li>
+						</ul>
+						<div class="box-content-btn">
+							<button class="layui-btn layui-btn-normal layui-btn-radius">上课</button>
+							<button class="layui-btn layui-btn-primary layui-btn-radius" onclick="window.location.href = 'AttendanceRecord.html'">到课情况</button>
+						</div>
+					</div>-->
+					<!--<div class="rmb-box">
+						<div class="rmb-product">
+							<a href="">
+								<img src="../img/12.jpg" />
+							</a>
+						</div>
+						<div class="rmb-res-title">
+							电动汽车电池管理系统
+						</div>
+						<ul>
+							<li>上传者:<span class="teacherName"> 王*老师</span></li>
+							<li>资源类型:<span class="teacherName"> 视频资源</span></li>
+							<li>发布时间:<span class="date"> 2019/11/14</span></li>
+							<li>购买量:<span class="cont"> 555526</span></li>
+							<li>课堂状态:<span style="color: red;">上课中</span></li>
+						</ul>
+						<div class="box-content-btn">
+							<button class="layui-btn layui-btn-normal layui-btn-radius">上课</button>
+							<button class="layui-btn layui-btn-primary layui-btn-radius" onclick="window.location.href = 'AttendanceRecord.html'">到课情况</button>
+						</div>
+					</div>-->
+					<!--<div class="rmb-box">
+						<div class="rmb-product">
+							<a href="">
+								<img src="../img/12.jpg" />
+							</a>
+						</div>
+						<div class="rmb-res-title">
+							电动汽车电池管理系统
+						</div>
+						<ul>
+							<li>上传者:<span class="teacherName"> 王*老师</span></li>
+							<li>资源类型:<span class="teacherName"> 视频资源</span></li>
+							<li>发布时间:<span class="date"> 2019/11/14</span></li>
+							<li>购买量:<span class="cont"> 555526</span></li>
+							<li>课堂状态:<span style="color: red;">已结束</span></li>
+						</ul>
+						<div class="box-content-btn">
+							<button class="layui-btn layui-btn-normal layui-btn-radius">上课</button>
+							<button class="layui-btn layui-btn-primary layui-btn-radius" onclick="window.location.href = 'AttendanceRecord.html'">到课情况</button>
+						</div>
+					</div>-->
+				</div>
+			</div>
 		</div>
 		<script>
-			layui.use(['element', 'form'], function() {
-				var element = layui.element;
-			});
+			function geturl() {
+				var str = document.baseURI;
+				var arr = str.split('/')
+				console.log(arr)
+			}
+
+			function file() {
+				index = layer.open({
+					type: 1,
+					area: ['700px', '600px'],
+					anim: 2,
+					title: '上传文件',
+					maxmin: true,
+					shadeClose: true, //点击遮罩关闭
+					content: $('#UploadFile')
+				});
+			}
 		</script>
 	</body>
+	<!--弹窗-->
+	<div id="UploadFile" class="layui-fluid">
+		<form class="layui-form" autocomplete="off" lay-filter="test">
+			<div class="layui-form-item">
+				<label class="layui-form-label">请选择资源类型</label>
+				<div class="layui-input-block widths">
+					<select name="type" lay-filter="res" class="layui-btn-radius" id="res">
+						<option value="-1">上传标签</option>
+						<option value="视频资源">视频资源</option>
+						<option value="音频资源">音频资源</option>
+						<option value="动画资源">动画资源</option>
+						<option value="文档资源">文档资源</option>
+						<option value="图像资源">图像资源</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">选择科目</label>
+				<div class="layui-input-block widths">
+					<select name="subject" class="layui-btn-radius" id="subject">
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">选择上传标签</label>
+				<div class="layui-input-block widths">
+					<select name="label" class="layui-btn-radius" id="labe">
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">选择封面</label>
+				<div class="layui-input-block widths">
+					<input type="hidden" name="resourceId" />
+					<span class="layui-btn layui-btn-primary layui-btn-radius" id="Cover">上传封面</span>
+					<!--<input type="text" name="schoolName" placeholder="示例：2019年7班4" autocomplete="off" class="layui-input">-->
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">请选择本地文件</label>
+				<div class="layui-input-block widths">
+					<input type="hidden" name="id" />
+					<span class="layui-btn layui-btn-primary layui-btn-radius load">本地上传</span>
+					<div class="layui-progress" lay-showPercent="true" lay-filter="progressBar" style="margin-top: 10px;">
+						<div class="layui-progress-bar layui-bg-blue" lay-percent="0%"></div>
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">简介</label>
+				<div class="layui-input-block widths">
+					<textarea type="text" name="describes" required lay-verify="required" placeholder="示例：2019年7班4" autocomplete="off" class="layui-input"></textarea>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<div class="layui-btn" lay-submit lay-filter="formModifyDemo">立即提交</div>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div id="shareClass" class="layui-fluid">
+		<form class="layui-form" autocomplete="off" lay-filter="shareClass">
+			<div class="layui-form-item">
+				<label class="layui-form-label">请选择班级</label>
+				<div class="layui-input-block widths">
+					<input type="hidden" name="resourceId" />
+					<div name="classId" class="ClassOption xm-select-demo" lay-search="">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<div class="layui-btn" lay-submit lay-filter="formShareDemo">立即提交</div>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<!--<div id="shareRes" class="layui-fluid">
+		<form class="layui-form" autocomplete="off" lay-filter="shareClass">
+			<div class="layui-form-item">
+				<label class="layui-form-label">请选择班级</label>
+				<div class="layui-input-block widths">
+					<input type="hidden" name="resourceId" />
+					<div name="classId" class="ClassOption xm-select-demo" lay-search="">
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<div class="layui-btn" lay-submit lay-filter="formShareDemo">立即提交</div>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+	</div>-->
 
 </html>

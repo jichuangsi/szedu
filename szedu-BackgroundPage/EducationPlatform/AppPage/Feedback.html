@@ -12,6 +12,8 @@
 		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
 		<script src="../lib/js/jquery.min.js"></script>
 		<script src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/Configuration.js" ></script>
+		<script type="text/javascript" src="../js/AppJs/util.js"></script>
 	</head>
 	<style>
 		.feed-box {
@@ -31,47 +33,11 @@
 	</style>
 
 	<body>
-		<div class="layui-row">
-			<ul class="layui-nav" lay-filter="">
-				<li class="layui-nav-item">
-					<a href="#">信力达</a>
-				</li>
-				<li class="layui-nav-item">
-					<a href="#">智能.互联.引领未来</a>
-				</li>
-				<li class="layui-nav-item" style="float: right;margin-right: 3%;">
-					<i class="layui-icon layui-icon-shrink-right"></i>
-					<dl class="layui-nav-child">
-						<!-- 二级菜单 -->
-						<dd>
-							<a href="">我的收藏</a>
-						</dd>
-						<dd>
-							<a href="">成绩分析</a>
-						</dd>
-						<dd>
-							<a href="">账号与设置</a>
-						</dd>
-						<dd>
-							<a href="">帮助与反馈</a>
-						</dd>
-						<dd>
-							<a href="">退出</a>
-						</dd>
-					</dl>
-				</li>
-
-				<li class="layui-nav-item" style="float: right;">
-					<a href="#">积分：<span>5562</span></a>
-				</li>
-				<li class="layui-nav-item" style="float: right;">
-					<a href="#">王木木<img src="//t.cn/RCzsdCq" class="layui-nav-img"></a>
-				</li>
-			</ul>
+		<div class="layui-row" id="nav">
 		</div>
 		<div class="layui-row">
-			<div class="layui-col-xs12 layui-col-sm12" style="text-align: center;line-height: 1.5rem;padding-left: 10px;">
-				<i class="layui-icon layui-icon-left" style="float: left;"></i>
+			<div class="layui-col-xs12 layui-col-sm12 nav-title">
+				<a href="javascript:history.back(-1)"><i class="layui-icon layui-icon-left" style="float: left;"></i> </a>
 				<span>帮助与反馈</span>
 			</div>
 		</div>
@@ -106,14 +72,30 @@
 				<hr />
 				<form class="layui-form" style="margin: 20px 0 20px 20px;">
 					<div class="layui-form-item layui-form-text">
-						<textarea name="desc" placeholder="请输入内容" class="layui-textarea" style="height: 200px;"></textarea>
+						<textarea name="message" placeholder="请输入内容" class="layui-textarea" style="height: 200px;"></textarea>
 					</div>
-					<div class="layui-form-item layui-form-text"style="text-align: center;">
-						<div class="layui-btn layui-btn-radius layui-btn-normal">发送</div>
+					<div class="layui-form-item layui-form-text" style="text-align: center;">
+						<div class="layui-btn layui-btn-radius layui-btn-normal"  lay-submit lay-filter="formDemo">发送</div>
 					</div>
 				</form>
 			</div>
 		</div>
+		<script>
+			layui.use(['form', 'table'], function() {
+				var form = layui.form,
+					table = layui.table;
+					form.on('submit(formDemo)',function(data){
+						var param =data.field;
+//						var user = JSON.parse(sessionStorage.getItem('student'))
+//						param.id=user.id;
+						var url='/studentInfo/LeavingMessage';
+						var flag=StudentPostMethod(url,param);
+						if(flag){
+							return layer.msg("留言成功！");
+						}
+					});
+			})
+		</script>
 	</body>
 
 </html>

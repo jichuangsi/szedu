@@ -5,9 +5,11 @@
 	padding: 0px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-form{
+
+form {
 	font-size: 18px;
 }
+
 a {
 	text-decoration: none;
 }
@@ -22,6 +24,10 @@ html {
 body {
 	width: 100%;
 	min-height: 100%;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .x-iframe {
@@ -150,6 +156,7 @@ body {
 	top: 1px;
 	background-color: #fff;
 	border: 1px solid #cccccc;
+	margin-top: 15px;
 	padding-top: 0;
 	min-height: 300px;
 }
@@ -173,6 +180,7 @@ body {
 	max-width: 100%;
 	margin: auto;
 	vertical-align: middle;
+	height: 160px;
 }
 
 .rmb-product>a img:hover {
@@ -287,22 +295,24 @@ body {
 /*资源*/
 
 .rmb-res-title {
-	padding: 5px 20px 0 20px;
+	/*padding: 5px 20px 0 20px;*/
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-}
-
-.rmb-res-title {
+	width: 75%;
 	font-size: 20px;
 	color: #333333;
+	padding-left: 10px;
 }
 
 .rmb-icon-res {
 	color: #ff0000;
-	position: absolute;
+	/*position: absolute;
 	top: 166px;
-	left: 186px;
+	left: 186px;*/
+	float: right;
+	line-height: 32px;
+	margin-right: 8%;
 }
 
 .rmb-icon-res:hover {
@@ -326,11 +336,12 @@ body {
 }
 
 .rmb-res-buy {
-	margin: auto 10px auto 20px;
+	/*	margin: auto 10px auto 20px;*/
+	padding-left: 10px;
 }
 
 .rmb-res-buy :last-child {
-	margin-left: 10px;
+	/*margin-left: 10px;*/
 }
 
 .rmb-content {}
@@ -352,4 +363,10 @@ body {
 
 .layui-table-cell {
 	height: 30px;
+}
+
+.nav-teacher-title {}
+
+.layui-icon-left {
+	float: left;
 }

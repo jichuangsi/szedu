@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>新建试卷</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+		<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="../css/index.css" />
+		<link rel="stylesheet" href="../css/administration.css" />
+		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
+		<script src="../lib/js/jquery.min.js"></script>
+		<script src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/util.js"></script>
+		<script type="text/javascript" src="../js/Configuration.js"></script>
+		<script type="text/javascript" src="../js/TestPaper.js"></script>
+	</head>
+	<style>
+		.wdiths {
+			width: 30%;
+		}
+		
+		.layui-form-label {
+			text-align: left;
+		}
+		
+		.layui-input-block-r {
+			margin-left: 10px;
+			min-height: 36px;
+		}
+		
+		.layui-input-block-l {
+			margin-left: 30px;
+			min-height: 36px;
+		}
+		
+		.chec-box>div {}
+		
+		.chec-span {
+			float: right;
+			margin-right: 20%;
+		}
+	</style>
+
+	<body>
+		<iframe src="../head.html" frameborder="0" scrolling="no" class="x-iframe"></iframe>
+		<div class="layui-row">
+			<div class="layui-row" style="background-color: #F9F9F9;height: 30px;line-height: 30px;">
+				<div class="layui-col-md8 layui-col-md-offset2" style="text-align: center;">
+					<a href="javascript:history.back();"><i class="layui-icon layui-icon-left" style="float: left;"></i> </a>
+					<span>新建试卷</span>
+				</div>
+			</div>
+			<div class="layui-col-md8 layui-col-md-offset2">
+				<form class="layui-form" style="margin-top: 20px;padding: 10px;" lay-filter="Single">
+					<div class="layui-form-item">
+						<label class="layui-form-label">试卷名称</label>
+						<div class="layui-input-block wdiths">
+							<input type="text" name="testPaperName" class="layui-input" lay-verify="required" value="理论课测试" />
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">适用年级</label>
+						<div class="layui-input-block wdiths">
+							<input type="text" name="grade" class="layui-input" lay-verify="required" value="1年级" />
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">考试类型</label>
+						<div class="layui-input-block wdiths">
+							<select name="type" lay-verify="" class="layui-btn-radius">
+								<option value="-1">考试类型</option>
+								<option value="单元测试">单元测试</option>
+								<option value="021">上海</option>
+								<option value="0571">杭州</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">备注</label>
+						<div class="layui-input-block">
+							<input type="remark" name="remark" class="layui-input" lay-verify="required" value="请输入50字内" />
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-input-block-r	">
+							<input type="radio" name="way" value="jp" title="使用精品题库进行随机组卷" checked>
+							<div class="layui-input-block-l">
+								<input type="radio" name="bankitem" value="all" title="选取所有试题" checked>
+							</div>
+							<div class="layui-input-block-l">
+								<input type="radio" name="bankitem" value="km" title="按科目选取试题" lay-filter='km'>
+								<div class="layui-input-block-l">
+									<!--查询科目的题目数量-->
+									<div class="chec-box">
+										<!--放入折叠面板里面-->
+										<div class="layui-collapse">
+											<div class="layui-colla-item">
+												<h2 class="layui-colla-title">题目</h2>
+												<div class="layui-colla-content">
+													<div>
+														<input type="checkbox" name="sub" lay-skin="primary" title="写作">
+														<div class="chec-span">
+															<span>单选题：120</span><span>多选题：120</span><span>判断题：120</span>
+														</div>
+													</div>
+													<div>
+														<input type="checkbox" name="sub" lay-skin="primary" title="写作">
+														<div class="chec-span">
+															<span>单选题：120</span><span>多选题：120</span><span>判断题：120</span>
+														</div>
+													</div>
+													<div>
+														<input type="checkbox" name="sub" lay-skin="primary" title="写作">
+														<div class="chec-span">
+															<span>单选题：120</span><span>多选题：120</span><span>判断题：120</span>
+														</div>
+													</div>
+													<div>
+														<input type="checkbox" name="sub" lay-skin="primary" title="写作">
+														<div class="chec-span">
+															<span>单选题：120</span><span>多选题：120</span><span>判断题：120</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="layui-input-block-l">
+								<input type="radio" name="bankitem" value="zj" title="按章节选取试题" >
+								<div class="layui-input-block-l">
+									<div id="demo1" class="xm-select-demo"></div>
+								</div>
+								<div class="layui-input-block-l">
+									<span style="color: #D0D0D0;">已经选取 单选题20，多选题20，判断题20</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--使用我的题库-->
+					<div class="layui-form-item">
+						<div class="layui-input-block-r	">
+							<input type="radio" name="way" value="wd" title="使用我的题库进行随机组卷">
+							<div class="layui-input-block-l">
+								<input type="radio" name="er" value="all" title="选取所有试题" checked>
+							</div>
+							<div class="layui-input-block-l">
+								<input type="radio" name="er" value="km" title="按科目选取试题">
+								<div class="layui-input-block-l">
+									<!--查询科目的题目数量-->
+									<div class="chec-box">
+										<div class="layui-collapse">
+											<div class="layui-colla-item">
+												<h2 class="layui-colla-title">题目</h2>
+												<div class="layui-colla-content" id="teacherQuertion">
+													<div>
+														<input type="checkbox" name="sub" lay-skin="primary" title="写作">
+														<div class="chec-span">
+															<span>单选题：120</span><span>多选题：120</span><span>判断题：120</span>
+														</div>
+													</div>
+													<div>
+														<input type="checkbox" name="sub" lay-skin="primary" title="写作">
+														<div class="chec-span">
+															<span>单选题：120</span><span>多选题：120</span><span>判断题：120</span>
+														</div>
+													</div>
+													<div>
+														<input type="checkbox" name="sub" lay-skin="primary" title="写作">
+														<div class="chec-span">
+															<span>单选题：120</span><span>多选题：120</span><span>判断题：120</span>
+														</div>
+													</div>
+													<div>
+														<input type="checkbox" name="sub" lay-skin="primary" title="写作">
+														<div class="chec-span">
+															<span>单选题：120</span><span>多选题：120</span><span>判断题：120</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="layui-input-block-l">
+								<input type="radio" name="er" value="zj" title="按章节选取试题">
+								<div class="layui-input-block-l">
+									<div id="demo2" class="xm-select-demo"></div>
+								</div>
+								<div class="layui-input-block-l">
+									<span style="color: #D0D0D0;">已经选取 单选题20，多选题20，判断题20</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="demo2" class="xm-select-demo"></div>
+					<div class="layui-form-item">
+						<div class="layui-input-block" style="text-align: center;">
+							<div class="layui-btn layui-btn-normal layui-btn-radius" lay-submit lay-filter="formDemo">立即提交</div>
+							<button type="reset" class="layui-btn layui-btn-primary layui-btn-radius">重置</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</body>
+
+</html>

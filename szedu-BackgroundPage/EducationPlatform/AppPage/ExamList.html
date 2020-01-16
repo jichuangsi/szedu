@@ -12,6 +12,8 @@
 		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
 		<script src="../lib/js/jquery.min.js"></script>
 		<script src="../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/Configuration.js"></script>
+		<script type="text/javascript" src="../js/AppJs/util.js"></script>
 		<script type="text/javascript" src="../js/AppJs/ExamList.js"></script>
 	</head>
 	<style>
@@ -26,7 +28,7 @@
 		.Exam-box {
 			width: 95%;
 			height: 300px;
-			border: 1px solid #333333;
+			border: 1px solid #b2b2b2;
 			margin: 5px;
 		}
 		
@@ -80,7 +82,8 @@
 	</style>
 
 	<body>
-		<iframe src="../AppPage/header.html" frameborder="0" scrolling="no" class="x-iframe"></iframe>
+		<div class="layui-row" id="nav">
+		</div>
 		<div class="layui-row" style="margin:20px 10px;">
 			<div class="layui-row layui-form">
 				<div class="layui-form-item  layui-input-inline widths">
@@ -113,7 +116,7 @@
 			</div>
 		</div>
 		<!--考试列表-->
-		<div class="layui-row" style="margin: 10px;">
+		<div class="layui-row studentExam" style="margin: 10px;">
 			<div class="layui-col-xs6 layui-col-sm3">
 				<div class="Exam-box">
 					<div class="box-pig">
@@ -133,8 +136,8 @@
 							</ul>
 						</div>
 						<div class="box-content-btn">
-							<div class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius ">进入考试</div>
-							<div class="layui-btn layui-btn-primary layui-btn-sm layui-btn-radius ">查看成绩</div>
+							<div class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius">进入考试</div>
+							<div class="layui-btn layui-btn-disabled layui-btn-sm layui-btn-radius ">查看成绩</div>
 						</div>
 					</div>
 				</div>
@@ -214,6 +217,25 @@
 					</div>
 				</div>
 			</div>
+		</div>
+		<div class="layui-row menu">
+			<ul>
+				<li>
+					<a href="index.html">主页</a>
+				</li>
+				<li >
+					<a href="CourseList.html">课堂</a>
+				</li>
+				<li class="menu-this">
+					<a href="ExamList.html">考试</a>
+				</li>
+				<li>
+					<a href="Resources.html">学习资料</a>
+				</li>
+				<li>
+					<a href="News.html">新闻</a>
+				</li>
+			</ul>
 		</div>
 	</body>
 

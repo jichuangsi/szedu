@@ -2,7 +2,8 @@ var url;
 var token;
 //修改路径
 function httpUrl() {
-	url = "http://192.168.31.83:8080"
+	// url = "http://192.168.1.3:8080"
+	url = "http://192.168.31.84:8080"
 	return url;
 }
 //获取token
@@ -19,12 +20,12 @@ function ajaxGET(url) {
 			'accessToken': getToken()
 		},
 		success: function(res) {
-			if(res.code == '0010') {
+			if (res.code == '0010') {
 				layui.notice.success("提示信息:成功!");
 				return res.data;
-			} else if(res.code == '0031') {
+			} else if (res.code == '0031') {
 				layui.notice.info("提示信息：权限不足");
-			} else if(res.code == '0050') {
+			} else if (res.code == '0050') {
 				layui.notice.error("提示信息:错误!");
 			}
 		}
@@ -42,12 +43,12 @@ function ajaxPOST(url, param) {
 		contentType: 'application/json',
 		data: JSON.stringify(param),
 		success: function(res) {
-			if(res.code == '0010') {
+			if (res.code == '0010') {
 				layui.notice.success("提示信息:成功!");
 				data = res.data;
-			} else if(res.code == '0031') {
+			} else if (res.code == '0031') {
 				layui.notice.info("提示信息：权限不足");
-			} else if(res.code == '0050') {
+			} else if (res.code == '0050') {
 				layui.notice.error("提示信息:错误!");
 			}
 		}
@@ -60,4 +61,38 @@ function setMsg(msg, icon) {
 		icon: icon,
 		time: 1000
 	});
+}
+
+function getAjaxData(url) {
+	var data;
+	$.ajax({
+		type: "GET",
+		url: httpUrl() + url,
+		async: false,
+		headers: {
+			'accessToken': getToken()
+		},
+		success: function(res) {
+			data = res;
+		}
+	});
+	return data;
+}
+
+function getAjaxPostData(url,param) {
+	var data;
+	$.ajax({
+		type: "post",
+		url: httpUrl() + url,
+		async: false,
+		headers: {
+			'accessToken': getToken(),
+		},
+		contentType: 'application/json',
+		data: JSON.stringify(param),
+		success: function(res) {
+			data=res;
+		}
+	});
+	return data;
 }
