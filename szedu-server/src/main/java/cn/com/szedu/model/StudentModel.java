@@ -1,6 +1,7 @@
 package cn.com.szedu.model;
 
 import javax.validation.constraints.Pattern;
+import java.util.Date;
 
 public class StudentModel  {
 
@@ -20,6 +21,24 @@ public class StudentModel  {
     private String classId;
     private String studentId;//学号
     private String specialtity;//专业
+    private Date birthday;//生日
+    private String address;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
 
     public String getSpecialtity() {
         return specialtity;

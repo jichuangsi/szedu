@@ -4,7 +4,8 @@ import cn.com.szedu.commons.Md5Util;
 import cn.com.szedu.constant.CourseStatus;
 import cn.com.szedu.entity.*;
 import cn.com.szedu.model.SandMessageModel;
-import cn.com.szedu.model.Student.StudentInfoModel;
+import cn.com.szedu.model.student.StudentClassInfoModel;
+import cn.com.szedu.model.student.StudentInfoModel;
 import cn.com.szedu.model.StudentModel;
 import cn.com.szedu.model.UserInfoForToken;
 import cn.com.szedu.model.teacher.*;
@@ -280,7 +281,7 @@ public class MappingEntity3ModelCoverter {
         message.setSenderid(info.getUserId());
         message.setSenderName(info.getUserName());
         message.setMessage(model.getMessage());
-        message.setAlreadyRead(false);
+        message.setAlreadyRead("false");
         message.setReply(model.getReply());
         message.setSend(model.getSend());//已发送
         return message;
@@ -296,10 +297,49 @@ public class MappingEntity3ModelCoverter {
         message.setSenderid(info.getUserId());//发送
         message.setSenderName(info.getUserName());
         message.setMessage(model.getMessage());//消息
-        message.setAlreadyRead(false);//已读
+        message.setAlreadyRead("false");//已读
         message.setRecipientId(model.getRecipientId());//接收
         message.setRecipientName(model.getRecipientName());
         message.setSend(model.getSend());//已发送
         return message;
+    }
+
+    /**
+     *建议、留言、管理员可见
+     * @param info
+     * @param model
+     * @return
+     */
+    public final static Message CONVERTERFROMBACKMESSAGEMODELLEAVE(UserInfoForToken info,MessageModel model) {
+        Message message=new Message();
+        message.setSenderid(info.getUserId());//发送
+        message.setSenderName(info.getUserName());
+        message.setMessage(model.getMessage());//消息
+        message.setAlreadyRead("false");//已读
+        message.setRecipientId("1");//接收
+        message.setSend("Y");//已发送
+        message.setTime(new Date().getTime());
+        return message;
+    }
+
+
+    /**
+     * 学生信息
+     * @param userInfo
+     * @return
+     */
+    public final static StudentClassInfoModel CONVERTERFROMBACKSTUDENT(StudentInfo userInfo) {
+        StudentClassInfoModel model1 = new StudentClassInfoModel();
+        model1.setId(userInfo.getId());
+        model1.setAccount(userInfo.getAccount());
+        model1.setName(userInfo.getName());
+        model1.setPortrait(userInfo.getPortrait());
+        model1.setSex(userInfo.getSex());
+        model1.setBirthday(userInfo.getBirthday());
+        model1.setAddress(userInfo.getAddress());
+        model1.setSchoolId(userInfo.getSchoolId());
+        model1.setSchoolName(userInfo.getSchoolName());
+        model1.setPhone(userInfo.getPhone());
+        return model1;
     }
 }

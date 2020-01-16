@@ -1,6 +1,6 @@
 package cn.com.szedu.controller;
 
-import cn.com.szedu.entity.UserInfo;
+import cn.com.szedu.entity.*;
 import cn.com.szedu.exception.UserServiceException;
 import cn.com.szedu.model.*;
 import cn.com.szedu.service.UserInfoService;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @Api("UserCRUDController相关的api")
@@ -79,9 +80,9 @@ public class UserCRUDController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")})
     @PostMapping(value = "/excel/saveStudentByExcel")
-    public ResponseModel<String> saveStudentByExcel(@RequestParam MultipartFile file, @ModelAttribute UserInfoForToken userInfo){
+    public ResponseModel<String> saveStudentByExcel(@RequestParam MultipartFile file, @ModelAttribute UserInfoForToken userInfo,@RequestParam String schoolId){
         try {
-            return ResponseModel.sucess("",userInfoService.saveExcelStudents(file,userInfo));
+            return ResponseModel.sucess("",userInfoService.saveExcelStudents(file,userInfo,schoolId));
         } catch (UserServiceException e) {
             return ResponseModel.fail("",e.getMessage());
         }
@@ -171,5 +172,105 @@ public class UserCRUDController {
         }catch (UserServiceException e){
             return ResponseModel.fail("",e.getMessage());
         }
+    }
+
+    @ApiOperation(value = "获取学生留言，反馈", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/getLeavingMessage")
+    public ResponseModel<List<Message>> getLeavingMessage(@ModelAttribute UserInfoForToken userInfo)throws UserServiceException{
+        return ResponseModel.sucess("", userInfoService.getLeavingMessage(userInfo));
+    }
+
+    @ApiOperation(value = "查询所有学校", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/getAllSchool")
+    public ResponseModel<List<SchoolInfo>> getAllSchool(@ModelAttribute UserInfoForToken userInfo)throws UserServiceException{
+        return ResponseModel.sucess("", userInfoService.getAllSchool(userInfo));
+    }
+
+    @ApiOperation(value = "获取老师留言，反馈", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/getMessageFeedback")
+    public ResponseModel<List<MessageFeedback>> getMessageFeedback(@ModelAttribute UserInfoForToken userInfo)throws UserServiceException{
+        return ResponseModel.sucess("", userInfoService.getMessageFeedback(userInfo));
+    }
+
+    @ApiOperation(value = "老师状态", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/teacherStatus")
+    public ResponseModel<Boolean> teacherStatus(@ModelAttribute UserInfoForToken userInfo,@RequestParam String teacherId,@RequestParam String status)throws UserServiceException{
+        return ResponseModel.sucess("", userInfoService.teacherStatus(userInfo,teacherId,status));
+    }
+
+    @ApiOperation(value = "删除老师", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/teacherdelete")
+    public ResponseModel<Boolean> teacherdelete(@ModelAttribute UserInfoForToken userInfo,@RequestParam String teacherId)throws UserServiceException{
+        return ResponseModel.sucess("", userInfoService.teacherdelete(userInfo,teacherId));
+    }
+
+
+    @ApiOperation(value = "老师密码", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/teacherPwd")
+    public ResponseModel<Boolean> teacherPwd(@ModelAttribute UserInfoForToken userInfo,@RequestParam String teacherId,@RequestParam String pwd)throws UserServiceException{
+        return ResponseModel.sucess("", userInfoService.teacherPwd(userInfo,teacherId,pwd));
+    }
+
+    @ApiOperation(value = "常见问题", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/addProblem")
+    public ResponseModel<Boolean> addProblem(@ModelAttribute UserInfoForToken userInfo, @RequestBody CommonProblem problem)throws UserServiceException{
+        return ResponseModel.sucess("", userInfoService.addProblem(userInfo,problem));
+    }
+
+    @ApiOperation(value = "修改常见问题", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/updateProblem")
+    public ResponseModel<Boolean> updateProblem(@ModelAttribute UserInfoForToken userInfo, @RequestBody CommonProblem problem)throws UserServiceException{
+        return ResponseModel.sucess("", userInfoService.updateProblem(userInfo,problem));
+    }
+
+    @ApiOperation(value = "所有常见问题", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/allProblem")
+    public ResponseModel<List<CommonProblem>> allProblem(@ModelAttribute UserInfoForToken userInfo)throws UserServiceException{
+        return ResponseModel.sucess("", userInfoService.allProblem(userInfo));
+    }
+
+    @ApiOperation(value = "学校常见问题", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/schoolProblem")
+    public ResponseModel<List<CommonProblem>> schoolProblem(@ModelAttribute UserInfoForToken userInfo, @RequestParam String schoolid)throws UserServiceException{
+        return ResponseModel.sucess("", userInfoService.schoolProblem(userInfo,schoolid));
+    }
+
+    @ApiOperation(value = "问题id看解决方法", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/aroblemAnswer")
+    public ResponseModel<List<CommonProblem>> aroblemAnswer(@ModelAttribute UserInfoForToken userInfo, @RequestParam String id)throws UserServiceException{
+        return ResponseModel.sucess("", userInfoService.aroblemAnswer(userInfo,id));
     }
 }

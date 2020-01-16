@@ -9,4 +9,6 @@ import java.util.List;
 public interface IMessageUserRelationRepository extends JpaRepository<MessageUserRelation,Integer> {
     @Transactional
     void deleteByMIdIn(List<Integer> mid);//根据消息id删除消息
+    @Transactional
+    void deleteByMIdAndUId(Integer id,String uid);
 }

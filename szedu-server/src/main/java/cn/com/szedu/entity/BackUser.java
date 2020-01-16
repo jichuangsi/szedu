@@ -18,7 +18,7 @@ public class BackUser {
     private String account;
     private String pwd;
     private String userName;
-    private String status;
+    private String status;//A正常，B冻结(禁用)
     private String roleId;
     private String roleName;
     private String deptId;

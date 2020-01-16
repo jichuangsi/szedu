@@ -20,4 +20,6 @@ public interface ICoursePushWareRelationRepository extends JpaRepository<CourseP
     @Query(value = " UPDATE `course_push_resource_relation` SET push=Y WHERE `course_id`:courseId",nativeQuery = true)
     void updateByCourseId(@Param("courseId") String courseId);
 
+    List<CoursePushResourceRelation> findByCourseIdAndPush(String courseId,String push);
+
 }

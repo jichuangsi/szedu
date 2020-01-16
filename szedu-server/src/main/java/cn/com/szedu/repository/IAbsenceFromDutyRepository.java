@@ -5,7 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface IAbsenceFromDutyRepository extends JpaRepository<AbsenceFromDuty,Integer> {
+public interface IAbsenceFromDutyRepository extends JpaRepository<AbsenceFromDuty,String> {
 
     List<AbsenceFromDuty> findByCourseId(String courseId);
+
+    Integer countByCourseIdAndStudentId(String courseId,String sudentId);
 }

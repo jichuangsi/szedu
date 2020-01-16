@@ -1,17 +1,26 @@
 package cn.com.szedu.model.teacher;
 
 public class MyAllLessionModel {
-     private Integer subjectId;
+     private String subjectId;
     private String lessionType;
+    private String timeName;
     private long time;
     private int pageNum;
     private int pageSize;
 
-    public Integer getSubjectId() {
+    public String getTimeName() {
+        return timeName;
+    }
+
+    public void setTimeName(String timeName) {
+        this.timeName = timeName;
+    }
+
+    public String getSubjectId() {
         return subjectId;
     }
 
-    public void setSubjectId(Integer subjectId) {
+    public void setSubjectId(String subjectId) {
         this.subjectId = subjectId;
     }
 

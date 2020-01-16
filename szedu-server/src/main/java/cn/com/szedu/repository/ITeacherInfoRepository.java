@@ -18,6 +18,11 @@ public interface ITeacherInfoRepository extends JpaRepository<TeacherInfo,Intege
     TeacherInfo findByid(String id);
     List<TeacherInfo> findBySchoolId(String schoolId);
 
+    List<TeacherInfo> findByIdNotAndSchoolId(String id,String schoolId);
+    List<TeacherInfo> findByIdIn(List<String> teacherId);
+    @Transactional
+    void deleteById(String id);
+
     @Transactional
     @Modifying
     @Query(value = "UPDATE TeacherInfo SET integral=?2 WHERE id=?1")

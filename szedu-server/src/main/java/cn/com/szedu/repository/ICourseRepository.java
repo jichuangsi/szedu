@@ -1,6 +1,8 @@
 package cn.com.szedu.repository;
 
+import cn.com.szedu.constant.CourseStatus;
 import cn.com.szedu.entity.Course;
+import cn.com.szedu.entity.CourseWare;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -25,4 +27,9 @@ public interface ICourseRepository extends JpaRepository<Course,String>,JpaSpeci
     List<Course> getBySubjectAndLessonTypeNameAndStartTimeAndIdIn(String subject, String type, String time,List<String> courseId);
 */
     List<Course> findBySubjectIdAndLessonTypeNameAndStartTimeAndIdIn(Integer subject, String type, long time,List<String> courseId);
+
+
+    List<Course> findByIdIn(List<String> courseId);
+    Integer countByTeacherId(String teacherId);
+    List<Course> findByIdInAndStatusIsNot(List<String> courseId,String status);
 }

@@ -12,4 +12,6 @@ public interface IAttendanceRepository extends JpaRepository<AttendanceInClass,I
     List<AttendanceInClass> findAllByStudentNameLike(String name);
 
     List<AttendanceInClass> findByCourseId(String courseId);
+
+    Integer countByCourseIdAndStudentId(String courseId,String studentId);
 }

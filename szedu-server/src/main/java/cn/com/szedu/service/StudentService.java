@@ -10,6 +10,7 @@ import cn.com.szedu.exception.TecherException;
 import cn.com.szedu.exception.UserServiceException;
 import cn.com.szedu.model.StudentModel;
 import cn.com.szedu.model.UserInfoForToken;
+import cn.com.szedu.model.teacher.MessageModel;
 import cn.com.szedu.repository.*;
 import cn.com.szedu.repository.IntermediateTableRepository.IStudentClassRelationRepository;
 import cn.com.szedu.util.MappingEntity3ModelCoverter;
@@ -28,9 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class StudentService {
@@ -48,8 +47,10 @@ public class StudentService {
     private IClassInfoMapper classInfoMapper;
  /*   @Resource
     private IntegralRecordRepository integralRecordRepository;*/
+ /*   @Resource
+    private MessageRepository messageRepository;*/
     @Resource
-    private MessageRepository messageRepository;
+    private TeacherInfoService teacherInfoService;
 
 
     /**
@@ -87,8 +88,10 @@ public class StudentService {
         integralRecordRepository.save(integralRecord);*/
         //系统信息
         String messages="成功创建学生-----您创建了一个新学生，学生账号："+info.getAccount();
-        Message message=new Message(userInfo.getUserId(),userInfo.getUserName(),messages,"N");
-        messageRepository.save(message);
+       /* Message message=new Message(userInfo.getUserId(),userInfo.getUserName(),messages,"N");
+        messageRepository.save(message);*/
+        MessageModel message=new MessageModel(userInfo.getUserId(), userInfo.getUserName(), messages,"N");
+        teacherInfoService.addMessage(userInfo,message);
 
     }
 
@@ -175,8 +178,9 @@ public class StudentService {
             slist.setPageNum(pageNum);
             slist.setPageSize(pageSize);
             return slist;
+        }else {
+            throw new UserServiceException(ResultCode.SELECT_NULL_MSG);
         }
-        return null;
     }
     /**
      * 批量添加学生
@@ -185,7 +189,8 @@ public class StudentService {
      * @throws UserServiceException
      */
     public String saveExcelStudents(MultipartFile file, UserInfoForToken userInfo,String classId) throws UserServiceException {
-        //TeacherInfo teacherInfo=teacherInfoRepository.findExsitById(userInfo.getUserId());
+        TeacherInfo teacherInfo=teacherInfoRepository.findExsitById(userInfo.getUserId());
+        if (teacherInfo==null){throw new UserServiceException(ResultCode.SELECT_NULL_MSG);}
         String fileName=file.getOriginalFilename();
         if(!fileName.endsWith(".xls")){
             System.out.println("文件不是.xls类型");
@@ -213,6 +218,8 @@ public class StudentService {
                     try {
                         info=saveRowStudent(row,userAccounts);
                         userAccounts.add(info.getAccount());
+                        info.setSchoolId(teacherInfo.getSchoolId());
+                        info.setSchoolName(teacherInfo.getSchoolName());
                     }catch (UserServiceException e){
                         errorRowNum.add((j + 1) + " ");
                         continue;
@@ -246,21 +253,10 @@ public class StudentService {
             //系统信息
             String messages="批量上传-----您已成功批量上传"+file.getName()+"文件，"+userInfos.size()+"账号导入成功"+errorRowNum.size()+
                     "个账号导入失败，"+account+"账号已存在，"+phone+"个手机号已存在，"+name+"个名字已存在，"+studentID+"个学号已存在";
-            Message message=new Message(userInfo.getUserId(),userInfo.getUserName(),messages,"N");
-            messageRepository.save(message);
-           /* if (account==0 && name==0 && phone==0 && studentID==0){
-                //系统信息
-                String messages="批量上传-----您已成功批量上传"+file.getName()+"文件，"+userInfos.size()+"账号导入成功";
-                Message message=new Message(userInfo.getUserId(),userInfo.getUserName(),messages);
-                messageRepository.save(message);
-            }*/
-          /*  if (account!=0){
-                //系统信息
-                String messages="批量上传-----您已成功批量上传"+file.getName()+"文件，"+userInfos.size()+"账号导入成功"+errorRowNum.size()+
-                        "个失败，失败原因："+account+"个账号";
-                Message message=new Message(userInfo.getUserId(),userInfo.getUserName(),messages);
-                messageRepository.save(message);
-            }*/
+
+            MessageModel message=new MessageModel(userInfo.getUserId(), userInfo.getUserName(), messages,"N");
+            teacherInfoService.addMessage(userInfo,message);
+
             return JSONObject.toJSONString(errorRowNum.toArray());
         }catch (IOException e){
             throw new UserServiceException(ResultCode.EXCEL_IMPORT_MSG);
@@ -282,13 +278,17 @@ public class StudentService {
             studentRespository.save(info);
             //操作者系统信息
             String messages="修改密码-----您已成功修改账号为"+info.getAccount()+"的密码，新密码为"+pwd;
-            Message message=new Message(userInfo.getUserId(),userInfo.getUserName(),messages,"N");
-            messageRepository.save(message);
+            /*Message message=new Message(userInfo.getUserId(),userInfo.getUserName(),messages,"N");
+            messageRepository.save(message);*/
+            MessageModel message=new MessageModel(userInfo.getUserId(), userInfo.getUserName(), messages,"N");
+            teacherInfoService.addMessage(userInfo,message);
 
             //被操作者系统信息
             String messages1="操作：被修改密码——你已成功修改密码，新密码为，"+pwd;
-            Message message1=new Message(info.getId(),info.getName(),messages1,"N");
-            messageRepository.save(message1);
+          /*  Message message1=new Message(info.getId(),info.getName(),messages1,"N");
+            messageRepository.save(message1);*/
+            MessageModel message1=new MessageModel(info.getId(),info.getName(),messages1,"N");
+            teacherInfoService.addMessage(userInfo,message1);
         }
     }
 
@@ -346,15 +346,20 @@ public class StudentService {
           String messages="操作：移动——\n" +
                   "您已将账号名"+studentInfo.getAccount()+"移动到另一个班级。班级信息：" +classInfo.getSpeciality()+
                   "班级"+classInfo.getClassName()+" 班。"+System.currentTimeMillis();
-          Message message=new Message(userInfo.getUserId(),userInfo.getUserName(),messages,"N");
-          messageRepository.save(message);
+         /* Message message=new Message(userInfo.getUserId(),userInfo.getUserName(),messages,"N");
+          messageRepository.save(message);*/
+          MessageModel message=new MessageModel(userInfo.getUserId(),userInfo.getUserName(),messages,"N");
+          teacherInfoService.addMessage(userInfo,message);
 
           //被操作者系统信息
           String messagess="操作：被移动——\n" +
                   "你的账号已被移动到另一个班级。班级信息：" +classInfo.getSpeciality()+
                   "班级"+classInfo.getClassName()+" 班。"+System.currentTimeMillis();
-          Message messages1=new Message(studentInfo.getId(),studentInfo.getName(),messagess,"N");
-          messageRepository.save(messages1);
+         /* Message messages1=new Message(studentInfo.getId(),studentInfo.getName(),messagess,"N");
+          messageRepository.save(messages1);*/
+          MessageModel messages1=new MessageModel(studentInfo.getId(),studentInfo.getName(),messagess,"N");
+          teacherInfoService.addMessage(userInfo,messages1);
+
       }
 
     }
@@ -379,23 +384,17 @@ public class StudentService {
                     userName = getCellString(row.getCell(i));
                     break;
                 case 1:
-                    studentId = getCellString(row.getCell(i));
+                    studentId = getCellNumber(row.getCell(i));
                     break;
                 case 2:
-                    account = getCellNumber(row.getCell(i));
+                    account = getCellString(row.getCell(i));
                     break;
                 case 3:
-                    phone = getCellString(row.getCell(i));
+                    phone = getCellNumber(row.getCell(i));
                     break;
                 case 4:
                     pwd = getCellString(row.getCell(i));
                     break;
-               /* case 5:
-                    pwd = getCellString(row.getCell(i));
-                    break;
-                case 6:
-                    studentId = getCellNumber(row.getCell(i));
-                    break;*/
                 default:
                     break;
             }
@@ -419,6 +418,7 @@ public class StudentService {
         userInfo.setRole("Student");
         userInfo.setStatus(Status.ACTIVATE.getName());
         userInfo.setStudentId(studentId);
+        userInfo.setIntegral(0);
         return userInfo;
     }
 

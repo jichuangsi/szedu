@@ -13,4 +13,6 @@ public interface IStudentCourseScoreRepository extends JpaRepository<StudentCour
 
     List<StudentCourseRelation> findByStudentId(String studentId);
 
+    StudentCourseRelation findByCourseIdAndStudentId(String courseId,String studentId);
+
 }

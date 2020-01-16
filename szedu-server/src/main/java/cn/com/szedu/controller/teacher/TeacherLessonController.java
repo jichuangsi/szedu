@@ -44,7 +44,15 @@ public class TeacherLessonController {
 
         return ResponseModel.sucess("", teacherLessonService.getAllLesson(userInfo,model));
     }
+    @ApiOperation(value = "我的课堂总数", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/getAllLessonCount")
+    public ResponseModel getAllLessonCount(@ModelAttribute UserInfoForToken userInfo) throws TecherException {
 
+        return ResponseModel.sucess("", teacherLessonService.allCount(userInfo));
+    }
     @ApiOperation(value = "删除课堂", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
@@ -155,12 +163,12 @@ public class TeacherLessonController {
         return ResponseModel.sucess("", teacherLessonService.getMyResoure(userInfo));
     }*/
 
-    @ApiOperation(value = "导师等级", notes = "")
+   /* @ApiOperation(value = "导师等级", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @GetMapping("/getMyGrade")
     public ResponseModel<String> getMyGrade(@ModelAttribute UserInfoForToken userInfo) throws TecherException {
         return ResponseModel.sucess("", teacherLessonService.getMyGrade(userInfo));
-    }
+    }*/
 }

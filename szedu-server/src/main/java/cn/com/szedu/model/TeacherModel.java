@@ -16,7 +16,15 @@ public class TeacherModel{
     private String schoolName;
     private Integer integral;
     private String status;
+    private String schoolId;
 
+    public String getSchoolId() {
+        return schoolId;
+    }
+
+    public void setSchoolId(String schoolId) {
+        this.schoolId = schoolId;
+    }
 
     public String getId() {
         return id;

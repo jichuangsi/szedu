@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import javax.transaction.Transactional;
 import java.util.List;
 @Repository
-public interface IClassInfoRepository extends JpaRepository<ClassInfo,Integer> {
+public interface IClassInfoRepository extends JpaRepository<ClassInfo,String> {
 
     List<ClassInfo> getClassInfoByIdIn(Sort sort,List<String> classId);
 
@@ -18,6 +18,8 @@ public interface IClassInfoRepository extends JpaRepository<ClassInfo,Integer> {
 
     Integer countBySpecialityAndRuTimeAndEducationalSystemAndClassName(String specialtity,String ruTime,String ed,String className);
     List<ClassInfo> findBySchoolIdAndStatus(String schoolId,String status);
+
+    List<ClassInfo> findByIdIn(List<String> classId);
 
 
 }

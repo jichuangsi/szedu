@@ -25,8 +25,17 @@ public class SchoolInfo {
         private Date buyTime;//订购时间
         private String status;//使用状态
         private String remarks;//备注
+        private  String portrait;//封面
 
-        public String getId() {
+    public String getPortrait() {
+        return portrait;
+    }
+
+    public void setPortrait(String portrait) {
+        this.portrait = portrait;
+    }
+
+    public String getId() {
             return id;
         }
 

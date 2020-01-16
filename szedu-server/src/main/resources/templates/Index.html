@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Index</title>
+    <script type="text/javascript" src="../jquery.min.js"></script>
+    <script type="text/javascript" src="../pageoffice.js" id="po_js_main"></script>
+
+</head>
+<body>
+<h1 th:inline="text">PageOffice 集成效果演示</h1>
+<div>
+    <form>
+        <input th:type="text" th:value="${id}" name="teacherid" id="teacherid">
+        <input th:type="text" th:value="${path}" name="path"id="path">
+        <input th:type="text" th:value="${type}" name="type"id="type">
+        <a href="javascript:POBrowser.openWindowModeless('/page/word','width=1200px;height=800px;',)" id="page">打开文件 </a>
+        <!--<a href="javascript:POBrowser.openWindowModeless('/page/word?teacherid=30a0cc87689b4e43aed22ce4c75d6687&path=upload/2bc9d911-bb5b-4604-9ec0-1d87855c70b8.xls&type=excel','width=1200px;height=800px;',)" id="page">打开文件 </a>
+       --><!-- <a href="/page/word?teacherid="+${id}></a>-->
+    </form>
+<script type="text/javascript">
+       /* $("#page").click(function () {
+            var teacherid=$("teacherid").value();
+            var path=$("path").value();
+            var type=$("type").value();
+            window.hregf="/page/word?teacherid="+teacherid+"&path="+path+"&type="+type;
+        })*/
+</script>
+</div>
+
+
+<script type="text/javascript">
+    function getPageOfficeJsUrl() {
+        var d = document.URL;
+        var c = d.substring(0, find(d, "/", 3) + 1);
+        var a = d.substring(0, find(d, "/", 4) + 1);
+        var f = new Array();
+        f[0] = c;
+        f[1] = a;
+        for (var b = 0; b < f.length; b++) {
+            var e = "pageoffice.js";
+            ajax({
+                url: f[b] + "/pageoffice.js",
+                type: "GET",
+                data: {name: "super"},
+                dataType: "json",
+                success: function (h, k) {
+                    if (d.indexOf("?") > 0) {
+                        d = d.substring(0, d.indexOf("?"))
+                    }
+                    var g = countChar(d.substring(f[b].length), "/");
+                    for (var i = 0; i < g; i++) {
+                        e = "../" + e
+                    }
+                    //alert('src="' + e + '"')
+                },
+                fail: function (g) {
+                }
+            })
+        }
+    }
+
+    function countChar(d, e) {
+        var b = 0;
+        for (var a = 0; a < d.length; a++) {
+            if (d.charAt(a) == e) {
+                b++
+            }
+        }
+        return b
+    }
+
+    function find(e, b, c) {
+        var a = 0;
+        for (var d = 0; d < c; d++) {
+            a = e.indexOf(b, a + 1)
+        }
+        return a
+    }
+
+    getPageOfficeJsUrl();
+
+    function ajax(a) {
+        a = a || {};
+        a.type = (a.type || "GET").toUpperCase();
+        a.dataType = a.dataType || "json";
+        var c = formatParams(a.data);
+        if (window.XMLHttpRequest) {
+            var b = new XMLHttpRequest()
+        } else {
+            var b = new ActiveXObject("Microsoft.XMLHTTP")
+        }
+        b.onreadystatechange = function () {
+            if (b.readyState == 4) {
+                var d = b.status;
+                if (d >= 200 && d < 300) {
+                    a.success && a.success(b.responseText, b.responseXML)
+                } else {
+                    a.fail && a.fail(d)
+                }
+            }
+        };
+        if (a.type == "GET") {
+            b.open("GET", a.url + "?" + c, false);
+            b.send(null)
+        } else {
+            if (a.type == "POST") {
+                b.open("POST", a.url, false);
+                b.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                b.send(c)
+            }
+        }
+    }
+
+    function formatParams(c) {
+        var a = [];
+        for (var b in c) {
+            a.push(encodeURIComponent(b) + "=" + encodeURIComponent(c[b]))
+        }
+        a.push(("v=" + Math.random()).replace(".", ""));
+        return a.join("&")
+    };
+</script>
+</body>
+</html>

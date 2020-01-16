@@ -51,4 +51,6 @@ public interface ICourseWareRespository extends JpaRepository<CourseWare,String>
 
     @Query(value = "SELECT * FROM CourseWare WHERE teacherid IN ?1 AND is_share_check=?2 ORDER BY buy,create_time DESC LIMIT ?3,?4",nativeQuery = true)
     List<CourseWare> getTeacheridInAndIsShareCheckOrderOrderByCreateTime(List<String> teacherIds,String status,int num,int size);
+
+    List<CourseWare> findByIdIn(List<String> wareId);
 }

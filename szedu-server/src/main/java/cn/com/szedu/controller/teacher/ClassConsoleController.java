@@ -51,7 +51,7 @@ public class ClassConsoleController {
         return  ResponseModel.sucessWithEmptyData("");
     }
 
-    @ApiOperation(value = "查询所有班级", notes = "")
+    @ApiOperation(value = "查询所有班级(用于添加未读班级)", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })

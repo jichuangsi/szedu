@@ -27,7 +27,8 @@ public class TeacherInfo {
     private String status = "I";
     private Integer integral=0;
     private String jobId;//工号
-    private Date birthday;//生日
+    //private Date birthday;//生日
+    private long birthday=new Date().getTime();//生日
     private String address;
     private String teachingTime;//教龄
     private long createTime = new Date().getTime();
@@ -166,13 +167,13 @@ public class TeacherInfo {
         this.jobId = jobId;
     }
 
-    public Date getBirthday() {
+   /* public Date getBirthday() {
         return birthday;
     }
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
-    }
+    }*/
 
     public String getAddress() {
         return address;
@@ -204,5 +205,13 @@ public class TeacherInfo {
 
     public void setUpdateTime(long updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public long getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(long birthday) {
+        this.birthday = birthday;
     }
 }

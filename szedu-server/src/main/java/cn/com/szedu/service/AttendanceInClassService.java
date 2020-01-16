@@ -61,7 +61,7 @@ public class AttendanceInClassService {
      */
     public PageInfo<AttendanceModel> getAttendance(UserInfoForToken userInfo,int pageNum , int pageSize)throws UserServiceException {
        /* AttendanceModel model=new AttendanceModel();*/
-
+if (StringUtils.isEmpty(userInfo)){throw new UserServiceException(ResultCode.PARAM_MISS_MSG);}
         List<AttendanceModel> alist=new ArrayList<AttendanceModel>();
         List<StudentModel> shidao=new ArrayList<StudentModel>();//实到人
         List<StudentModel> duty=new ArrayList<StudentModel>();//缺勤人

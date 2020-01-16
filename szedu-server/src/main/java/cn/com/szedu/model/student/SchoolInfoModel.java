@@ -1,7 +1,6 @@
 package cn.com.szedu.model.student;
 
 import cn.com.szedu.entity.IntermediateTable.SchoolCurriculumRelation;
-import cn.com.szedu.entity.IntermediateTable.SchoolUserRelation;
 
 import java.util.Date;
 import java.util.List;

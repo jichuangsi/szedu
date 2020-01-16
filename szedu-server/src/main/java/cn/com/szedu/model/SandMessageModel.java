@@ -8,6 +8,15 @@ public class SandMessageModel {
     private String message;//消息内容
     private Integer reply;//回复消息id
     private String send;//是否发送
+    private List<String> classId;
+
+    public List<String> getClassId() {
+        return classId;
+    }
+
+    public void setClassId(List<String> classId) {
+        this.classId = classId;
+    }
 
     public String getSend() {
         return send;

@@ -15,9 +15,17 @@ public class Message {
     private String recipientName;//接收者名字
     private String message;//消息详情
     private long time=new Date().getTime();
-    private boolean alreadyRead=false;//是否已读
+    private String alreadyRead;//是否已读,True已读
     private String send;//是否发送Y已发送N未发送
     private Integer reply;//回复信息id
+
+    public String getAlreadyRead() {
+        return alreadyRead;
+    }
+
+    public void setAlreadyRead(String alreadyRead) {
+        this.alreadyRead = alreadyRead;
+    }
 
     public Integer getReply() {
         return reply;
@@ -59,13 +67,21 @@ public class Message {
         this.time = time;
     }
 
-    public boolean isAlreadyRead() {
+   /* public boolean isAlreadyRead() {
         return alreadyRead;
     }
 
     public void setAlreadyRead(boolean alreadyRead) {
         this.alreadyRead = alreadyRead;
+    }*/
+
+   /* public Boolean getAlreadyRead() {
+        return alreadyRead;
     }
+
+    public void setAlreadyRead(Boolean alreadyRead) {
+        this.alreadyRead = alreadyRead;
+    }*/
 
     public Integer getId() {
         return id;

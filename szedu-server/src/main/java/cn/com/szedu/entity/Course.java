@@ -3,6 +3,7 @@ package cn.com.szedu.entity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "course")
@@ -31,8 +32,24 @@ public class Course implements Cloneable{
     private String lessonTypeName;//课堂类型
     private String status;//课堂状态
     private long endTime;//结束时间
+    private long createTime=System.currentTimeMillis();//创建时间
+    private String portrait;//封面
 
+    public String getPortrait() {
+        return portrait;
+    }
 
+    public void setPortrait(String portrait) {
+        this.portrait = portrait;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
 
     public Integer getChapterId() {
         return chapterId;

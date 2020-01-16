@@ -1,19 +1,19 @@
 package cn.com.szedu.service;
 
 import cn.com.szedu.constant.ResultCode;
-import cn.com.szedu.entity.Course;
-import cn.com.szedu.entity.Exam;
+import cn.com.szedu.dao.mapper.IClassInfoMapper;
+import cn.com.szedu.entity.*;
 import cn.com.szedu.entity.IntermediateTable.ExamClassRelation;
+import cn.com.szedu.entity.IntermediateTable.StudentClassRelation;
 import cn.com.szedu.exception.TecherException;
 import cn.com.szedu.model.UserInfoForToken;
-import cn.com.szedu.model.teacher.ClassExamModel;
-import cn.com.szedu.model.teacher.ExamClassResultModel;
-import cn.com.szedu.model.teacher.ExamModel;
-import cn.com.szedu.model.teacher.TeacherExamDetailModel;
+import cn.com.szedu.model.teacher.*;
+import cn.com.szedu.repository.IClassInfoRepository;
 import cn.com.szedu.repository.IExamRepository;
+import cn.com.szedu.repository.IStudentAnswerCollectionRepository;
 import cn.com.szedu.repository.IntermediateTableRepository.IClassExamRelationRepository;
+import cn.com.szedu.repository.IntermediateTableRepository.IStudentClassRelationRepository;
 import cn.com.szedu.util.MappingEntity3ModelCoverter;
-import com.github.pagehelper.PageInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +32,16 @@ public class TeacherAchievementService {
     private IClassExamRelationRepository classExamRelationRepository;
     @Resource
     private IExamRepository examRepository;
+    @Resource
+    private IStudentClassRelationRepository studentClassRelationRepository;
+  /*  @Resource
+    private IStudentExamRelationRepository studentExamRelationRepository;*/
+    @Resource
+    private IStudentAnswerCollectionRepository studentAnswerCollectionRepository;//学生答案
+    @Resource
+    private IClassInfoMapper classInfoMapper;
+    @Resource
+    private IClassInfoRepository classInfoRepository;
 
 
 
@@ -77,7 +87,9 @@ public class TeacherAchievementService {
            for (ExamClassRelation e:examClassRelation) {
                in.value(e.getExamId());
            }
-           predicateList.add(criteriaBuilder.and(criteriaBuilder.and(in)));
+           if (examClassRelation.size()>0) {
+               predicateList.add(criteriaBuilder.and(criteriaBuilder.and(in)));
+           }
           /* if(!StringUtils.isEmpty(mmodel.getSubjectId())){
                predicateList.add(criteriaBuilder.equal(root.get("subjectId").as(Integer.class),mmodel.getSubjectId()));
            }
@@ -116,26 +128,37 @@ public class TeacherAchievementService {
      */
     public ClassExamModel getClassExam(UserInfoForToken userInfo, String examId)throws TecherException{
         if (StringUtils.isEmpty(userInfo) ||StringUtils.isEmpty(examId)){throw  new TecherException(ResultCode.PARAM_MISS_MSG);}
+        ClassExamModel classExamModel=new ClassExamModel();
         Integer sum=0;//应考人数
         Integer actual=0;//实考人数
         Integer miss;//缺考人数
-        List<String> examClass;//考试班级
-        List<String> aName;//实考人
+        List<String> examClass=new ArrayList<String>();//考试班级
+        List<String> aName=new ArrayList<String>();//实考人
         List<ExamClassRelation> examClassRelation=classExamRelationRepository.findByExamId(examId);//根据考试查出班级
         //判断班级是否为空，将班级加入考试班级
-
+        if (examClassRelation.size()<=0){throw new TecherException(ResultCode.SELECT_NULL_MSG);}
+        for(ExamClassRelation e:examClassRelation){
+            examClass.add(e.getClassId());
+        }
+        classExamModel.setExamClass(examClass);
         //根据班级查出学生
-
+        List<StudentClassRelation> student=studentClassRelationRepository.findByClassIdIn(examClass);
         //记录应考人数
-
-        //跟学生和考试的关系表，根据考试查出实考学生人数
-
+        classExamModel.setSum(student.size());
+        //跟据学生和考试的关系表，根据考试查出实考学生人数
+       // List<StudentAnswerCollection> sa=studentAnswerCollectionRepository.
+        List<StudentAnswerCollection> sa= classInfoMapper.getStudentByExam(examId);
         //记录实考人数
-
+        classExamModel.setActual(sa.size());
         //记录实考学生姓名
+        for (StudentAnswerCollection s:sa ) {
+            aName.add(s.getStudentName());
+        }
+        classExamModel.setaName(aName);
+
 
         //记录缺考人数=应考人数-实考人数
-
+        classExamModel.setMiss(student.size()-sa.size());
         //根据考试ID查询学生成绩
 
         //按分数段记录人数，等级
@@ -143,7 +166,7 @@ public class TeacherAchievementService {
         //计算分数段比例(分数段总人数/总学生*总题目)
 
         //添加到classExamModel
-        ClassExamModel classExamModel=new ClassExamModel();
+        //ClassExamModel classExamModel=new ClassExamModel();
         return classExamModel;
     }
 
@@ -157,18 +180,18 @@ public class TeacherAchievementService {
      * @return
      * @throws TecherException
      */
-    public PageInfo<ExamClassResultModel> getExamClassResult(UserInfoForToken userInfo, String examId,String classId, int pageNum1 ,int pageSize1)throws TecherException{
+    public Page<ExamClassResultModel> getExamClassResult(UserInfoForToken userInfo, String examId,String classId, int pageNum1 ,int pageSize1)throws TecherException{
         if (StringUtils.isEmpty(userInfo) ||StringUtils.isEmpty(examId)||StringUtils.isEmpty(classId)){throw  new TecherException(ResultCode.PARAM_MISS_MSG);}
         int pageNum=pageNum1==0?1:pageNum1;
         int pageSize=pageSize1==0?5:pageSize1;
         //根据考试ID查出考试总题目
-
+        List<TopQuestions> questions=classInfoMapper.getQuestionByExam(examId);
         //根据考试查出班级//根据考试和班级
-        List<ExamClassRelation> examClassRelation=classExamRelationRepository.findByExamId(examId);
+        //List<ExamClassRelation> examClassRelation=classExamRelationRepository.findByExamId(examId);
         //循环班级
 
         //根据班级查出学生
-
+        List<StudentClassRelation> scr=studentClassRelationRepository.findAllByClassId(classId);
         //根据学生答案表，根据学生考试ID查询学生答案
 
         //循环学生考试答案表
@@ -191,10 +214,27 @@ public class TeacherAchievementService {
 
         //计算正确率(正确题数/总题数)保留两位小数
 
+        Page<ExamClassResultModel> pageInfo=null;
 
-        PageInfo<ExamClassResultModel> pageInfo=new PageInfo<ExamClassResultModel>();
         return pageInfo;
     }
 
-
+    /**
+     * 根据考试查询班级
+     * @param userInfo
+     * @param examId
+     * @return
+     */
+    public List<ClassModel> getClassByExamId( UserInfoForToken userInfo, String examId){
+        ClassModel model=new ClassModel();
+        List<ClassModel> models=new ArrayList<ClassModel>();
+        List<ExamClassRelation> examClassRelations=classExamRelationRepository.findByExamId(examId);
+        for (ExamClassRelation ec:examClassRelations) {
+            ClassInfo classInfo=classInfoRepository.findExistById(ec.getClassId());//查询班纳吉信息
+            model.setClassId(classInfo.getId());
+            model.setClassName(classInfo.getClassName());
+            models.add(model);
+        }
+        return models;
+    }
 }

@@ -5,6 +5,7 @@ import cn.com.szedu.exception.TecherException;
 import cn.com.szedu.model.ResponseModel;
 import cn.com.szedu.model.UserInfoForToken;
 import cn.com.szedu.model.teacher.ClassExamModel;
+import cn.com.szedu.model.teacher.ClassModel;
 import cn.com.szedu.model.teacher.ExamClassResultModel;
 import cn.com.szedu.model.teacher.ExamModel;
 import cn.com.szedu.service.BackExamService;
@@ -18,6 +19,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/teacherAchievement")
@@ -45,9 +47,10 @@ public class TeacherAchievementController {
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @PostMapping("/getExamQuestion")
-    public ResponseModel<ExamModel> getExamByClass(@ModelAttribute UserInfoForToken userInfo, @RequestParam String exanId )throws TecherException {
-        ExamModel model=new ExamModel();
-        return  ResponseModel.sucess("",model);
+    public ResponseModel<ExamModel> getExamByClass(@ModelAttribute UserInfoForToken userInfo, @RequestParam String examId )throws TecherException {
+        //ExamModel model=new ExamModel();
+
+        return  ResponseModel.sucess("",backExamService.getExamByExamId(userInfo, examId));
     }
 
     @ApiOperation(value = "班级情况总览", notes = "")
@@ -64,7 +67,7 @@ public class TeacherAchievementController {
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @PostMapping("/getClassResult")
-    public ResponseModel<PageInfo<ExamClassResultModel>> getClassResult(@ModelAttribute UserInfoForToken userInfo, @RequestParam String examId , @RequestParam String classId , @RequestParam int pageNum , @RequestParam int pageSize)throws TecherException {
+    public ResponseModel getClassResult(@ModelAttribute UserInfoForToken userInfo, @RequestParam String examId , @RequestParam String classId , @RequestParam int pageNum , @RequestParam int pageSize)throws TecherException {
         return  ResponseModel.sucess("",teacherAchievementService.getExamClassResult(userInfo, examId, classId, pageNum, pageSize));
     }
 
@@ -85,4 +88,18 @@ public class TeacherAchievementController {
     public ResponseModel getAllExam(@ModelAttribute UserInfoForToken userInfo,String examId) {
         return ResponseModel.sucess("",backExamService.getExamByExamId(userInfo,examId));
     }
+
+    @ApiOperation(value = "根据考试id查询考试班级", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/getClassByExamId")
+    public ResponseModel<List<ClassModel>> getClassByExamId(@ModelAttribute UserInfoForToken userInfo,@RequestParam String examId) {
+        return ResponseModel.sucess("",teacherAchievementService.getClassByExamId(userInfo,examId));
+    }
+
+
+
+
+
 }
