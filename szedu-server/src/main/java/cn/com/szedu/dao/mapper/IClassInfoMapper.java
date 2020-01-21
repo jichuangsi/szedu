@@ -1,8 +1,10 @@
 package cn.com.szedu.dao.mapper;
 
 import cn.com.szedu.entity.*;
+import cn.com.szedu.model.StudentRankModel;
 import cn.com.szedu.model.student.StudentIntegralModel;
 import cn.com.szedu.model.StudentModel;
+import cn.com.szedu.model.student.StudyModel;
 import cn.com.szedu.model.teacher.ClassModel;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -91,12 +93,20 @@ public interface IClassInfoMapper {
             "OR `recipient_id` IN \n" +
             "<foreach collection='reId' item='item' open='(' separator=',' close=')'>'#{item}'</foreach> \n" +
             "AND `senderid` IS NULL ORDER BY `time` DESC  LIMIT #{num},#{size}</script>")*/
-    @Select("<script>SELECT m.*,m.`recipient_id` AS recipientId,m.`recipient_name` AS recipientName,m.`sender_name` AS senderName \n" +
+   /* @Select("<script>SELECT m.*,m.`recipient_id` AS recipientId,m.`recipient_name` AS recipientName,m.`sender_name` AS senderName \n" +
             ",m.`already_read` AS alreadyRead FROM `message` m \n" +
             "WHERE `recipient_id`=#{userId}  AND `senderid` IS NULL \n" +
             "OR `recipient_id` IN(SELECT `class_id` FROM `student_class_relation` WHERE `student_id`=#{userId})AND `senderid` IS NULL \n" +
             " ORDER BY `time` DESC LIMIT #{num},#{size}</script>")
     List<Message> getStudentMessage(@Param("userId") String userId, @Param("reId") List<String> reId, @Param("num") int num, @Param("size") int size);
+*/
+
+    @Select("<script>SELECT m.*,m.`recipient_id` AS recipientId,m.`recipient_name` AS recipientName,m.`sender_name` AS senderName \n" +
+            ",m.`already_read` AS alreadyRead FROM `message` m \n" +
+            "WHERE `recipient_id`=#{userId}  AND `senderid` IS NULL \n" +
+            "ORDER BY `time` DESC LIMIT #{num},#{size}</script>")
+    List<Message> getStudentMessage(@Param("userId") String userId, @Param("num") int num, @Param("size") int size);
+
 
     @Select("<script>SELECT m.*,m.`recipient_id` AS recipientId,m.`recipient_name` AS recipientName,m.`sender_name` AS senderName \n" +
             ",m.`already_read` AS alreadyRead FROM `message` m \n" +
@@ -133,4 +143,99 @@ public interface IClassInfoMapper {
              "AND `start_time` BETWEEN #{startTime} AND #{time}</script>")
     int countNum(@Param("subjectId") Integer subjectId, @Param("lessonTypeName") String lessonTypeName,
               @Param("startTime") long startTime, @Param("time") long time,@Param("studentId") String studentId);*/
+
+
+    @Select("<script>SELECT cw.`filename` AS `filename`,cw.`filepath` AS `filepath` ,cw.`teacher_name` AS teacherName,cw.`cover_pic` AS coverpic,\n" +
+            "\tcp.`push_time` AS pushtime,re.`type_name` AS `type`,cw.`subject`AS `subject`,pl.`name` AS label" +
+            " FROM `courseware` cw INNER JOIN `resources_rule` re ON cw.type=re.id \n" +
+            "\tINNER JOIN `course_push_resource_relation` cp ON cp.`pushresourceid` =cw.id INNER JOIN `upload_label` pl ON pl.`id`=cw.`label` WHERE cp.`push`= 'Y' " +
+            "\tAND cp.`course_id` IN(SELECT `course_id` FROM `course_class_relation` cc INNER JOIN `student_class_relation` sc \n" +
+            "\tON cc.`class_id`=sc.`class_id` WHERE `student_id`=#{studentId})\n" +
+            "\tAND cw.`subject`=#{subject} AND re.`type_name`=#{type}" +
+            "\tORDER BY `pushtime` ASC LIMIT #{num},#{size}</script>")
+    List<StudyModel> listCourseWare(@Param("studentId") String studentId, @Param("subject") String subject, @Param("type") String type, @Param("num") int num, @Param("size") int size);
+
+    @Select("<script>SELECT COUNT(*) FROM `courseware` cw INNER JOIN `resources_rule` re ON cw.type=re.id \n" +
+            "\tINNER JOIN `course_push_resource_relation` cp ON cp.`pushresourceid` =cw.id INNER JOIN `upload_label` pl ON pl.`id`=cw.`label` WHERE cp.`push`= 'Y' " +
+            "\tAND cp.`course_id` IN(SELECT `course_id` FROM `course_class_relation` cc INNER JOIN `student_class_relation` sc \n" +
+            "\tON cc.`class_id`=sc.`class_id` WHERE `student_id`=#{studentId})\n" +
+            "\tAND cw.`subject`=#{subject} AND re.`type_name`=#{type}</script>")
+    Integer countCourseWare(@Param("studentId") String studentId, @Param("subject") String subject, @Param("type") String type);
+
+    @Select("<script>SELECT cw.`filename` AS `filename`,cw.`filepath` AS `filepath` ,cw.`teacher_name` AS teacherName,cw.`cover_pic` AS coverpic,\n" +
+            "\tcp.`push_time` AS pushtime,re.`type_name` AS `type`,cw.`subject`AS `subject`,pl.`name` AS label" +
+            " FROM `courseware` cw INNER JOIN `resources_rule` re ON cw.type=re.id \n" +
+            "\tINNER JOIN `course_push_resource_relation` cp ON cp.`pushresourceid` =cw.id INNER JOIN `upload_label` pl ON pl.`id`=cw.`label` WHERE cp.`push`= 'Y' " +
+            "\tAND cp.`course_id` IN(SELECT `course_id` FROM `course_class_relation` cc INNER JOIN `student_class_relation` sc \n" +
+            "\tON cc.`class_id`=sc.`class_id` WHERE `student_id`=#{studentId})\n" +
+            "\tORDER BY `pushtime` ASC LIMIT #{num},#{size}</script>")
+    List<StudyModel> listCourseWareAll(@Param("studentId") String studentId, @Param("num") int num, @Param("size") int size);
+
+    @Select("<script>SELECT COUNT(*) FROM `courseware` cw INNER JOIN `resources_rule` re ON cw.type=re.id \n" +
+            "\tINNER JOIN `course_push_resource_relation` cp ON cp.`pushresourceid` =cw.id INNER JOIN `upload_label` pl ON pl.`id`=cw.`label` WHERE cp.`push`= 'Y' " +
+            "\tAND cp.`course_id` IN(SELECT `course_id` FROM `course_class_relation` cc INNER JOIN `student_class_relation` sc \n" +
+            "\tON cc.`class_id`=sc.`class_id` WHERE `student_id`=#{studentId})</script>")
+    Integer countCourseWareAll(@Param("studentId") String studentId);
+
+    @Select("<script>SELECT cw.`filename` AS `filename`,cw.`filepath` AS `filepath` ,cw.`teacher_name` AS teacherName,cw.`cover_pic` AS coverpic,\n" +
+            "\tcp.`push_time` AS pushtime,re.`type_name` AS `type`,cw.`subject`AS `subject`,pl.`name` AS label" +
+            " FROM `courseware` cw INNER JOIN `resources_rule` re ON cw.type=re.id \n" +
+            "\tINNER JOIN `course_push_resource_relation` cp ON cp.`pushresourceid` =cw.id INNER JOIN `upload_label` pl ON pl.`id`=cw.`label` WHERE cp.`push`= 'Y' " +
+            "\tAND cp.`course_id` IN(SELECT `course_id` FROM `course_class_relation` cc INNER JOIN `student_class_relation` sc \n" +
+            "\tON cc.`class_id`=sc.`class_id` WHERE `student_id`=#{studentId})\n" +
+            "\tAND cw.`subject`=#{subject}" +
+            "\tORDER BY `pushtime` ASC LIMIT #{num},#{size}</script>")
+    List<StudyModel> listCourseWareSubject(@Param("studentId") String studentId, @Param("subject") String subject, @Param("num") int num, @Param("size") int size);
+
+    @Select("<script>SELECT COUNT(*) FROM `courseware` cw INNER JOIN `resources_rule` re ON cw.type=re.id \n" +
+            "\tINNER JOIN `course_push_resource_relation` cp ON cp.`pushresourceid` =cw.id INNER JOIN `upload_label` pl ON pl.`id`=cw.`label` WHERE cp.`push`= 'Y' " +
+            "\tAND cp.`course_id` IN(SELECT `course_id` FROM `course_class_relation` cc INNER JOIN `student_class_relation` sc \n" +
+            "\tON cc.`class_id`=sc.`class_id` WHERE `student_id`=#{studentId})\n" +
+            "\tAND cw.`subject`=#{subject}</script>")
+    Integer countCourseWareSubject(@Param("studentId") String studentId, @Param("subject") String subject);
+
+
+    @Select("<script>SELECT cw.`filename` AS `filename`,cw.`filepath` AS `filepath` ,cw.`teacher_name` AS teacherName,cw.`cover_pic` AS coverpic,\n" +
+            "\tcp.`push_time` AS pushtime,re.`type_name` AS `type`,cw.`subject`AS `subject` ,pl.`name` AS label" +
+            "\tFROM `courseware` cw INNER JOIN `resources_rule` re ON cw.type=re.id \n" +
+            "\tINNER JOIN `course_push_resource_relation` cp ON cp.`pushresourceid` =cw.id INNER JOIN `upload_label` pl ON pl.`id`=cw.`label` WHERE cp.`push`= 'Y' " +
+            "\tAND cp.`course_id` IN(SELECT `course_id` FROM `course_class_relation` cc INNER JOIN `student_class_relation` sc \n" +
+            "\tON cc.`class_id`=sc.`class_id` WHERE `student_id`=#{studentId})\n" +
+            "\tAND  re.`type_name`=#{type}" +
+            "\tORDER BY `pushtime` DESC LIMIT #{num},#{size}</script>")
+    List<StudyModel> listCourseWareType(@Param("studentId") String studentId, @Param("type") String type, @Param("num") int num, @Param("size") int size);
+
+    @Select("<script>SELECT COUNT(*) FROM `courseware` cw INNER JOIN `resources_rule` re ON cw.type=re.id \n" +
+            "\tINNER JOIN `course_push_resource_relation` cp ON cp.`pushresourceid` =cw.id INNER JOIN `upload_label` pl ON pl.`id`=cw.`label` WHERE cp.`push`= 'Y' " +
+            "\tAND cp.`course_id` IN(SELECT `course_id` FROM `course_class_relation` cc INNER JOIN `student_class_relation` sc \n" +
+            "\tON cc.`class_id`=sc.`class_id` WHERE `student_id`=#{studentId})\n" +
+            "\tAND re.`type_name`=#{type}</script>")
+    Integer countCourseWareType(@Param("studentId") String studentId, @Param("type") String type);
+
+
+    @Select("<script>SELECT SUM(`score`) FROM `student_answer_collection` WHERE `exam_id`=#{examId}" +
+            " AND `student_id`=#{studentId}</script>")
+    Integer sumScoreExam(@Param("studentId") String studentId, @Param("examId") String examId);
+
+    @Select("<script>SELECT SUM(`score`) FROM `student_answer_collection` WHERE `exam_id`=#{examId} " +
+            "AND `student_id`=#{studentId} AND `score` IS NOT NULL</script>")
+    Integer sumScoreNotNull(@Param("studentId") String studentId, @Param("examId") String examId);
+
+    @Select("<script>SELECT SUM(`score`) FROM `student_answer_collection` WHERE `exam_id`=#{examId} " +
+            "AND `student_id`=#{studentId}</script>")
+    Integer sumScore(@Param("studentId") String studentId, @Param("examId") String examId);
+
+    @Select("<script>SELECT * ,SUM(`score`) AS s FROM `student_answer_collection` WHERE `exam_id`= #{examId} ORDER BY s DESC </script>")
+    List<StudentAnswerCollection> sumScoreAsc(@Param("examId") String examId);
+
+
+    @Select("<script> SET @curRank := 0;\n" +
+            " SELECT `student_id` AS studentId,SUM(`score`) AS score ,@curRank:= @curRank + 1 AS rank\n" +
+            " FROM `student_answer_collection` WHERE `exam_id`=#{examId}  ORDER BY score DESC</script>")
+    List<StudentRankModel> sumScoreCount(@Param("examId") String examId);
+
+   /* @Select("<script>  SET @curRank := 0;\n" +
+            " SELECT`student_id` AS studentId,SUM(`score`) AS score ,@curRank:= @curRank + 1 AS rank\n" +
+            " FROM `student_answer_collection` WHERE `exam_id`=#{examId}  ORDER BY s ASC</script>")
+    List<StudentRankModel> sumScoreCount2(@Param("examId") String examId);*/
 }

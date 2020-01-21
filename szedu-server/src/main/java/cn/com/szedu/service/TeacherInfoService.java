@@ -8,7 +8,7 @@ import cn.com.szedu.model.UserInfoForToken;
 import cn.com.szedu.model.teacher.ClassModel;
 import cn.com.szedu.model.teacher.MessageModel;
 import cn.com.szedu.model.teacher.TeacherInfoModel;
-import cn.com.szedu.model.teacher.TeacherModel;
+import cn.com.szedu.model.teacher.TeacherLoginModel;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,7 +18,7 @@ import java.util.List;
 public interface TeacherInfoService {
 
 
-    public TeacherModel loginTeacher(TeacherModel model) throws UserServiceException;
+    public TeacherLoginModel loginTeacher(TeacherLoginModel model) throws UserServiceException;
 
     Integer signin(UserInfoForToken userInfo) throws UserServiceException;
 
@@ -50,7 +50,7 @@ public interface TeacherInfoService {
     void updateintegralRule(UserInfoForToken userInfo, IntegralRule integralRule);
 
     //查看所有老师
-    List<TeacherModel> getAllTeacher(UserInfoForToken userInfo) throws UserServiceException;
+    List<TeacherLoginModel> getAllTeacher(UserInfoForToken userInfo) throws UserServiceException;
 
     //查看班级
     List<ClassModel> getAllStudent(UserInfoForToken userInfo) throws UserServiceException;
@@ -59,7 +59,7 @@ public interface TeacherInfoService {
 
     public void addintegral(UserInfoForToken userInfo, IntegralRecord integralRecord);
 
-    void deleteMessage(Integer id);//删除系统消息
+    void deleteMessage(UserInfoForToken userInfo,Integer id);//删除系统消息
 
     void deleteInteractionMessage(UserInfoForToken userInfo,Integer id);//删除互动消息
 
@@ -76,9 +76,10 @@ public interface TeacherInfoService {
     public List<ClassModel> getAllClass(UserInfoForToken userInfo) throws UserServiceException;
     public List<StudentModel> getStudentByClassId(UserInfoForToken userInfo, String classId) throws UserServiceException;
 
-    List<TeacherModel> getStudentTeacher(UserInfoForToken userInfo)throws UserServiceException;
+    List<TeacherLoginModel> getStudentTeacher(UserInfoForToken userInfo)throws UserServiceException;
 
 
   boolean teacherMessage(UserInfoForToken userInfo,MessageFeedback feedback)throws UserServiceException;
+    Page<SystemMessage>  getSystemAdmin(UserInfoForToken userInfo,int pageNum,int pageSize) throws UserServiceException;
     Integer countSystemMessage(UserInfoForToken userInfo,String schoolid)throws UserServiceException;
 }

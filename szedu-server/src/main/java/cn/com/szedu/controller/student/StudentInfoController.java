@@ -109,7 +109,7 @@ public class StudentInfoController {
         return ResponseModel.sucess("", studentInfoService.integralRanking(userInfo,pageNum,pageSize));
     }
 
-    @ApiOperation(value = "查看老师系统消息(学生通用)", notes = "")
+    @ApiOperation(value = "查看学生系统消息(学生通用)", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })

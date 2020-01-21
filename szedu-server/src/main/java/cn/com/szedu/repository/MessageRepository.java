@@ -19,7 +19,9 @@ public interface MessageRepository extends JpaRepository<Message,Integer>,Paging
     List<Message> findByRecipientIdAndSendAndSenderid(String teacherId, String send, String sendId);
     Integer countByRecipientIdAndSendAndSenderid(String teacherId,String send,String sendId);
     //系统
-    Integer countBySenderidIsNullAndAlreadyReadIsTrue();
+    //Integer countBySenderidIsNullAndAlreadyReadIsTrue();
+    //系统
+    Integer countBySenderidIsNullAndAlreadyReadIsFalse();
     //Integer countBySenderidIsNull
     //互动
     Integer countBySenderidIsNotNullAndAlreadyRead(String status);
@@ -33,4 +35,10 @@ public interface MessageRepository extends JpaRepository<Message,Integer>,Paging
     List<Message> findBySenderidAndRecipientId(String sendId,String teacherId);
 
     List<Message> findByRecipientId(String teacherId);
+
+    //系统
+    List<Message> findBySenderidIsNull();
+
+    //互动
+    List<Message>  findBySenderidIsNotNull();
 }

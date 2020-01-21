@@ -15,16 +15,24 @@ public class ClassExamModel {
     private Integer actual;//实考人数
     private Integer miss;//缺考人数
     private List<String> aName;//实考人
-    private ClassGradeDistributionModel model;
+    //private ClassGradeDistributionModel model;
+    private List<ClassGradeDistributionModel> model;
 
+    public List<ClassGradeDistributionModel> getModel() {
+        return model;
+    }
 
-    public ClassGradeDistributionModel getModel() {
+    public void setModel(List<ClassGradeDistributionModel> model) {
+        this.model = model;
+    }
+
+    /* public ClassGradeDistributionModel getModel() {
         return model;
     }
 
     public void setModel(ClassGradeDistributionModel model) {
         this.model = model;
-    }
+    }*/
 
     public String getExamId() {
         return examId;

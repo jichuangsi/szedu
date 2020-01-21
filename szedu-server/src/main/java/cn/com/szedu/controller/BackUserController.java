@@ -15,8 +15,10 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 
 @Api("后台用户相关功能")
 @RestController
@@ -135,23 +137,32 @@ public class BackUserController {
         return ResponseModel.sucess("", backUserService.sendSystemAdmin(userInfo,message));
     }
 
-    @ApiOperation(value = "管理员查看系统信息", notes = "")
+   /* @ApiOperation(value = "管理员查看系统信息", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @GetMapping("/getSystemAdmin")
     public ResponseModel getSystemAdmin(@ModelAttribute UserInfoForToken userInfo,@RequestParam String schoolId,@RequestParam String admin,@RequestParam int pageNum,@RequestParam int pageSize) throws UserServiceException {
         return ResponseModel.sucess("", backUserService.getSystemAdmin(userInfo,schoolId,admin,pageNum,pageSize));
+    }*/
+
+    @ApiOperation(value = "管理员查看系统信息", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/getSystemAdmin")
+    public ResponseModel getSystemAdmin(@ModelAttribute UserInfoForToken userInfo,@RequestParam int pageNum,@RequestParam int pageSize) throws UserServiceException {
+        return ResponseModel.sucess("", backUserService.getSystemAdmin(userInfo,pageNum,pageSize));
     }
 
-    @ApiOperation(value = "管理员所有系统信息", notes = "")
+   /* @ApiOperation(value = "管理员所有系统信息", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @GetMapping("/getSystemSchoolId")
     public ResponseModel getSystemSchoolId(@ModelAttribute UserInfoForToken userInfo,@RequestParam String schoolId,@RequestParam int pageNum,@RequestParam int pageSize) throws UserServiceException {
         return ResponseModel.sucess("", backUserService.getSystemSchoolId(userInfo,schoolId,pageNum,pageSize));
-    }
+    }*/
 
     @ApiOperation(value = "查询审核系统信息", notes = "")
     @ApiImplicitParams({
@@ -176,7 +187,9 @@ public class BackUserController {
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @GetMapping("/deleteCheckMessage")
-    public ResponseModel<Boolean> deletCheckMessage(@ModelAttribute UserInfoForToken userInfo,@RequestParam String id) throws UserServiceException {
-        return ResponseModel.sucess("", backUserService.deletCheckMessage(userInfo,id));
+    public ResponseModel<Boolean> deleteCheckMessage(@ModelAttribute UserInfoForToken userInfo,@RequestParam String id) throws UserServiceException {
+        return ResponseModel.sucess("", backUserService.deleteCheckMessage(userInfo,id));
     }
+
+
 }

@@ -13,6 +13,7 @@ import cn.com.szedu.model.UserInfoForToken;
 import cn.com.szedu.model.teacher.MessageModel;
 import cn.com.szedu.repository.*;
 import cn.com.szedu.repository.IntermediateTableRepository.IStudentClassRelationRepository;
+import cn.com.szedu.repository.IntermediateTableRepository.SystemUserRepository;
 import cn.com.szedu.service.BackTokenService;
 import cn.com.szedu.service.StudentInfoService;
 import cn.com.szedu.util.MappingEntity3ModelCoverter;
@@ -50,6 +51,8 @@ public class StudentInfoServiceImpl implements StudentInfoService {
     private IClassInfoRepository classInfoRepository;
     @Resource
     private SystemMessageRepository systemMessageRepository;
+    @Resource
+    private SystemUserRepository systemUserRepository;
 
     /**
      * 学生登录(根据账号和手机号)
@@ -262,37 +265,12 @@ public class StudentInfoServiceImpl implements StudentInfoService {
      */
     @Override
     public List<Message> getStudentMessage(UserInfoForToken userInfo, int pageNum, int pageSize) throws UserServiceException {
-        List<StudentClassRelation> scr=studentClassRelationRepository.findByStudentId(userInfo.getUserId());
+      /*  List<StudentClassRelation> scr=studentClassRelationRepository.findByStudentId(userInfo.getUserId());
         List<String> classId=new ArrayList<String>();
         for (StudentClassRelation s:scr){
             classId.add(s.getClassId());
-        }
-       /* String[] classId=new String[scr.size()+1] ;
-        if (scr.size()<=0) {throw new UserServiceException(ResultCode.SELECT_NULL_MSG);}
-            for (int i = 0; i < scr.size(); i++) {
-                classId[i] = scr.get(i).getClassId();
-            }*/
-        /*pageNum = pageNum - 1;
-        List<StudentClassRelation> scr=studentClassRelationRepository.findByStudentId(userInfo.getUserId());
-        List<String> classId=new ArrayList<String>();
-        for (StudentClassRelation s:scr){
-            classId.add(s.getClassId());
-        }
-        Pageable pageable = new PageRequest(pageNum, pageSize);
-        Page<Message> records = messageRepository.findAll((Root<Message> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) -> {
-            List<Predicate> predicateList = new ArrayList<>();
-            Path<Object> path = root.get("recipientId");
-            CriteriaBuilder.In<Object> in = criteriaBuilder.in(path);
-            for (String s:classId){
-                in.value(s);
-            }
-            predicateList.add(criteriaBuilder.or(criteriaBuilder.equal(root.get("recipientId"), userInfo.getUserId()),
-                    criteriaBuilder.and(criteriaBuilder.and(in))));
-            predicateList.add(criteriaBuilder.equal(root.get("send"), "Y"));//已发送
-            predicateList.add(criteriaBuilder.equal(root.get("senderid"), null));//系统
-            return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
-        }, pageable);*/
-        List<Message> list=classInfoMapper.getStudentMessage(userInfo.getUserId(),classId,(pageNum-1)*pageSize,pageSize);
+        }*/
+        List<Message> list=classInfoMapper.getStudentMessage(userInfo.getUserId(),(pageNum-1)*pageSize,pageSize);
         return list;
     }
 
@@ -325,7 +303,8 @@ public class StudentInfoServiceImpl implements StudentInfoService {
             throw new UserServiceException(ResultCode.PARAM_MISS_MSG);}
         StudentInfo studentInfo=studentInfoRespository.findFirstById(userInfo.getUserId());
         if (StringUtils.isEmpty(studentInfo)){throw new UserServiceException(ResultCode.SELECT_NULL_MSG);}
-        Integer count= systemMessageRepository.countByAlreadyReadAndSchoolIdAndExamine("false",studentInfo.getSchoolId(),2);
+        Integer count=systemUserRepository.countByAlreadyReadAndUid("false",studentInfo.getSchoolId());
+       // Integer count= systemMessageRepository.countByAlreadyReadAndSchoolIdAndExamine("false",studentInfo.getSchoolId(),2);
         return count;
     }
 

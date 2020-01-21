@@ -15,7 +15,7 @@ import cn.com.szedu.model.UserInfoForToken;
 import cn.com.szedu.model.teacher.ClassModel;
 import cn.com.szedu.model.teacher.MessageModel;
 import cn.com.szedu.model.teacher.TeacherInfoModel;
-import cn.com.szedu.model.teacher.TeacherModel;
+import cn.com.szedu.model.teacher.TeacherLoginModel;
 import cn.com.szedu.repository.*;
 import cn.com.szedu.repository.IntermediateTableRepository.*;
 import cn.com.szedu.service.BackTokenService;
@@ -26,15 +26,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -80,6 +78,9 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
     private IMessageFeedbackRepository messageFeedbackRepository;
     @Resource
     private SystemMessageRepository systemMessageRepository;
+    @Resource
+    private SystemUserRepository systemUserRepository;
+
     @Value("${file.uploadFolder}")
     private String uploadPath;
     @Value("${file.imagePath}")
@@ -93,8 +94,8 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
     /**
      * 老师登录
      */
-    public TeacherModel loginTeacher(TeacherModel model) throws UserServiceException {
-        TeacherModel model1 = null;
+    public TeacherLoginModel loginTeacher(TeacherLoginModel model) throws UserServiceException {
+        TeacherLoginModel model1 = null;
         if (StringUtils.isEmpty(model.getAcount()) || StringUtils.isEmpty(model.getPassword())) {
             throw new UserServiceException(ResultCode.PARAM_MISS_MSG);
         }
@@ -118,7 +119,7 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
                 model1.setSignin(true);//能签
             }
 
-          Map<String,Long> p=new HashMap<>();
+            Map<String, Long> p = new HashMap<>();
             p.put(userInfo.getId(), System.currentTimeMillis() / 1000);
             LoginMap.setMap(p);
             return model1;
@@ -150,16 +151,16 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
             IntegralRecord integralRecord = new IntegralRecord(
                     "签到", "老师登录签到", userInfo.getUserId(), userInfo.getUserName(),
                     1, System.currentTimeMillis());
-            addintegral(userInfo,integralRecord);
+            addintegral(userInfo, integralRecord);
             //integralRecordRepository.save(integralRecord);
             //系统信息
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
             String s = df.format(new Date());// new Date()为获取当前系统时间
 
             String messages = "您今日已成功签到获得1积分。" + s;
-           // Message message = new Message(teacherInfo.getId(), teacherInfo.getName(), messages, "N");
-            MessageModel message=new MessageModel(teacherInfo.getId(), teacherInfo.getName(), messages, "N");
-            addMessage(userInfo,message);
+            // Message message = new Message(teacherInfo.getId(), teacherInfo.getName(), messages, "N");
+            MessageModel message = new MessageModel(teacherInfo.getId(), teacherInfo.getName(), messages, "N");
+            addMessage(userInfo, message);
             //messageRepository.save(message);
         }/*else {
             throw new UserServiceException(ResultCode.SIGNIN_IS_EXIST);
@@ -212,7 +213,7 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
             predicateList.add(criteriaBuilder.equal(root.get("senderid"), null));//系统
             return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
         }, pageable);*/
-       List<Message> list=classInfoMapper.getTeacherMessage(userInfo.getUserId(),(pageNum-1)*pageSize,pageSize);
+        List<Message> list = classInfoMapper.getTeacherMessage(userInfo.getUserId(), (pageNum - 1) * pageSize, pageSize);
         return list;
     }
 
@@ -223,13 +224,19 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
      * @return
      */
     @Override
-    public Integer getTeacherMessageCount(UserInfoForToken userInfo)throws UserServiceException {
-        if (StringUtils.isEmpty(userInfo)){throw new UserServiceException(ResultCode.PARAM_MISS_MSG);}
-        Integer count=messageRepository.countByRecipientIdAndAlreadyRead(userInfo.getUserId(),"false");
-        TeacherInfo teacherInfo=teacherInfoRepository.findExsitById(userInfo.getUserId());
-        if (StringUtils.isEmpty(teacherInfo.getSchoolId())){throw new UserServiceException(ResultCode.SELECT_NULL_MSG);}
-        Integer count2=systemMessageRepository.countByAlreadyReadAndSchoolIdAndExamine("false",teacherInfo.getSchoolId(),2);
-        return count+count2;
+    public Integer getTeacherMessageCount(UserInfoForToken userInfo) throws UserServiceException {
+        if (StringUtils.isEmpty(userInfo)) {
+            throw new UserServiceException(ResultCode.PARAM_MISS_MSG);
+        }
+        //Integer count=messageUserRelationRepository.countByAlreadyReadAndUId("false",userInfo.getUserId());
+        Integer count = messageRepository.countByRecipientIdAndAlreadyRead(userInfo.getUserId(), "false");
+        TeacherInfo teacherInfo = teacherInfoRepository.findExsitById(userInfo.getUserId());
+        if (StringUtils.isEmpty(teacherInfo.getSchoolId())) {
+            throw new UserServiceException(ResultCode.SELECT_NULL_MSG);
+        }
+        Integer count2 =systemUserRepository.countByAlreadyReadAndUid("false",userInfo.getUserId());
+        //Integer count2 = systemMessageRepository.countBySchoolIdAndExamine("false", teacherInfo.getSchoolId(), 2);
+        return count + count2;
     }
 
     /**
@@ -269,7 +276,7 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
     @Override
     public void getUserLogin(String userId) {
         IntegralRule integralRule = integralRuleRepository.findByRoleAndType("老师", "在线");
-        if (integralRule==null){
+        if (integralRule == null) {
             return;
         }
         //修改老师积分
@@ -293,11 +300,14 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
      * @throws UserServiceException
      */
     @Override
-    public boolean updateTeacherMessage(UserInfoForToken userInfo,Integer id) throws UserServiceException {
-       // Message message = messageRepository.findByRecipientIdAndSenderidAndId(userInfo.getUserId(), null,id);//系统信息
+    public boolean updateTeacherMessage(UserInfoForToken userInfo, Integer id) throws UserServiceException {
+        // Message message = messageRepository.findByRecipientIdAndSenderidAndId(userInfo.getUserId(), null,id);//系统信息
         Message message = messageRepository.findByIdIs(id);
         message.setAlreadyRead("true");
         messageRepository.save(message);//已读
+       /* MessageUserRelation messageUserRelation=new MessageUserRelation();
+        messageUserRelation.setAlreadyRead("true");
+        messageUserRelationRepository.save(messageUserRelation);*/
         return true;
     }
 
@@ -315,7 +325,7 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
         Pageable pageable = new PageRequest(pageNum, pageSize);
         Page<IntegralRule> records = integralRuleRepository.findAll((Root<IntegralRule> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) -> {
             List<Predicate> predicateList = new ArrayList<>();
-            predicateList.add(criteriaBuilder.equal(root.get("role"),"老师"));
+            predicateList.add(criteriaBuilder.equal(root.get("role"), "老师"));
             return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
         }, pageable);
         return records;
@@ -329,16 +339,16 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
      */
     @Override
     public Integer sendMessageByTeacher(UserInfoForToken userInfo) {
-        if (StringUtils.isEmpty(userInfo)){
+        if (StringUtils.isEmpty(userInfo)) {
             return 0;
         }
         Integer count = messageRepository.countByRecipientIdAndSendAndSenderid(userInfo.getUserId(), "N", null);
         List<Message> message = messageRepository.findByRecipientIdAndSendAndSenderid(userInfo.getUserId(), "N", null);
-      for (Message m:message){
-          Message message1=messageRepository.findByIdIs(m.getId());
-          message1.setSend("Y");//修改为发送状态
-          messageRepository.save(message1);
-      }
+        for (Message m : message) {
+            Message message1 = messageRepository.findByIdIs(m.getId());
+            message1.setSend("Y");//修改为发送状态
+            messageRepository.save(message1);
+        }
         return count;//返回发送消息数
     }
 
@@ -371,8 +381,8 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
      * @param userInfo
      * @return
      */
-    private TeacherModel getTeacherDetail(TeacherInfo userInfo) {
-        TeacherModel model1 = null;
+    private TeacherLoginModel getTeacherDetail(TeacherInfo userInfo) {
+        TeacherLoginModel model1 = null;
         List<CourseUserRelation> tcr = courseUserRelationRepository.findAllByUid(userInfo.getId());//老师课堂
         //List<ResourceTeacherInfoRelation> trr = resourceTeacherInfoRelationRepository.findByTeacherId(userInfo.getId());//老师资源
         //List<CourseWare> trr=
@@ -426,7 +436,7 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
      */
     @Override
     public boolean addInteractionMessage(UserInfoForToken userInfo, SandMessageModel model) {
-        for (IDNameModel i : model.getRecipient()) {
+        for (IDNameModel i : model.getRecipient()) {//多发
             model.setSend("Y");
             Message message = MappingEntity3ModelCoverter.CONVERTERFROMBACKMESSAGEMODEL(userInfo, model);
             message.setRecipientId(i.getId());//接收者
@@ -435,20 +445,22 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
             MessageUserRelation mur = new MessageUserRelation();//信息id和用户id,一条信息对应多个用户
             mur.setmId(message1.getId());
             mur.setuId(i.getId());//接收者
+
             messageUserRelationRepository.save(mur);
-            MessageUserRelation mur2 = new MessageUserRelation();//信息id和用户id,一条信息对应多个用户
-            mur2.setmId(message1.getId());
-            mur2.setuId(userInfo.getUserId());//发送者
-            messageUserRelationRepository.save(mur2);
+                MessageUserRelation mur2 = new MessageUserRelation();//信息id和用户id,一条信息对应多个用户
+                mur2.setmId(message1.getId());
+                mur2.setuId(userInfo.getUserId());//发送者
+
+                messageUserRelationRepository.save(mur2);
         }
-        if (model.getClassId()!=null){
-            List<String> studentId=new ArrayList<>();
-            List<StudentClassRelation> studentClassRelations=srelationRepository.findByClassIdIn(model.getClassId());
-            for (StudentClassRelation s:studentClassRelations){
+        if (model.getClassId() != null) {
+            List<String> studentId = new ArrayList<>();
+            List<StudentClassRelation> studentClassRelations = srelationRepository.findByClassIdIn(model.getClassId());
+            for (StudentClassRelation s : studentClassRelations) {
                 studentId.add(s.getStudentId());
             }
-            List<StudentInfo> studentInfos=studentInfoRespository.findByIdIn(studentId);
-            for (StudentInfo info:studentInfos){
+            List<StudentInfo> studentInfos = studentInfoRespository.findByIdIn(studentId);
+            for (StudentInfo info : studentInfos) {
                 model.setSend("Y");
                 Message message = MappingEntity3ModelCoverter.CONVERTERFROMBACKMESSAGEMODEL(userInfo, model);
                 message.setRecipientId(info.getId());//接收者
@@ -457,10 +469,12 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
                 MessageUserRelation mur = new MessageUserRelation();//信息id和用户id,一条信息对应多个用户
                 mur.setmId(message1.getId());
                 mur.setuId(info.getId());//接收者
+
                 messageUserRelationRepository.save(mur);
                 MessageUserRelation mur2 = new MessageUserRelation();//信息id和用户id,一条信息对应多个用户
                 mur2.setmId(message1.getId());
                 mur2.setuId(userInfo.getUserId());//发送者
+
                 messageUserRelationRepository.save(mur2);
             }
         }
@@ -492,30 +506,31 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
      * @return
      */
     @Override
-    public List<TeacherModel> getAllTeacher(UserInfoForToken userInfo) {
-        List<TeacherModel> modelList = new ArrayList<TeacherModel>();
-        TeacherInfo teacher=teacherInfoRepository.findExsitById(userInfo.getUserId());
-        List<TeacherInfo> teacherInfo = teacherInfoRepository.findByIdNotAndSchoolId(userInfo.getUserId(),teacher.getSchoolId());//除了自己
+    public List<TeacherLoginModel> getAllTeacher(UserInfoForToken userInfo) {
+        List<TeacherLoginModel> modelList = new ArrayList<TeacherLoginModel>();
+        TeacherInfo teacher = teacherInfoRepository.findExsitById(userInfo.getUserId());
+        List<TeacherInfo> teacherInfo = teacherInfoRepository.findByIdNotAndSchoolId(userInfo.getUserId(), teacher.getSchoolId());//除了自己
         for (TeacherInfo t : teacherInfo) {
-            TeacherModel teacherModel = MappingEntity3ModelCoverter.CONVERTERFROMBACKTEACHERINFO(t);
-            modelList.add(teacherModel);
+            TeacherLoginModel TeacherLoginModel = MappingEntity3ModelCoverter.CONVERTERFROMBACKTEACHERINFO(t);
+            modelList.add(TeacherLoginModel);
         }
         return modelList;
     }
+
     @Override
     public List<ClassModel> getAllStudent(UserInfoForToken userInfo) {
-        List<ClassModel> models=new ArrayList<ClassModel>();
-        ClassModel classModel=new ClassModel();
+        List<ClassModel> models = new ArrayList<ClassModel>();
+        ClassModel classModel = new ClassModel();
         List<StudentIntegralModel> modelList = new ArrayList<StudentIntegralModel>();
-        StudentIntegralModel model=new StudentIntegralModel();
-        List<String> classId=new ArrayList<String>();
-        List<String> studentId=new ArrayList<String>();
-        List<StudentClassRelation> studentClassRelations=srelationRepository.findByStudentId(userInfo.getUserId());//同班学生
-        for (StudentClassRelation s:studentClassRelations){
+        StudentIntegralModel model = new StudentIntegralModel();
+        List<String> classId = new ArrayList<String>();
+        List<String> studentId = new ArrayList<String>();
+        List<StudentClassRelation> studentClassRelations = srelationRepository.findByStudentId(userInfo.getUserId());//同班学生
+        for (StudentClassRelation s : studentClassRelations) {
             classId.add(s.getClassId());
         }
-        List<ClassInfo> list=classInfoRepository.getClassInfoByIdIn(null,classId);
-        for (ClassInfo c:list){
+        List<ClassInfo> list = classInfoRepository.getClassInfoByIdIn(null, classId);
+        for (ClassInfo c : list) {
             classModel.setClassId(c.getId());
             classModel.setClassName(c.getClassName());
             models.add(classModel);
@@ -536,20 +551,43 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
     }
 
     @Override
-    public void deleteMessage(Integer id) {
-        messageRepository.deleteById(id);
+    public void deleteMessage(UserInfoForToken userInfo, Integer id) {
+        //messageRepository.deleteById(id);
+        messageUserRelationRepository.deleteByMIdAndUId(id, userInfo.getUserId());
     }
 
     @Override
-    public void deleteInteractionMessage(UserInfoForToken userInfo,Integer id) {
+    public void deleteInteractionMessage(UserInfoForToken userInfo, Integer id) {
         //messageRepository.deleteById(id);
-        messageUserRelationRepository.deleteByMIdAndUId(id,userInfo.getUserId());
+        messageUserRelationRepository.deleteByMIdAndUId(id, userInfo.getUserId());
     }
 
     @Override
     public void addMessage(UserInfoForToken userInfo, MessageModel message) {
-        Message message1=MappingEntity3ModelCoverter.CONVERTERFROMBACKMESSAGE(userInfo,message);
-        messageRepository.save(message1);
+        Message message1 = MappingEntity3ModelCoverter.CONVERTERFROMBACKMESSAGE(userInfo, message);
+        Message message2=null;
+        ClassInfo classInfo=classInfoRepository.findExistById(message.getRecipientId());
+        if (classInfo!=null){//给班级下的所有学生
+            List<StudentClassRelation> sc=srelationRepository.findAllByClassId(classInfo.getId());
+            if (sc.size()>=0){
+                for (StudentClassRelation s:sc) {
+                    message1.setRecipientId(s.getStudentId());
+                    message2=messageRepository.save(message1);
+                    /*MessageUserRelation messageUserRelation = new MessageUserRelation();
+                    messageUserRelation.setmId(message2.getId());
+                    messageUserRelation.setuId(s.getStudentId());*/
+                }
+            }
+        }
+        TeacherInfo teacherInfo=teacherInfoRepository.findExsitById(message.getRecipientId());
+        if (teacherInfo!=null){//给老师
+            message1.setRecipientId(teacherInfo.getId());
+            message2=messageRepository.save(message1);
+           /* MessageUserRelation messageUserRelation = new MessageUserRelation();
+           // messageUserRelation.setAlreadyRead("false");
+            messageUserRelation.setmId(message2.getId());
+            messageUserRelation.setuId(teacherInfo.getId());*/
+        }
     }
 
     /***
@@ -565,78 +603,102 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
 
     /**
      * 根据用户查询聊天
+     *
      * @param userInfo
      * @param sendId
      * @param pageNum
      * @param pageSize
-     * @returnFF
      * @throws UserServiceException
+     * @returnFF
      */
     @Override
-    public List<Message> getMessageBysenderid(UserInfoForToken userInfo,String sendId, int pageNum, int pageSize) throws UserServiceException {
-    List<Message> list=classInfoMapper.getMessageBysenderid(userInfo.getUserId(),sendId,(pageNum-1)*pageSize,pageSize);
-
-        return list;
+    public List<Message> getMessageBysenderid(UserInfoForToken userInfo, String sendId, int pageNum, int pageSize) throws UserServiceException {
+        List<Message> list = classInfoMapper.getMessageBysenderid(userInfo.getUserId(), sendId, (pageNum - 1) * pageSize, pageSize);
+          return list;
     }
 
     /**
      * 系统未读
+     *
      * @param userInfo
      * @return
      * @throws UserServiceException
      */
     @Override
     public Integer getSystemMessageCount(UserInfoForToken userInfo) throws UserServiceException {
-        Integer count=messageRepository.countBySenderidIsNullAndAlreadyReadIsTrue();
+        if (StringUtils.isEmpty(userInfo)){throw new UserServiceException(ResultCode.PARAM_MISS_MSG);}
+        Integer count = messageRepository.countBySenderidIsNullAndAlreadyReadIsFalse();
+
+       /* List<Integer> mid=new ArrayList<Integer>();
+        List<Message> list=messageRepository.findBySenderidIsNull();
+        for (Message m:list){
+            mid.add(m.getId());
+        }
+        Integer count=0;
+        if (mid.size()>=0){
+            count=messageUserRelationRepository.countByAlreadyReadAndMIdIn("false",mid);
+        }*/
         return count;
     }
 
     /**
      * 互动未读
+     *
      * @param userInfo
      * @return
      * @throws UserServiceException
      */
     @Override
     public Integer gethuMessageCount(UserInfoForToken userInfo) throws UserServiceException {
-        Integer count=messageRepository.countBySenderidIsNotNullAndAlreadyRead("ture");
+        if (StringUtils.isEmpty(userInfo)){throw new UserServiceException(ResultCode.PARAM_MISS_MSG);}
+       /* List<Integer> mid=new ArrayList<Integer>();
+        List<Message> list=messageRepository.findBySenderidIsNotNull();
+        for (Message m:list){
+            mid.add(m.getId());
+        }
+        Integer count=0;
+        if (mid.size()>=0){
+            count=messageUserRelationRepository.countByAlreadyReadAndMIdIn("false",mid);
+        }*/
+        Integer count = messageRepository.countBySenderidIsNotNullAndAlreadyRead("false");
         return count;
     }
 
     /**
      * 老师个人中心
+     *
      * @param userInfo
      * @param teacherId
      * @return
      * @throws UserServiceException
      */
     @Override
-    public TeacherInfoModel teacherinfo(UserInfoForToken userInfo,String teacherId) throws UserServiceException {
-        TeacherInfoModel model=new TeacherInfoModel();
-        ClassModel classModel=new ClassModel();
-        List<ClassModel> cmodel=new ArrayList<ClassModel>();
-        TeacherInfo teacherInfo=teacherInfoRepository.findExsitById(teacherId);//查询老师信息
-        if (teacherInfo==null){
+    public TeacherInfoModel teacherinfo(UserInfoForToken userInfo, String teacherId) throws UserServiceException {
+        TeacherInfoModel model = new TeacherInfoModel();
+        ClassModel classModel = new ClassModel();
+        List<ClassModel> cmodel = new ArrayList<ClassModel>();
+        TeacherInfo teacherInfo = teacherInfoRepository.findExsitById(teacherId);//查询老师信息
+        if (teacherInfo == null) {
             throw new UserServiceException(ResultCode.SELECT_NULL_MSG);
         }
-        SchoolInfo schoolInfos =schoolInfoRepository.findFirstById(teacherInfo.getSchoolId());
-        List<ClassRelation> classRelation=techerClassRelationRepository.findByTecherId(teacherId);
-        if (classRelation.size()<=0){
+        SchoolInfo schoolInfos = schoolInfoRepository.findFirstById(teacherInfo.getSchoolId());
+        List<ClassRelation> classRelation = techerClassRelationRepository.findByTecherId(teacherId);
+        if (classRelation.size() <= 0) {
             throw new UserServiceException(ResultCode.SELECT_NULL_MSG);
         }
-        for (ClassRelation c:classRelation){
-            ClassInfo classInfo=classInfoRepository.findExistById(c.getClassId());
-            if (classInfo!=null){
+        for (ClassRelation c : classRelation) {
+            ClassInfo classInfo = classInfoRepository.findExistById(c.getClassId());
+            if (classInfo != null) {
                 classModel.setClassId(classInfo.getId());
                 classModel.setClassName(classInfo.getClassName());
                 cmodel.add(classModel);
             }
 
         }
-        SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd"); //设置格式
-        String timeText="";
-        if (!StringUtils.isEmpty(teacherInfo.getBirthday())){
-            timeText=format.format(teacherInfo.getBirthday());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); //设置格式
+        String timeText = "";
+        if (!StringUtils.isEmpty(teacherInfo.getBirthday())) {
+            timeText = format.format(teacherInfo.getBirthday());
         }
         model.setTeacherBirthday(timeText);
         model.setTeacherInfo(teacherInfo);//老师基本信息
@@ -647,24 +709,25 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
 
     /**
      * 修改老师信息
+     *
      * @param userInfo
      * @param teacherInfo
      * @throws UserServiceException
      */
     @Override
     public boolean updateteacherinfo(UserInfoForToken userInfo, TeacherInfo teacherInfo) throws UserServiceException {
-        TeacherInfo teacherInfo1=teacherInfoRepository.findExsitById(teacherInfo.getId());
-        TeacherInfo count=teacherInfoRepository.findByAccountAndPwd(teacherInfo.getAccount(),teacherInfo.getPwd());
-            if (count!=null){//存在
-                throw new UserServiceException(ResultCode.ACCOUNT_ISEXIST_MSG);
-            }
-            teacherInfo1.setName(teacherInfo.getName());
-            // teacherInfo1.setAccount(teacherInfo.getAccount());
-            teacherInfo1.setAddress(teacherInfo.getAddress());
-            teacherInfo1.setSex(teacherInfo.getSex());
-            teacherInfo1.setPhone(teacherInfo.getPhone());
-            teacherInfo1.setBirthday(teacherInfo.getBirthday());
-            teacherInfoRepository.save(teacherInfo1);
+        TeacherInfo teacherInfo1 = teacherInfoRepository.findExsitById(teacherInfo.getId());
+        TeacherInfo count = teacherInfoRepository.findByAccountAndPwd(teacherInfo.getAccount(), teacherInfo.getPwd());
+        if (count != null) {//存在
+            throw new UserServiceException(ResultCode.ACCOUNT_ISEXIST_MSG);
+        }
+        teacherInfo1.setName(teacherInfo.getName());
+        // teacherInfo1.setAccount(teacherInfo.getAccount());
+        teacherInfo1.setAddress(teacherInfo.getAddress());
+        teacherInfo1.setSex(teacherInfo.getSex());
+        teacherInfo1.setPhone(teacherInfo.getPhone());
+        teacherInfo1.setBirthday(teacherInfo.getBirthday());
+        teacherInfoRepository.save(teacherInfo1);
         /*if (userInfo.getUserName().equalsIgnoreCase(teacherInfo.getName())) {//修改了老师姓名
             integralRecordRepository.updateOperatorName(userInfo.getUserId(), teacherInfo.getName());
         }*/
@@ -673,17 +736,18 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
 
     /**
      * 上传老师头像
+     *
      * @param file
      * @param userInfo
      * @param teacherId
      * @throws IOException
      */
     @Override
-    public Boolean teacherinfoPic(MultipartFile file, UserInfoForToken userInfo, String teacherId)throws IOException {
-        if (StringUtils.isEmpty(teacherId)){//
+    public Boolean teacherinfoPic(MultipartFile file, UserInfoForToken userInfo, String teacherId) throws IOException {
+        if (StringUtils.isEmpty(teacherId)) {//
             throw new IOException(ResultCode.PARAM_MISS_MSG);
         }
-        TeacherInfo teacherInfo=teacherInfoRepository.findExsitById(teacherId);
+        TeacherInfo teacherInfo = teacherInfoRepository.findExsitById(teacherId);
       /*  teacherInfo.setTeacherPic(file.getBytes());
         System.out.println(file.getBytes());*/
 
@@ -691,32 +755,34 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
         String fileName = file.getOriginalFilename();
         //获取文件后缀名
         String suffixName = fileName.substring(fileName.lastIndexOf("."));
-        double fileSize = (double) file.getSize()/1024/1024;//MB
-        if(fileSize>3){
+        double fileSize = (double) file.getSize() / 1024 / 1024;//MB
+        if (fileSize > 3) {
             throw new IOException("图片过大！");
         }
         //重新生成文件名
-        fileName =UUID.randomUUID()+suffixName;
-        File file1=new File(uploadPath+imagePath+fileName);
-        if (!file1.exists()){
+        fileName = UUID.randomUUID() + suffixName;
+        File file1 = new File(uploadPath + imagePath + fileName);
+        if (!file1.exists()) {
             //创建文件夹
             file1.getParentFile().mkdir();
         }
         file.transferTo(file1);
-        teacherInfo.setPortrait(uri+fileName);
+        teacherInfo.setPortrait(uri + fileName);
         teacherInfoRepository.save(teacherInfo);
         return true;
     }
 
     @Override
     public List<ClassModel> getAllClass(UserInfoForToken userInfo) throws UserServiceException {
-        if (StringUtils.isEmpty(userInfo)){throw new UserServiceException(ResultCode.PARAM_MISS_MSG); }
-        List<ClassModel> classModels=new ArrayList<ClassModel>();
-        List<ClassModel> classModels2=new ArrayList<ClassModel>();
-        ClassModel classi=null;
-        classModels=classInfoMapper.getTeacherIdById(userInfo.getUserId());
-        for (ClassModel info:classModels) {
-            List<StudentClassRelation> sclist=srelationRepository.findAllByClassId(info.getClassId());//查询班级所有学生
+        if (StringUtils.isEmpty(userInfo)) {
+            throw new UserServiceException(ResultCode.PARAM_MISS_MSG);
+        }
+        List<ClassModel> classModels = new ArrayList<ClassModel>();
+        List<ClassModel> classModels2 = new ArrayList<ClassModel>();
+        ClassModel classi = null;
+        classModels = classInfoMapper.getTeacherIdById(userInfo.getUserId());
+        for (ClassModel info : classModels) {
+            List<StudentClassRelation> sclist = srelationRepository.findAllByClassId(info.getClassId());//查询班级所有学生
             info.setStudent(sclist.size());
             classModels2.add(info);
         }
@@ -725,23 +791,23 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
 
     @Override
     public List<StudentModel> getStudentByClassId(UserInfoForToken userInfo, String classId) throws UserServiceException {
-        if (StringUtils.isEmpty(userInfo) ||StringUtils.isEmpty(classId)){
-            throw  new UserServiceException(ResultCode.PARAM_MISS_MSG);
+        if (StringUtils.isEmpty(userInfo) || StringUtils.isEmpty(classId)) {
+            throw new UserServiceException(ResultCode.PARAM_MISS_MSG);
         }
-        ClassInfo classInfo=classInfoRepository.findExistById(classId);
-        List<StudentClassRelation> relation=srelationRepository.findAllByClassId(classId);
-        List<StudentModel> studentModels=new ArrayList<StudentModel>();
-        List<StudentModel> models=new ArrayList<StudentModel>();
-        if (relation!=null){
-            for (StudentClassRelation s:relation) {
-                StudentInfo info=studentRespository.findFirstByid(s.getStudentId());
-                if (info!=null){
-                    StudentModel model=MappingEntity3ModelCoverter.CONVERTERFROMSTUDENTMODEL(info);
+        ClassInfo classInfo = classInfoRepository.findExistById(classId);
+        List<StudentClassRelation> relation = srelationRepository.findAllByClassId(classId);
+        List<StudentModel> studentModels = new ArrayList<StudentModel>();
+        List<StudentModel> models = new ArrayList<StudentModel>();
+        if (relation != null) {
+            for (StudentClassRelation s : relation) {
+                StudentInfo info = studentRespository.findFirstByid(s.getStudentId());
+                if (info != null) {
+                    StudentModel model = MappingEntity3ModelCoverter.CONVERTERFROMSTUDENTMODEL(info);
                     model.setSpecialtity(classInfo.getSpeciality());
                     studentModels.add(model);
                 }
             }
-            models=classInfoMapper.getByClassId(classId);
+            models = classInfoMapper.getByClassId(classId);
 
             return models;
         }
@@ -749,50 +815,92 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
     }
 
     @Override
-    public List<TeacherModel> getStudentTeacher(UserInfoForToken userInfo) throws UserServiceException {
-        if (StringUtils.isEmpty(userInfo)){throw new UserServiceException(ResultCode.PARAM_MISS_MSG);}
-        List<TeacherModel> models=new ArrayList<TeacherModel>();
-        TeacherModel teacherModel=new TeacherModel();
+    public List<TeacherLoginModel> getStudentTeacher(UserInfoForToken userInfo) throws UserServiceException {
+        if (StringUtils.isEmpty(userInfo)) {
+            throw new UserServiceException(ResultCode.PARAM_MISS_MSG);
+        }
+        List<TeacherLoginModel> models = new ArrayList<TeacherLoginModel>();
+        TeacherLoginModel TeacherLoginModel = new TeacherLoginModel();
         List<StudentIntegralModel> modelList = new ArrayList<StudentIntegralModel>();
-        StudentIntegralModel model=new StudentIntegralModel();
-        List<String> classId=new ArrayList<String>();
-        List<String> teacherId=new ArrayList<String>();
-        List<StudentClassRelation> studentClassRelations=srelationRepository.findByStudentId(userInfo.getUserId());//同班学生
-        for (StudentClassRelation s:studentClassRelations){
+        StudentIntegralModel model = new StudentIntegralModel();
+        List<String> classId = new ArrayList<String>();
+        List<String> teacherId = new ArrayList<String>();
+        List<StudentClassRelation> studentClassRelations = srelationRepository.findByStudentId(userInfo.getUserId());//同班学生
+        for (StudentClassRelation s : studentClassRelations) {
             classId.add(s.getClassId());
         }
-        List<ClassRelation> teacher=techerClassRelationRepository.findByClassIdIn(classId);
-        for (ClassRelation c:teacher){
+        List<ClassRelation> teacher = techerClassRelationRepository.findByClassIdIn(classId);
+        for (ClassRelation c : teacher) {
             teacherId.add(c.getTecherId());
         }
-        List<TeacherInfo> teacherInfos=teacherInfoRepository.findByIdIn(teacherId);
-        if (teacherInfos.size()<=0){throw new UserServiceException(ResultCode.SELECT_NULL_MSG);}
-        for (TeacherInfo t:teacherInfos){
-            teacherModel.setTeacherId(t.getId());
-            teacherModel.setTeacherName(t.getName());
-            teacherModel.setAcount(t.getAccount());
-            models.add(teacherModel);
+        List<TeacherInfo> teacherInfos = teacherInfoRepository.findByIdIn(teacherId);
+        if (teacherInfos.size() <= 0) {
+            throw new UserServiceException(ResultCode.SELECT_NULL_MSG);
+        }
+        for (TeacherInfo t : teacherInfos) {
+            TeacherLoginModel.setTeacherId(t.getId());
+            TeacherLoginModel.setTeacherName(t.getName());
+            TeacherLoginModel.setAcount(t.getAccount());
+            models.add(TeacherLoginModel);
         }
         return models;
     }
 
     @Override
     public boolean teacherMessage(UserInfoForToken userInfo, MessageFeedback feedback) throws UserServiceException {
-        if (StringUtils.isEmpty(userInfo) && StringUtils.isEmpty(feedback)){throw new UserServiceException(ResultCode.PARAM_MISS_MSG);}
-            feedback.setTeacherId(userInfo.getUserId());
+        if (StringUtils.isEmpty(userInfo) && StringUtils.isEmpty(feedback)) {
+            throw new UserServiceException(ResultCode.PARAM_MISS_MSG);
+        }
+        feedback.setTeacherId(userInfo.getUserId());
+        feedback.setTeacherName(userInfo.getUserName());
+        feedback.setTime(new Date().getTime());
         messageFeedbackRepository.save(feedback);
         return true;
     }
+
     @Override
-    public Integer countSystemMessage(UserInfoForToken userInfo,String schoolid)throws UserServiceException{
-        if (StringUtils.isEmpty(userInfo) ||StringUtils.isEmpty(schoolid)){
-            throw new UserServiceException(ResultCode.PARAM_MISS_MSG);}
-        TeacherInfo teacherInfo=teacherInfoRepository.findExsitById(userInfo.getUserId());
-        if (StringUtils.isEmpty(teacherInfo)){throw new UserServiceException(ResultCode.SELECT_NULL_MSG);}
-       Integer count= systemMessageRepository.countByAlreadyReadAndSchoolIdAndExamine("false",teacherInfo.getSchoolId(),2);
+    public Integer countSystemMessage(UserInfoForToken userInfo, String schoolid) throws UserServiceException {
+        if (StringUtils.isEmpty(userInfo) || StringUtils.isEmpty(schoolid)) {
+            throw new UserServiceException(ResultCode.PARAM_MISS_MSG);
+        }
+        TeacherInfo teacherInfo = teacherInfoRepository.findExsitById(userInfo.getUserId());
+        if (StringUtils.isEmpty(teacherInfo)) {
+            throw new UserServiceException(ResultCode.SELECT_NULL_MSG);
+        }
+        Integer count = systemUserRepository.countByAlreadyReadAndUid("false", teacherInfo.getSchoolId());
         return count;
     }
 
-
+    @Override
+    public Page<SystemMessage> getSystemAdmin(UserInfoForToken userInfo,int pageNum, int pageSize) throws UserServiceException {
+        if (StringUtils.isEmpty(userInfo)) {
+            throw new UserServiceException(ResultCode.PARAM_MISS_MSG);
+        }
+        TeacherInfo teacherInfo=teacherInfoRepository.findByid(userInfo.getUserId());
+        // StudentInfo studentInfo=studentInfoRespository.findFirstById(userInfo.getUserId());
+        List<String> uid=new ArrayList<String>();
+        List<SystemUser> m=systemUserRepository.findByUid(userInfo.getUserId());
+        for (SystemUser s:m){
+            uid.add(s.getSid());
+        }
+        if (uid.size()<=0){
+            throw new UserServiceException(ResultCode.SELECT_NULL_MSG);
+        }
+        Sort sort=new Sort(new Sort.Order(Sort.Direction.ASC, "time"));
+        Pageable pageable=new PageRequest(pageNum-1,pageSize,sort);
+        Page<SystemMessage> systemMessages=systemMessageRepository.findAll((Root<SystemMessage> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder)->{
+            List<Predicate> predicateList = new ArrayList<>();
+            Path<Object> path = root.get("id");
+            CriteriaBuilder.In<Object> in = criteriaBuilder.in(path);
+            for (String s:uid) {
+                in.value(s);
+            }
+            predicateList.add(criteriaBuilder.and(criteriaBuilder.and(in)));
+          predicateList.add(criteriaBuilder.equal(root.get("schoolId").as(String.class),teacherInfo.getSchoolId()));
+            predicateList.add(criteriaBuilder.equal(root.get("examine").as(Integer.class),2));
+            return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
+        },pageable);
+        return systemMessages;
+    }
 }
 

@@ -10,7 +10,7 @@ public class MessageUserRelation {
     private Integer id;//
     private String uId;//用户id
     private Integer mId;//聊天记录id
-
+   /* private String alreadyRead;//是否已读,True已读*/
     public Integer getId() {
         return id;
     }
@@ -34,4 +34,12 @@ public class MessageUserRelation {
     public void setmId(Integer mId) {
         this.mId = mId;
     }
+
+   /* public String getAlreadyRead() {
+        return alreadyRead;
+    }
+
+    public void setAlreadyRead(String alreadyRead) {
+        this.alreadyRead = alreadyRead;
+    }*/
 }

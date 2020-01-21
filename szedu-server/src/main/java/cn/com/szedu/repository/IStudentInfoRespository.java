@@ -26,4 +26,5 @@ public interface IStudentInfoRespository extends JpaRepository<StudentInfo,Integ
     List<StudentInfo> findByIdIn(List<String> studentIds);
     List<StudentInfo> findByidIn(List<String> studentIds);
     StudentInfo findFirstById(String id);
+    List<StudentInfo> findBySchoolId(String schoolid);
 }

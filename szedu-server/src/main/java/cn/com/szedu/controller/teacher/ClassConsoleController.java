@@ -11,7 +11,7 @@ import cn.com.szedu.model.UserInfoForToken;
 import cn.com.szedu.model.teacher.AttendanceModel;
 import cn.com.szedu.model.teacher.ClassModel;
 import cn.com.szedu.model.teacher.TeacherAddClassModel;
-import cn.com.szedu.model.teacher.TeacherModel;
+import cn.com.szedu.model.teacher.TeacherLoginModel;
 import cn.com.szedu.service.AttendanceInClassService;
 import cn.com.szedu.service.StudentService;
 import cn.com.szedu.service.TecherClassService;

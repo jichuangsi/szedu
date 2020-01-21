@@ -2,6 +2,7 @@ package cn.com.szedu.util;
 
 import cn.com.szedu.commons.Md5Util;
 import cn.com.szedu.constant.CourseStatus;
+import cn.com.szedu.constant.Status;
 import cn.com.szedu.entity.*;
 import cn.com.szedu.model.SandMessageModel;
 import cn.com.szedu.model.student.StudentClassInfoModel;
@@ -72,7 +73,7 @@ public class MappingEntity3ModelCoverter {
             info1.setPwd(Md5Util.encodeByMd5(model.getPwd()));
         }
         info1.setPhone(model.getPhone());
-        info1.setStatus(model.getStatus());
+        info1.setStatus(Status.ACTIVATE.getName());
         info1.setSex(model.getSex());
         info1.setSchoolName(model.getSchoolName());
         info1.setSchoolId(model.getSchoolId());
@@ -118,8 +119,8 @@ public class MappingEntity3ModelCoverter {
      * @param userInfo
      * @return
      */
-    public final static TeacherModel CONVERTERFROMBACKTEACHERINFO(TeacherInfo userInfo) {
-        TeacherModel model1 = new TeacherModel();
+    public final static TeacherLoginModel CONVERTERFROMBACKTEACHERINFO(TeacherInfo userInfo) {
+        TeacherLoginModel model1 = new TeacherLoginModel();
         model1.setAcount(userInfo.getAccount());
         model1.setTeacherName(userInfo.getName());
         model1.setTeacherId(userInfo.getId());
@@ -297,7 +298,7 @@ public class MappingEntity3ModelCoverter {
         message.setSenderid(info.getUserId());//发送
         message.setSenderName(info.getUserName());
         message.setMessage(model.getMessage());//消息
-        message.setAlreadyRead("false");//已读
+         message.setAlreadyRead("false");//已读
         message.setRecipientId(model.getRecipientId());//接收
         message.setRecipientName(model.getRecipientName());
         message.setSend(model.getSend());//已发送

@@ -23,7 +23,25 @@ public class BackUser {
     private String roleName;
     private String deptId;
     private String deptName;
+    private String schoolId;
+    private String schoolName;
     private long createdTime = new Date().getTime();
+
+    public String getSchoolId() {
+        return schoolId;
+    }
+
+    public void setSchoolId(String schoolId) {
+        this.schoolId = schoolId;
+    }
+
+    public String getSchoolName() {
+        return schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
+    }
 
     public String getId() {
         return id;

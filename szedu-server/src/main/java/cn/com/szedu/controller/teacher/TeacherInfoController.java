@@ -9,7 +9,7 @@ import cn.com.szedu.model.UserInfoForToken;
 import cn.com.szedu.model.teacher.ClassModel;
 import cn.com.szedu.model.teacher.MessageModel;
 import cn.com.szedu.model.teacher.TeacherInfoModel;
-import cn.com.szedu.model.teacher.TeacherModel;
+import cn.com.szedu.model.teacher.TeacherLoginModel;
 import cn.com.szedu.service.BackUserService;
 import cn.com.szedu.service.TeacherInfoService;
 import org.springframework.data.domain.Page;
@@ -37,7 +37,7 @@ public class TeacherInfoController {
     @ApiOperation("登录")
     @ApiImplicitParams({})
     @PostMapping("/teacherLogin")
-    public ResponseModel<TeacherModel> loginBackUser(@RequestBody TeacherModel model) {
+    public ResponseModel<TeacherLoginModel> loginBackUser(@RequestBody TeacherLoginModel model) {
         try {
             return ResponseModel.sucess("", teacherInfoService.loginTeacher(model));
         } catch (UserServiceException e) {
@@ -177,7 +177,7 @@ public class TeacherInfoController {
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @GetMapping("/getAllTeacher")
-    public ResponseModel<List<TeacherModel>> getAllTeacher(@ModelAttribute UserInfoForToken userInfo)throws UserServiceException{
+    public ResponseModel<List<TeacherLoginModel>> getAllTeacher(@ModelAttribute UserInfoForToken userInfo)throws UserServiceException{
 
         return ResponseModel.sucess("",teacherInfoService.getAllTeacher(userInfo));
     }
@@ -216,7 +216,7 @@ public class TeacherInfoController {
     })
     @GetMapping("/deleteMessage")
     public ResponseModel deleteMessage(@ModelAttribute UserInfoForToken userInfo,@RequestParam Integer id)throws UserServiceException{
-        teacherInfoService.deleteMessage(id);
+        teacherInfoService.deleteMessage(userInfo,id);
         return ResponseModel.sucessWithEmptyData("");
     }
 
@@ -293,7 +293,7 @@ public class TeacherInfoController {
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @GetMapping("/getStudentTeacher")
-    public ResponseModel<List<TeacherModel>> getStudentTeacher(@ModelAttribute UserInfoForToken userInfo)throws UserServiceException{
+    public ResponseModel<List<TeacherLoginModel>> getStudentTeacher(@ModelAttribute UserInfoForToken userInfo)throws UserServiceException{
 
         return ResponseModel.sucess("",teacherInfoService.getStudentTeacher(userInfo));
     }
@@ -303,7 +303,7 @@ public class TeacherInfoController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
-    @GetMapping("/teacherMessage")
+    @PostMapping("/teacherMessage")
     public ResponseModel<Boolean> teacherMessage(@ModelAttribute UserInfoForToken userInfo,@RequestBody MessageFeedback feedback)throws UserServiceException{
     return ResponseModel.sucess("",teacherInfoService.teacherMessage(userInfo,feedback));
     }
@@ -313,8 +313,8 @@ public class TeacherInfoController {
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @GetMapping("/getSystemAdmin")
-    public ResponseModel getSystemAdmin(@ModelAttribute UserInfoForToken userInfo,@RequestParam String schoolId,@RequestParam int pageNum,@RequestParam int pageSize) throws UserServiceException {
-        return ResponseModel.sucess("", backUserService.getSystemSchoolId(userInfo,schoolId,pageNum,pageSize));
+    public ResponseModel getSystemAdmin(@ModelAttribute UserInfoForToken userInfo,@RequestParam int pageNum,@RequestParam int pageSize) throws UserServiceException {
+        return ResponseModel.sucess("", teacherInfoService.getSystemAdmin(userInfo,pageNum,pageSize));
     }
 
     @ApiOperation(value = "修改已读系统信息(管理员)", notes = "")

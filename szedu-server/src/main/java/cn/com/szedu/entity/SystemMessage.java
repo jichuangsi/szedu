@@ -18,10 +18,9 @@ public class SystemMessage {
     private String sendId;//管理员
     private String sendName;//
     private String schoolId;//学校id
-    private String alreadyRead;//是否已读,True已读
+   /* private String alreadyRead;//是否已读,True已读*/
     private Integer examine;//审核1未审核，2已审核，3审核未通过
     private long time=new Date().getTime();
-
     public String getId() {
         return id;
     }
@@ -29,6 +28,14 @@ public class SystemMessage {
     public void setId(String id) {
         this.id = id;
     }
+
+   /* public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }*/
 
     public String getTitle() {
         return title;
@@ -70,13 +77,13 @@ public class SystemMessage {
         this.schoolId = schoolId;
     }
 
-    public String getAlreadyRead() {
+   /* public String getAlreadyRead() {
         return alreadyRead;
     }
 
     public void setAlreadyRead(String alreadyRead) {
         this.alreadyRead = alreadyRead;
-    }
+    }*/
 
    /* public Integer getCheck() {
         return check;

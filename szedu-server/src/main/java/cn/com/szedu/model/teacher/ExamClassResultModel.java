@@ -6,7 +6,8 @@ public class ExamClassResultModel {
     private String studentID;//学号
     private String stdentName;
     private String className;//班级
-    private Double result;//分数
+    //private Double result;//分数
+    private Integer result;//分数
     private String rank;//等级
     private Double accuracyRate;//正确率
     private Integer ranking;//排名
@@ -45,11 +46,19 @@ public class ExamClassResultModel {
         this.className = className;
     }
 
-    public Double getResult() {
+    /*public Double getResult() {
         return result;
     }
 
     public void setResult(Double result) {
+        this.result = result;
+    }*/
+
+    public Integer getResult() {
+        return result;
+    }
+
+    public void setResult(Integer result) {
         this.result = result;
     }
 
