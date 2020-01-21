@@ -41,7 +41,7 @@ public class TopQuestionsController {
     @PostMapping("/uploadQuestionContentImg")
     public ResponseModel uploadQuestionImg(@RequestParam MultipartFile file, @ModelAttribute UserInfoForToken userInfo, @RequestParam(required = false) Integer questionId) {
         try {
-            return ResponseModel.sucess("",topQuestionsService.addTopQuestionContentImg(userInfo,file,questionId));
+            return ResponseModel.sucess("",topQuestionsService.localUploadTopQuestionContentImg(userInfo,file,questionId));
         }catch (Exception e) {
             return ResponseModel.fail("", e.getMessage());
         }
@@ -54,7 +54,7 @@ public class TopQuestionsController {
     @PostMapping("/uploadQuestionOptionImg")
     public ResponseModel uploadQuestionOptionImg(@RequestParam MultipartFile file,@ModelAttribute UserInfoForToken userInfo,@RequestParam String options,@RequestParam(required = false) Integer questionId) {
         try {
-            return ResponseModel.sucess("",topQuestionsService.addTopQuestionImg(userInfo,file,options,questionId));
+            return ResponseModel.sucess("",topQuestionsService.localUploadTopQuestionImg(userInfo,file,options,questionId));
         }catch (Exception e) {
             return ResponseModel.fail("", e.getMessage());
         }

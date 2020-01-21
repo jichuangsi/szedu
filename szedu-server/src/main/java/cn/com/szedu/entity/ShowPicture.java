@@ -18,6 +18,7 @@ public class ShowPicture {
     private long createTime=new Date().getTime();
     private String creatorId;
     private String creatorName;
+    private String status;
 
     public Integer getId() {
         return id;
@@ -97,5 +98,13 @@ public class ShowPicture {
 
     public void setCreatorName(String creatorName) {
         this.creatorName = creatorName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

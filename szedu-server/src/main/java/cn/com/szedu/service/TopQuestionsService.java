@@ -19,6 +19,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.util.NumberToTextConverter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -26,9 +27,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class TopQuestionsService {//精品题库
@@ -48,6 +51,12 @@ public class TopQuestionsService {//精品题库
     @Resource
     private ITopQuestionsRepository topQuestionsRepository;
 
+    @Value("${file.uploadFolder}")
+    private String uploadPath;
+    @Value("${file.imagePath}")
+    private String imagePath;
+    @Value("${file.uri}")
+    private String uri;
 
     @Transactional(rollbackFor = Exception.class)
     public void deleteQuestion(Integer id) {
@@ -82,6 +91,89 @@ public class TopQuestionsService {//精品题库
         questions.setContentPic(storePath.getFullPath());
         questions.setCreaterId(userInfoForToken.getUserId());
         questions.setCreaterName(userInfoForToken.getUserName());
+        TopQuestions questions1=topQuestionsRepository.save(questions);
+        return questions1.getId();
+    }
+
+    /**
+     * 本地上传精品题目图片
+     * @param userInfoForToken
+     * @param file
+     * @param questionId
+     * @return
+     * @throws IOException
+     */
+    public Integer localUploadTopQuestionContentImg(UserInfoForToken userInfoForToken,MultipartFile file,Integer questionId)throws IOException {
+        //获取文件名
+        String fileName = file.getOriginalFilename();
+        //获取文件后缀名
+        String suffixName = fileName.substring(fileName.lastIndexOf("."));
+        /*double fileSize = (double) file.getSize()/1024/1024;//MB
+        if(fileSize>2){
+            throw new TecherException("图片过大！");
+        }*/
+        TopQuestions questions=new TopQuestions();
+        if(!StringUtils.isEmpty(questionId)){
+            questions=topQuestionsRepository.findByid(questionId);
+        }
+        questions.setCreaterId(userInfoForToken.getUserId());
+        questions.setCreaterName(userInfoForToken.getUserName());
+        //重新生成文件名
+        fileName =UUID.randomUUID()+suffixName;
+        File file1=new File(uploadPath+imagePath+fileName);
+        if (!file1.exists()){
+            //创建文件夹
+            file1.getParentFile().mkdir();
+        }
+        file.transferTo(file1);
+        questions.setContentPic(uri+fileName);
+        TopQuestions questions1=topQuestionsRepository.save(questions);
+        return questions1.getId();
+    }
+
+    /**
+     * 本地上传选项图片
+     * @param userInfoForToken
+     * @param file
+     * @param options
+     * @param questionId
+     * @return
+     * @throws IOException
+     */
+    public Integer localUploadTopQuestionImg(UserInfoForToken userInfoForToken,MultipartFile file,String options,Integer questionId)throws IOException {
+        //获取文件名
+        String fileName = file.getOriginalFilename();
+        //获取文件后缀名
+        String suffixName = fileName.substring(fileName.lastIndexOf("."));
+        /*double fileSize = (double) file.getSize()/1024/1024;//MB
+        if(fileSize>2){
+            throw new TecherException("图片过大！");
+        }*/
+        TopQuestions questions=new TopQuestions();
+        if(!StringUtils.isEmpty(questionId)){
+            questions=topQuestionsRepository.findByid(questionId);
+        }
+        questions.setCreaterId(userInfoForToken.getUserId());
+        questions.setCreaterName(userInfoForToken.getUserName());
+        //重新生成文件名
+        fileName =UUID.randomUUID()+suffixName;
+        File file1=new File(uploadPath+imagePath+fileName);
+        if (!file1.exists()){
+            //创建文件夹
+            file1.getParentFile().mkdir();
+        }
+        file.transferTo(file1);
+        if (!StringUtils.isEmpty(options)){
+            if(options.equals("A")){
+                questions.setAoptionPic(uri+fileName);
+            }else if(options.equals("B")){
+                questions.setBoptionPic(uri+fileName);
+            }else if(options.equals("C")){
+                questions.setCoptionPic(uri+fileName);
+            }else if(options.equals("D")){
+                questions.setDoptionPic(uri+fileName);
+            }
+        }
         TopQuestions questions1=topQuestionsRepository.save(questions);
         return questions1.getId();
     }

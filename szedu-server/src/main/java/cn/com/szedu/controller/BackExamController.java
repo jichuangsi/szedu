@@ -188,4 +188,13 @@ public class BackExamController {
     public ResponseModel getExamByStudent(@ModelAttribute UserInfoForToken userInfo,@RequestParam Integer pageNum,@RequestParam Integer pageSize) {
         return ResponseModel.sucess("",backExamService.getExamByStudentId(userInfo,pageNum,pageSize));
     }
+
+    @ApiOperation(value = "根据班级查询考试成绩", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/getExamResultByClass")
+    public ResponseModel getExamResultByClass(@ModelAttribute UserInfoForToken userInfo,@RequestParam String examId,@RequestParam String classId) {
+        return ResponseModel.sucess("",backExamService.settleStudentScoreByClass(userInfo,classId,examId));
+    }
 }

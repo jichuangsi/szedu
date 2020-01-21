@@ -12,6 +12,7 @@ import cn.com.szedu.model.UserInfoForToken;
 import cn.com.szedu.model.student.StudentAnswerModel;
 import cn.com.szedu.model.student.StudentAnswerModel2;
 import cn.com.szedu.model.teacher.ExamModel;
+import cn.com.szedu.model.teacher.StudentResultModel;
 import cn.com.szedu.repository.*;
 import cn.com.szedu.repository.IntermediateTableRepository.IExamClassRelationRepository;
 import cn.com.szedu.repository.IntermediateTableRepository.IExamUserRelationRepository;
@@ -508,7 +509,14 @@ public class BackExamService {
         studentAnswerCollectionRepository.saveAll(studentAnswerCollections);
     }
 
-    /*private Integer settleStudentScoreByClass(UserInfoForToken userInfo,String classId,String examId){
+    /**
+     * 统计班级学生成绩
+     * @param userInfo
+     * @param classId
+     * @param examId
+     * @return
+     */
+    public List<StudentResultModel> settleStudentScoreByClass(UserInfoForToken userInfo,String classId,String examId){
         //查询学生
         List<StudentClassRelation> studentClassRelations=studentClassRelationRepository.findAllByClassId(classId);
         List<String> studentIds=new ArrayList<>();
@@ -516,11 +524,36 @@ public class BackExamService {
             studentIds.add(studentClassRelation.getStudentId());
         });
         List<StudentInfo> studentInfos=studentInfoRespository.findByidIn(studentIds);
-        studentInfos.forEach(studentInfo -> {
+        List<StudentResultModel> studentResultModels=new ArrayList<>();
+        StudentResultModel model =new StudentResultModel();
+        for (StudentInfo studentInfo:studentInfos) {
+            Integer totalScore=0;
             List<StudentAnswerCollection> studentAnswerCollection=studentAnswerCollectionRepository.findByExamIdAndStudentId(examId,studentInfo.getStudentId());
-            studentAnswerCollection.forEach(studentAnswerCollection1 -> {
-
-            });
-        });
-    }*/
+            model.setClassId(classId);
+            model.setStudentId(studentInfo.getStudentId());
+            model.setStudentName(studentInfo.getName());
+            int right=0;
+            int wrong=0;
+            int rightQuestion=0;
+            int wrongQuestion=0;
+            for (StudentAnswerCollection sc:studentAnswerCollection) {
+                totalScore+=sc.getScore();
+                if (sc.getScore()>0){
+                    right+=1;
+                    rightQuestion+=1;
+                }else{
+                    wrong+=1;
+                    wrongQuestion+=1;
+                }
+            }
+            model.setResult(totalScore);
+            if (rightQuestion==0){
+                model.setAccuracyRate(0.0);
+            }else {
+                model.setAccuracyRate(Double.valueOf(rightQuestion/studentAnswerCollection.size()));
+            }
+            studentResultModels.add(model);
+        }
+        return studentResultModels;
+    }
 }

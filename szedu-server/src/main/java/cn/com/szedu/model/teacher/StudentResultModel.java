@@ -6,9 +6,9 @@ public class StudentResultModel {
     private String studentName;
     private String classId;
     private String className;
-    private String result;
+    private Integer result;
     private String level;//等级
-    private String accuracyRate;//正确率
+    private Double accuracyRate;//正确率
 
     public String getId() {
         return id;
@@ -50,11 +50,11 @@ public class StudentResultModel {
         this.className = className;
     }
 
-    public String getResult() {
+    public Integer getResult() {
         return result;
     }
 
-    public void setResult(String result) {
+    public void setResult(Integer result) {
         this.result = result;
     }
 
@@ -66,11 +66,11 @@ public class StudentResultModel {
         this.level = level;
     }
 
-    public String getAccuracyRate() {
+    public Double getAccuracyRate() {
         return accuracyRate;
     }
 
-    public void setAccuracyRate(String accuracyRate) {
+    public void setAccuracyRate(Double accuracyRate) {
         this.accuracyRate = accuracyRate;
     }
 }

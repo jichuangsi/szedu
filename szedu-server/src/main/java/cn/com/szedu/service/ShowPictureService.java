@@ -40,20 +40,6 @@ public class ShowPictureService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void localUpLoadFiles(UserInfoForToken userInfoForToken, MultipartFile[] files,String way) throws IOException {
-        List<ShowPicture> showPictureList=showPictureRepository.findByWay(way);
-        if (showPictureList!=null&& showPictureList.size()!=0){
-            showPictureList.forEach(s->{
-                File file=new File(s.getFilepath());
-                if(file.exists()){
-                    //删除文件
-                    file.delete();
-                }/*else {
-                    throw new BackUserException(ResultCode.FILE_ISNOT_EXIST);
-                }*/
-            });
-            showPictureRepository.deleteAll(showPictureList);
-        }
-
         List<ShowPicture> showPictures=new ArrayList<>();
         for (MultipartFile file:files) {
             //获取文件名
@@ -74,6 +60,7 @@ public class ShowPictureService {
             file.transferTo(file1);
             showPicture.setFilepath(uri+fileName);
             showPicture.setWay(way);
+            showPicture.setStatus("2");
             showPictures.add(showPicture);
         }
         showPictureRepository.saveAll(showPictures);
@@ -83,19 +70,32 @@ public class ShowPictureService {
      * 查询全部轮播图
      * @return
      */
-    public List<ShowPicture> getAllShowPicture(){
-        return showPictureRepository.findAll();
+    @Transactional(rollbackFor = Exception.class)
+    public List<ShowPicture> getAllShowPictureByWay(String way)throws BackUserException{
+        if (showPictureRepository.countByStatusAndWay("1",way)>0 && showPictureRepository.countByStatusAndWay("2",way)>0){
+            List<ShowPicture> showPictureList=showPictureRepository.findByWayAndStatus(way,"1");
+            if (showPictureList!=null&& showPictureList.size()!=0){
+                for (ShowPicture s:showPictureList) {
+                    File file=new File(s.getFilepath());
+                    if(file.exists()){
+                        //删除文件
+                        file.delete();
+                    }else {
+                        throw new BackUserException(ResultCode.FILE_ISNOT_EXIST);
+                    }
+                }
+                showPictureRepository.deleteAll(showPictureList);
+            }
+        }
+        List<ShowPicture> showPictures=showPictureRepository.findByWayAndStatus(way,"2");
+        if(showPictures!=null&&showPictures.size()>0){
+            showPictures.forEach(sp->{
+                sp.setStatus("1");
+            });
+            showPictureRepository.saveAll(showPictures);
+        }
+        return showPictureRepository.findByWayAndStatus(way,"1");
     }
-
-    /**
-     * 根据载具查询轮播图
-     * @param way
-     * @return
-     */
-    public List<ShowPicture> getAllShowPictureByWay(String way){
-        return showPictureRepository.findByWay(way);
-    }
-
     /**
      * 删除轮播图
      * @param id

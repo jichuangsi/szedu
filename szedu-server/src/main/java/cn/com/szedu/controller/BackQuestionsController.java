@@ -105,7 +105,7 @@ public class BackQuestionsController {
     @PostMapping("/uploadQuestionContentImg")
     public ResponseModel uploadQuestionImg(@RequestParam MultipartFile file,@ModelAttribute UserInfoForToken userInfo,@RequestParam(required = false) Integer questionId) {
         try {
-            return ResponseModel.sucess("",selfQuestionsService.addSelfQuestionContentImg(userInfo,file,questionId));
+            return ResponseModel.sucess("",selfQuestionsService.localUploadSelfQuestionContentImg(userInfo,file,questionId));
         }catch (Exception e) {
             return ResponseModel.fail("", e.getMessage());
         }
@@ -118,7 +118,7 @@ public class BackQuestionsController {
     @PostMapping("/uploadQuestionOptionImg")
     public ResponseModel uploadQuestionOptionImg(@RequestParam MultipartFile file,@ModelAttribute UserInfoForToken userInfo,@RequestParam String options,@RequestParam(required = false) Integer questionId) {
         try {
-            return ResponseModel.sucess("",selfQuestionsService.addSelfQuestionImg(userInfo,file,options,questionId));
+            return ResponseModel.sucess("",selfQuestionsService.localUploadSelfQuestionImg(userInfo,file,options,questionId));
         }catch (Exception e) {
             return ResponseModel.fail("", e.getMessage());
         }

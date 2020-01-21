@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface IShowPictureRepository extends JpaRepository<ShowPicture,Integer> {
     ShowPicture findByid(Integer id);
-    List<ShowPicture> findByWay(String way);
+    List<ShowPicture> findByWayAndStatus(String way,String status);
+    int countByStatusAndWay(String status,String way);
 }

@@ -18,6 +18,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.util.NumberToTextConverter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,10 +32,12 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 public class SelfQuestionsService {
@@ -55,6 +58,13 @@ public class SelfQuestionsService {
     private ITopQuestionsRepository topQuestionsRepository;
     @Resource
     private ITestpaperQuestionRelationRepository testpaperQuestionRelationRepository;
+
+    @Value("${file.uploadFolder}")
+    private String uploadPath;
+    @Value("${file.imagePath}")
+    private String imagePath;
+    @Value("${file.uri}")
+    private String uri;
 
 
     public void addQuestion(QuestionsModelII model) {
@@ -167,6 +177,42 @@ public class SelfQuestionsService {
     }
 
     /**
+     * 本地上传题目图片
+     * @param userInfoForToken
+     * @param file
+     * @param questionId
+     * @return
+     * @throws IOException
+     */
+    public Integer localUploadSelfQuestionContentImg(UserInfoForToken userInfoForToken,MultipartFile file,Integer questionId)throws IOException {
+        //获取文件名
+        String fileName = file.getOriginalFilename();
+        //获取文件后缀名
+        String suffixName = fileName.substring(fileName.lastIndexOf("."));
+        /*double fileSize = (double) file.getSize()/1024/1024;//MB
+        if(fileSize>2){
+            throw new TecherException("图片过大！");
+        }*/
+        SelfQuestions questions=new SelfQuestions();
+        if(!StringUtils.isEmpty(questionId)){
+            questions=selfQuestionsRepository.findByid(questionId);
+        }
+        questions.setTeacherId(userInfoForToken.getUserId());
+        questions.setTeacherName(userInfoForToken.getUserName());
+        //重新生成文件名
+        fileName =UUID.randomUUID()+suffixName;
+        File file1=new File(uploadPath+imagePath+fileName);
+        if (!file1.exists()){
+            //创建文件夹
+            file1.getParentFile().mkdir();
+        }
+        file.transferTo(file1);
+        questions.setContentPic(uri+fileName);
+        SelfQuestions questions1=selfQuestionsRepository.save(questions);
+        return questions1.getId();
+    }
+
+    /**
      * 上传选项图片
      * @param userInfoForToken
      * @param file
@@ -199,22 +245,30 @@ public class SelfQuestionsService {
         return questions1.getId();
     }
 
-    /*private void localUploadFile(MultipartFile file)throws CourseWareException{
+    /**
+     * 本地上传选项图片
+     * @param userInfoForToken
+     * @param file
+     * @param options
+     * @param questionId
+     * @return
+     * @throws IOException
+     */
+    public Integer localUploadSelfQuestionImg(UserInfoForToken userInfoForToken,MultipartFile file,String options,Integer questionId)throws IOException {
         //获取文件名
         String fileName = file.getOriginalFilename();
         //获取文件后缀名
         String suffixName = fileName.substring(fileName.lastIndexOf("."));
-        double fileSize = (double) file.getSize()/1024/1024;//MB
+        /*double fileSize = (double) file.getSize()/1024/1024;//MB
         if(fileSize>2){
-            throw new CourseWareException("图片过大！");
+            throw new TecherException("图片过大！");
+        }*/
+        SelfQuestions questions=new SelfQuestions();
+        if(!StringUtils.isEmpty(questionId)){
+            questions=selfQuestionsRepository.findByid(questionId);
         }
-        CourseWare courseWare=new CourseWare();
-        if(!StringUtils.isEmpty(resourceId)){
-            courseWare=courseWareRespository.findByid(resourceId);
-        }
-        courseWare.setTeacherid(userInfoForToken.getUserId());
-        courseWare.setTeacherName(userInfoForToken.getUserName());
-        courseWare.setIsCheck("1");//未审核
+        questions.setTeacherId(userInfoForToken.getUserId());
+        questions.setTeacherName(userInfoForToken.getUserName());
         //重新生成文件名
         fileName =UUID.randomUUID()+suffixName;
         File file1=new File(uploadPath+imagePath+fileName);
@@ -223,10 +277,20 @@ public class SelfQuestionsService {
             file1.getParentFile().mkdir();
         }
         file.transferTo(file1);
-        courseWare.setCoverPic(uri+fileName);
-        CourseWare courseWare1=courseWareRespository.save(courseWare);
-        return courseWare1.getId();
-    }*/
+        if (!StringUtils.isEmpty(options)){
+            if(options.equals("A")){
+                questions.setAoptionPic(uri+fileName);
+            }else if(options.equals("B")){
+                questions.setBoptionPic(uri+fileName);
+            }else if(options.equals("C")){
+                questions.setCoptionPic(uri+fileName);
+            }else if(options.equals("D")){
+                questions.setDoptionPic(uri+fileName);
+            }
+        }
+        SelfQuestions questions1=selfQuestionsRepository.save(questions);
+        return questions1.getId();
+    }
 
     /**
      * 保存题目
