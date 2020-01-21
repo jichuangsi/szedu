@@ -4,7 +4,7 @@ layui.use(['form', 'table', 'element', 'carousel'], function() {
 		element = layui.element,
 		carousel = layui.carousel;
 
-	carousel.render({
+	var ins=carousel.render({
 		elem: '#test1',
 		width: '100%',
 		height: '16rem',
@@ -51,5 +51,23 @@ layui.use(['form', 'table', 'element', 'carousel'], function() {
 		}
 		$('#test').append(str);
 	}
+	
+	getShowPic();
+	function getShowPic(){
+		var url='/BackInformation/getShowPictureByWay?way=1';
+		var arr =StudentPostMethod(url);
+		console.log(arr);
+		var str='';
+		$('#way').empty();
+		$.each(arr,function(index,item){
+			str+='<div>';
+			str+='<img src="http://192.168.31.84:8080'+item.filepath+'" style="width: 100%;height: 100%;" />';
+			str+='</div>';
+		});
+		console.log(str)
+		$('#way').append(str);
+		 ins.reload({elem: '#test1'});
+	}
+	
 
 })

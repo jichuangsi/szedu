@@ -139,6 +139,15 @@ layui.use(['form', 'table'], function() {
 		}
 			$('#coures').append(str);
 	}
-
+	//老师留言反馈
+	form.on('submit(formDemoMultiple)',function(data){
+		var param=data.field;
+		var url='/teacherInfo/teacherMessage'
+		var flag=ajaxPostData(url,param);
+		if(flag){
+			return layer.msg('留言成功!');
+		}
+		
+	});
 
 });
