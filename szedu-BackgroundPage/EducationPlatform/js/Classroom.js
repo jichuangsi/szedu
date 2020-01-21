@@ -507,7 +507,6 @@ layui.use(['form', 'table', 'element', 'flow', 'upload'], function() {
 								str += '<div class="layui-btn layui-btn-normal layui-btn-radius" onclick="share(this)">分享</div>'
 								str += '<div class="layui-btn layui-btn-normal layui-btn-radius"onclick="getClassInfo(this)">推送</div>'
 								str += '<div class="layui-btn layui-btn-normal layui-btn-radius" onclick="deleteAttachment(this)">删除</div>';
-
 							} else {
 								str += '<input type="hidden"  name="id" value="' + item.id + '"/>';
 								str += '<div class="layui-btn layui-btn-normal layui-btn-radius" onclick="share(this)">分享</div>'
@@ -692,5 +691,7 @@ layui.use(['form', 'table', 'element', 'flow', 'upload'], function() {
 	}
 
 	//收藏资源
+	
+	//
 
 })

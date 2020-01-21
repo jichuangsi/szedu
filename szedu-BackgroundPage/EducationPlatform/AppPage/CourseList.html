@@ -28,7 +28,7 @@
 		<div class="layui-row" style="margin:10px 10px;">
 			<div class="layui-row layui-form">
 				<div class="layui-form-item  layui-input-inline widths">
-					<select name="city" lay-verify="" class="layui-btn-radius" id="subject">
+					<select name="city" lay-filter="subject" class="layui-btn-radius" id="subject">
 						<option value="">科目</option>
 						<option value="010">北京</option>
 						<option value="021">上海</option>
@@ -36,7 +36,7 @@
 					</select>
 				</div>
 				<div class="layui-form-item  layui-input-inline widths">
-					<select name="city" lay-verify="" class="layui-btn-radius">
+					<select name="city" lay-filter="type" class="layui-btn-radius">
 						<option value="">课堂类型</option>
 						<option value="010">北京</option>
 						<option value="021">上海</option>
@@ -56,7 +56,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="layui-row" id="studentCourse" style="padding-bottom: 50px;">
+		<div class="layui-row" id="studentCourse">
 			<div class="layui-col-xs6 layui-col-sm3">
 				<div class="Exam-box">
 					<div class="box-pig">
@@ -82,6 +82,9 @@
 					</div>
 				</div>
 			</div>
+		</div>
+		<div class="layui-row" style="padding-bottom: 50px;text-align: center;">
+			<div id="page"></div>
 		</div>
 		<div class="layui-row menu">
 			<ul>

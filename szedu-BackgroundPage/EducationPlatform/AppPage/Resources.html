@@ -11,18 +11,23 @@
 		<link rel="stylesheet" href="../css/app/index.css" />
 		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
 		<script src="../lib/js/jquery.min.js"></script>
+		<script src="../js/AppJs/jquery.cookie.js"></script>
 		<script src="../lib/layui/layui.js" charset="utf-8"></script>
 		<script type="text/javascript" src="../js/AppJs/util.js"></script>
+		<script src="../js/Configuration.js"></script>
+		<script src="../js/AppJs/ResourceDetails.js"></script>
+		<script type="text/javascript" src="../js/AppJs/Resources.js"></script>
+		
 	</head>
 	<style>
-	.widths {
+		.widths {
 			width: 24%;
 		}
-		
+
 		.layui-unselect {
 			border-radius: 20px 20px;
 		}
-		
+
 		.rmb-product {
 			width: 100%;
 			text-align: center;
@@ -31,36 +36,45 @@
 			background: #fff;
 			overflow: hidden;
 		}
-		
-		.rmb-product img{
+
+		.rmb-product img {
 			width: 100%;
 			height: 100%;
 		}
-	}
-	.rmb-product-title{
-		font-size: 1.4rem;
-		padding: 0 10px;
-		line-height: 2rem;
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-	}
-	.iconfont {
-		font-size: 1.4rem;
-	}
-	.rmb-product-content {
-		margin-top: 10px;
-		padding: 0 10px;
-		font-size: 1rem;
-		color: #333333;
-		line-height: 1.5rem;
-		/*字体颜色*/
-	}
-	.res-box {
-		min-height: 280px !important;
-		/*margin-bottom: 10px;*/
-		margin: 5px;
-	}
+
+		.rmb-product-title {
+			font-size: 1.4rem;
+			padding: 0 10px;
+			line-height: 2rem;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+
+		.rmb-product-title>span {
+			width: 80%;
+		}
+
+		.iconfont {
+			font-size: 1.4rem;
+		}
+
+		.rmb-product-content {
+			margin-top: 10px;
+			padding: 0 10px;
+			font-size: 1rem;
+			color: #333333;
+			line-height: 1.5rem;
+			/*字体颜色*/
+		}
+		.box-n{
+			text-align: center;
+		}
+		.res-box {
+			min-height: 280px !important;
+			/*margin-bottom: 10px;*/
+			margin: 5px;
+		}
 	</style>
 
 	<body>
@@ -70,7 +84,7 @@
 		<div class="layui-row" style="margin:20px 10px;">
 			<div class="layui-row layui-form">
 				<div class="layui-form-item  layui-input-inline widths">
-					<select name="city" lay-verify="" class="layui-btn-radius">
+					<select name="city" lay-filter="subject" class="layui-btn-radius" id="sub">
 						<option value="">科目</option>
 						<option value="010">北京</option>
 						<option value="021">上海</option>
@@ -78,23 +92,23 @@
 					</select>
 				</div>
 				<div class="layui-form-item  layui-input-inline widths">
-					<select name="city" lay-verify="" class="layui-btn-radius">
+					<select name="city" lay-filter="type" class="layui-btn-radius" id="type">
 						<option value="">资源类型</option>
 						<option value="010">北京</option>
 						<option value="021">上海</option>
 						<option value="0571">杭州</option>
 					</select>
 				</div>
-				<div class="layui-form-item  layui-input-inline widths">
+				<!-- 		<div class="layui-form-item  layui-input-inline widths">
 					<select name="city" lay-verify="" class="layui-btn-radius ">
 						<option value="">推送时间</option>
 						<option value="010">北京</option>
 						<option value="021">上海</option>
 						<option value="0571">杭州</option>
 					</select>
-				</div>
+				</div> -->
 			</div>
-			<div class="layui-row">
+			<div class="layui-row" id="resources">
 				<div class="layui-col-xs6 layui-col-sm3">
 					<div class="res-box">
 						<div class="rmb-product">
@@ -129,12 +143,9 @@
 						</div>
 					</div>
 				</div>
-				<div class="layui-col-xs6 layui-col-sm3">
-					<div class="res-box"></div>
-				</div>
-				<div class="layui-col-xs6 layui-col-sm3">
-					<div class="res-box"></div>
-				</div>
+			</div>
+			<div class="layui-row" style="padding-bottom: 50px;text-align: center;">
+				<div id="test1"></div>
 			</div>
 		</div>
 		<div class="layui-row menu">
@@ -156,28 +167,7 @@
 				</li>
 			</ul>
 		</div>
-		<script>
-			layui.use(['element', 'carousel', 'form'], function() {
-				var element = layui.element,
-					form = layui.form,
-					carousel = layui.carousel;
 
-				carousel.render({
-					elem: '#test1',
-					width: '100%',
-					height: '16rem',
-					arrow: 'always' //始终显示箭头
-					//,anim: 'updown' //切换动画方式
-				});
-			});
-			$('.iconfont').click(function() {
-				$(this).css('color', '#999999');
-			})
-			$('.iconfont').dblclick(function() {
-				console.log(111)
-				$(this).css('color', '#ff0000');
-			})
-		</script>
 	</body>
 
 </html>

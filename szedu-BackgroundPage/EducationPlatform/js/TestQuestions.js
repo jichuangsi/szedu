@@ -72,6 +72,9 @@ layui.use(['form', 'table', 'upload'], function() {
 	var uploadInst = upload.render({
 		elem: '#demo1',
 		url: httpUrl() + '/BackQuestions/uploadQuestionContentImg',
+		headers: {
+			'accessToken': getToken()
+		},
 		before: function(obj) {
 			console.log(obj)
 			//预读本地文件示例，不支持ie8
@@ -98,6 +101,7 @@ layui.use(['form', 'table', 'upload'], function() {
 			//上传成功
 		}
 	});
+	var qId='';
 	//添加试题-单选题
 	form.on('submit(formDemo)', function(data) {
 		var param = data.field;
@@ -142,21 +146,25 @@ layui.use(['form', 'table', 'upload'], function() {
 			"falseOption": "",
 			"falseOptionPic": "",
 			"foptionPic": "",
-			"id": 0,
+			"id":qId ,
 			"questionId": 0,
 			"tureOption": "",
 			"tureOptionPic": ""
 		};
+		param.id=qId;
 		param.options=options;
 		
 		var url='/BackQuestions/saveSelfQuestion';
 		ajaxPOST(url,param)
 	});
-
+	
 	//普通图片上传 单选题A
 	var uploadInstA = upload.render({
 		elem: '#demoA',
 		url: httpUrl() + '/BackQuestions/uploadQuestionOptionImg',
+		headers: {
+			'accessToken': getToken()
+		},
 		before: function(obj) {
 			console.log(obj)
 			//预读本地文件示例，不支持ie8
@@ -167,11 +175,15 @@ layui.use(['form', 'table', 'upload'], function() {
 		data: {
 			options: function() {
 				return "A";
+			},
+			questionId:function(){
+				return qId
 			}
 		},
 		done: function(res) {
 			//如果上传失败
 			if(res.code == '0010') {
+				qId=res.data;
 				form.val('Single', {
 					aoptionPic: res.data
 				});
@@ -192,6 +204,9 @@ layui.use(['form', 'table', 'upload'], function() {
 	var uploadInstB = upload.render({
 		elem: '#demoB',
 		url: httpUrl() + '/BackQuestions/uploadQuestionOptionImg',
+		headers: {
+			'accessToken': getToken()
+		},
 		before: function(obj) {
 			console.log(obj)
 			//预读本地文件示例，不支持ie8
@@ -202,11 +217,15 @@ layui.use(['form', 'table', 'upload'], function() {
 		data: {
 			options: function() {
 				return "B";
+			},
+			questionId:function(){
+				return qId
 			}
 		},
 		done: function(res) {
 			//如果上传失败
 			if(res.code == '0010') {
+				qId=res.data;
 				form.val('Single', {
 					boptionPic: res.data
 				});
@@ -226,6 +245,9 @@ layui.use(['form', 'table', 'upload'], function() {
 	var uploadInstC = upload.render({
 		elem: '#demoC',
 		url: httpUrl() + '/BackQuestions/uploadQuestionOptionImg',
+		headers: {
+			'accessToken': getToken()
+		},
 		before: function(obj) {
 			console.log(obj)
 			//预读本地文件示例，不支持ie8
@@ -236,11 +258,15 @@ layui.use(['form', 'table', 'upload'], function() {
 		data: {
 			options: function() {
 				return "C";
+			},
+			questionId:function(){
+				return qId
 			}
 		},
 		done: function(res) {
 			//如果上传失败
 			if(res.code == '0010') {
+				qId=res.data;
 				form.val('Single', {
 					coptionPic: res.data
 				});
@@ -260,6 +286,9 @@ layui.use(['form', 'table', 'upload'], function() {
 	var uploadInstD = upload.render({
 		elem: '#demoD',
 		url: httpUrl() + '/BackQuestions/uploadQuestionOptionImg',
+		headers: {
+			'accessToken': getToken()
+		},
 		before: function(obj) {
 			console.log(obj)
 			//预读本地文件示例，不支持ie8
@@ -270,11 +299,15 @@ layui.use(['form', 'table', 'upload'], function() {
 		data: {
 			options: function() {
 				return "D";
+			},
+			questionId:function(){
+				return qId
 			}
 		},
 		done: function(res) {
 			//如果上传失败
 			if(res.code == '0010') {
+				qId=res.data;
 				form.val('Single', {
 					doptionPic: res.data
 				});

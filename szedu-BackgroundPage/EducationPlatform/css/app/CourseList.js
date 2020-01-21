@@ -1,13 +1,16 @@
-layui.use(['form', 'table', 'rate'], function() {
+var lessionType=null;
+var subjectId=null;
+layui.use(['form', 'table', 'rate', 'laypage'], function() {
 	var form = layui.form,
 		rate = layui.rate,
+		laypage = layui.laypage,
 		table = layui.table;
 
 	var param = {
-		"lessionType": "",
+		"lessionType":lessionType,
 		"pageNum": 1,
-		"pageSize": 20,
-		"subjectId": null,
+		"pageSize": 12,
+		"subjectId": subjectId,
 		"time": null,
 		"timeName": ""
 	}
@@ -17,9 +20,10 @@ layui.use(['form', 'table', 'rate'], function() {
 		console.log(param)
 		var url = '/studentLesson/getAllLesson';
 		var arr = StudentPostMethod(url, param);
+		var data=arr.content;
 		var str = '';
 		$('#studentCourse').empty();
-		$.each(arr, function(index, item) {
+		$.each(data, function(index, item) {
 			str += '<div class="layui-col-xs6 layui-col-sm3">';
 			str += '<div class="Exam-box">';
 			str += '<div class="box-pig">';
@@ -33,11 +37,11 @@ layui.use(['form', 'table', 'rate'], function() {
 			str += '<li><span>课类型类型：</span>' + item.lessonTypeName + '</li>';
 			str += '<li><span>开课时间：</span>' + item.startTime + '</li>';
 			str += '<li><span>课堂时长：</span>' + item.courseTimeLength + '</li>';
-			if(item.status == "P") {
+			if (item.status == "P") {
 				str += '<li><span>课堂状态：</span>准备上课</li>';
-			} else if(item.status == "H") {
+			} else if (item.status == "H") {
 				str += '<li><span>课堂状态：</span>正在上课</li>';
-			} else if(item.status == "F") {
+			} else if (item.status == "F") {
 				str += '<li><span>课堂状态：</span>已结束</li>';
 			}
 			str += '</ul>';
@@ -45,25 +49,28 @@ layui.use(['form', 'table', 'rate'], function() {
 			str += '<div class="box-content-btn">';
 			str += '<input type="hidden" name="id" value="' + item.id + '" />';
 			str += '<input type="hidden" name="name" value="' + item.courseTitle + '" />';
-			if(item.status == "P") {
-				if(item.qiandao) {
-					str += '<div class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius "onclick="AttendanceInClass(this)">签到</div>';
+			if (item.status == "P") {
+				if (item.qiandao) {
+					str +=
+						'<div class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius "onclick="AttendanceInClass(this)">签到</div>';
 					str += '<div class="layui-btn layui-btn-disabled layui-btn-sm layui-btn-radius ">评分</div>';
 				} else {
 					str += '<div class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius ">已签到</div>';
 					str += '<div class="layui-btn layui-btn-disabled layui-btn-sm layui-btn-radius ">评分</div>';
 				}
-				str += '<div class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius"onclick="toCourse(this)">进入课堂</div>';
-			} else if(item.status == "H") {
-				if(item.qiandao) {
-					str += '<div class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius "onclick="AttendanceInClass(this)">签到</div>';
+				str +=
+					'<div class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius"onclick="toCourse(this)">进入课堂</div>';
+			} else if (item.status == "H") {
+				if (item.qiandao) {
+					str +=
+						'<div class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius "onclick="AttendanceInClass(this)">签到</div>';
 					str += '<div class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius "onclick="score(this)">评分</div>';
 
 				} else {
 					str += '<div class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius ">已签到</div>';
 					str += '<div class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius "onclick="score(this)">评分</div>';
 				}
-			} else if(item.status == "F") {
+			} else if (item.status == "F") {
 				str += '<div class="layui-btn layui-btn-disabled layui-btn-sm layui-btn-radius ">签到</div>';
 				str += '<div class="layui-btn layui-btn-normal layui-btn-sm layui-btn-radius" onclick="score(this)">评分</div>';
 			}
@@ -74,8 +81,48 @@ layui.use(['form', 'table', 'rate'], function() {
 			str += '</div>';
 		});
 		$('#studentCourse').append(str);
+		laypage.render({
+			elem: 'page',
+			limit:param.pageSize,//页面多少条
+			count: arr.totalElements,//总数
+			curr:param.pageNum,
+			 theme: '#1E9FFF',
+			jump: function(obj, first) {
+				console.log(obj)
+				//obj包含了当前分页的所有参数，比如：
+				console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+				console.log(obj.limit); //得到每页显示的条数
+				//首次不执行
+				if (!first) {
+					param = {
+						"lessionType": "",
+						"pageNum": obj.curr	,
+						"pageSize":12,
+						"subjectId": null,
+						"time": null,
+						"timeName": ""
+					}
+					getStudentCoures(param);
+				}
+			}
+		});
 
 	}
+	
+	form.on('select(subject)', function(data) {
+		subjectId=data.value;
+		var param = {
+		"lessionType":lessionType,
+		"pageNum": 1,
+		"pageSize": 12,
+		"subjectId": subjectId,
+		"time": null,
+		"timeName": ""
+	}
+		if(subjectId!=-1){
+			getStudentCoures(param)
+		}
+	});
 	getSubject();
 	//获取科目
 	function getSubject() {
@@ -85,7 +132,7 @@ layui.use(['form', 'table', 'rate'], function() {
 		var str = '';
 		$('#subject').empty();
 		str += '<option value="-1">科目</option>'
-		if(arr.length > 0) {
+		if (arr.length > 0) {
 			$.each(arr, function(index, item) {
 				str += '<option value="' + item.id + '">' + item.title + '</option>'
 			});
@@ -107,7 +154,7 @@ layui.use(['form', 'table', 'rate'], function() {
 			courseName: name
 		}
 		var arr = StudentPostMethod(url, param)
-		if(arr) {
+		if (arr) {
 			return layer.msg('签到成功！');
 		}
 	}
@@ -135,16 +182,17 @@ layui.use(['form', 'table', 'rate'], function() {
 			setText: function(value) {
 				score = value;
 				this.span.text((value + "分"));
-				if(score != 0) {
+				if (score != 0) {
 					var url = "/studentLesson/addscore?score=" + score + "&courseId=" + id
 					var arr = StudentPostMethod(url);
-					if(arr) {
+					if (arr) {
 						layer.close(index);
 						return layer.msg("评分成功！");
 					}
 				}
 			}
 		})
-
 	}
+
+
 })
