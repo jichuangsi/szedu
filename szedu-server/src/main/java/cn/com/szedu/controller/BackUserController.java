@@ -10,6 +10,7 @@ import cn.com.szedu.model.UserInfoForToken;
 import cn.com.szedu.service.BackUserService;
 import cn.com.szedu.service.IBackSchoolService;
 import cn.com.szedu.service.OpLogService;
+import cn.com.szedu.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -30,6 +31,8 @@ public class BackUserController {
     @Resource
     private IBackSchoolService backSchoolService;
     @Resource
+    private UserInfoService userInfoService;
+    @Resource
     private OpLogService opLogService;
 
     @ApiOperation("后台用户注册")
@@ -49,8 +52,9 @@ public class BackUserController {
     @PostMapping("/loginBackUser")
     public ResponseModel loginBackUser(@RequestBody BackUserLoginModel model){
         try {
-            return ResponseModel.sucess("",backUserService.loginBackUser(model));
-        }catch (BackUserException e){
+            //return ResponseModel.sucess("",backUserService.loginBackUser(model));
+            return ResponseModel.sucess("",userInfoService.loginBackUser(model));
+        }catch (UserServiceException e){
             return ResponseModel.fail("",e.getMessage());
         }
     }

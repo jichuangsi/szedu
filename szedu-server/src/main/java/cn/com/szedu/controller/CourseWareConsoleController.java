@@ -302,4 +302,13 @@ public class CourseWareConsoleController {
     public ResponseModel getPublicResourceByTime(@ModelAttribute UserInfoForToken userInfo,@RequestParam int pageNum, @RequestParam int pageSize) {
         return ResponseModel.sucess("",courseWareConsoleService.getPublicResourceByTime(userInfo,pageNum,pageSize));
     }
+
+    @ApiOperation(value = "获取老师分享购买记录", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping(value = "/getBuyShareList")
+    public ResponseModel getBuyShareList(@ModelAttribute UserInfoForToken userInfo,@RequestParam int pageNum, @RequestParam int pageSize) {
+        return ResponseModel.sucess("",courseWareConsoleService.getBuyShareByUser(userInfo,pageNum,pageSize));
+    }
 }

@@ -1,4 +1,4 @@
-package cn.com.szedu.controller;
+/*package cn.com.szedu.controller;
 
 import cn.com.szedu.constant.ResultCode;
 import cn.com.szedu.entity.CourseWare;
@@ -117,7 +117,9 @@ public class OnlinePageController {
     @RequestMapping(value="/index", method=RequestMethod.GET)
     public ModelAndView showIndex(String id, String path, String type){
         ModelAndView mv = new ModelAndView("Index");
-       /* mv.addObject("name","张三");*/
+       */
+/* mv.addObject("name","张三");*//*
+
         mv.addObject("path", path);
         mv.addObject("id", id);
         mv.addObject("type", type);
@@ -127,7 +129,8 @@ public class OnlinePageController {
         return mv;
     }
 
-   /* @RequestMapping(value="/word", method=RequestMethod.GET)
+   */
+/* @RequestMapping(value="/word", method=RequestMethod.GET)
     public ModelAndView showWord(HttpServletRequest request, Map<String,Object> map){
         //--- PageOffice的调用代码 开始 -----
         PageOfficeCtrl poCtrl=new PageOfficeCtrl(request);
@@ -140,7 +143,8 @@ public class OnlinePageController {
         //--- PageOffice的调用代码 结束 -----
         ModelAndView mv = new ModelAndView("Word");
         return mv;
-    }*/
+    }*//*
+
 
 
 
@@ -207,9 +211,11 @@ public class OnlinePageController {
         fs.close();
     }
 
-    /**
+    */
+/**
      * 添加PageOffice的服务器端授权程序Servlet（必须）
-     */
+     *//*
+
     @Bean
     public ServletRegistrationBean servletRegistrationBean() {
         com.zhuozhengsoft.pageoffice.poserver.Server poserver = new com.zhuozhengsoft.pageoffice.poserver.Server();
@@ -225,9 +231,11 @@ public class OnlinePageController {
         return srb;//
     }
 
-    /**
+    */
+/**
      * 添加印章管理程序Servlet（可选）
-     */
+     *//*
+
     @Bean
     public ServletRegistrationBean servletRegistrationBean2() {
         com.zhuozhengsoft.pageoffice.poserver.AdminSeal adminSeal = new com.zhuozhengsoft.pageoffice.poserver.AdminSeal();
@@ -240,3 +248,4 @@ public class OnlinePageController {
         return srb;
     }
 }
+*/

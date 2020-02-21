@@ -2,9 +2,11 @@ package cn.com.szedu.controller;
 
 import cn.com.szedu.entity.Article;
 import cn.com.szedu.entity.ArticleCategory;
+import cn.com.szedu.entity.ArticleComment;
 import cn.com.szedu.entity.ShowPicture;
 import cn.com.szedu.exception.BackUserException;
 import cn.com.szedu.exception.UserServiceException;
+import cn.com.szedu.model.ArticleModel;
 import cn.com.szedu.model.CurriculemResourceModel;
 import cn.com.szedu.model.ResponseModel;
 import cn.com.szedu.model.UserInfoForToken;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/BackInformation")
@@ -122,6 +125,20 @@ public class BackInformationDeliveryController {
             return ResponseModel.fail("", e.getMessage());
         }
     }
+    @ApiOperation(value = "删除文章与图片", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/deleteArticleAndPicture")
+    public ResponseModel deleteArticleAndPicture(@RequestParam Integer id, @ModelAttribute UserInfoForToken userInfo) {
+        try {
+            backArticleCategoryService.deleteArticleAndPicture(userInfo,id);
+            return ResponseModel.sucessWithEmptyData("");
+        }catch (UserServiceException e) {
+            return ResponseModel.fail("", e.getMessage());
+        }
+    }
+
 
     @ApiOperation(value = "查询全部文章", notes = "")
     @ApiImplicitParams({
@@ -131,6 +148,86 @@ public class BackInformationDeliveryController {
     public ResponseModel<PageInfo<Article>> getAllArticle(@ModelAttribute UserInfoForToken userInfo, @RequestParam int pageNum , @RequestParam int pageSize) {
         return ResponseModel.sucess("",backArticleCategoryService.getAllArticle(pageNum,pageSize));
     }
+
+    @ApiOperation(value = "本地上传文章图片", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/localUploadArticlePicture")
+    public ResponseModel localUploadArticlePicture(@ModelAttribute UserInfoForToken userInfo, @RequestParam MultipartFile[] file,@RequestParam Integer articleId) {
+        try {
+            backArticleCategoryService.localUpLoadFiles(userInfo,file,articleId);
+            return ResponseModel.sucessWithEmptyData("");
+        }catch (Exception e) {
+            return ResponseModel.fail("", e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "查询全部文章和图片", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/getAllArticleAndPicture")
+    public ResponseModel<List<ArticleModel>> getAllArticleAndPicture(@ModelAttribute UserInfoForToken userInfo, @RequestParam int pageNum , @RequestParam int pageSize) {
+        return ResponseModel.sucess("",backArticleCategoryService.getAllArticleAndPicture(pageNum,pageSize));
+    }
+
+    @ApiOperation(value = "文章点赞", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/articleLike")
+    public ResponseModel articleLike(@ModelAttribute UserInfoForToken userInfo,@RequestParam Integer articleId) {
+        try {
+            backArticleCategoryService.saveUserLikeArticle(userInfo,articleId);
+            return ResponseModel.sucessWithEmptyData("");
+        }catch (Exception e) {
+            return ResponseModel.fail("", e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "取消文章点赞", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/deleteArticleLike")
+    public ResponseModel deleteArticleLike(@ModelAttribute UserInfoForToken userInfo,@RequestParam Integer articleId) {
+        try {
+            backArticleCategoryService.deleteUserLike(userInfo,articleId);
+            return ResponseModel.sucessWithEmptyData("");
+        }catch (Exception e) {
+            return ResponseModel.fail("", e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "文章评论", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/saveArticleCommon")
+    public ResponseModel saveArticleCommon(@ModelAttribute UserInfoForToken userInfo,@RequestBody ArticleComment articleComment) {
+        try {
+            backArticleCategoryService.saveArticleCommon(userInfo,articleComment);
+            return ResponseModel.sucessWithEmptyData("");
+        }catch (Exception e) {
+            return ResponseModel.fail("", e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "删除文章评论", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/deleteArticleCommon")
+    public ResponseModel deleteArticleCommon(@ModelAttribute UserInfoForToken userInfo,@RequestParam Integer articleId) {
+        try {
+            backArticleCategoryService.deleteArticleCommon(userInfo,articleId);
+            return ResponseModel.sucessWithEmptyData("");
+        }catch (Exception e) {
+            return ResponseModel.fail("", e.getMessage());
+        }
+    }
+
 
     /*@ApiOperation(value = "查询全部轮播图", notes = "")
     @ApiImplicitParams({
