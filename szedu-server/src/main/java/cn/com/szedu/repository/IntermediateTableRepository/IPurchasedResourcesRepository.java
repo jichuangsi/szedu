@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface IPurchasedResourcesRepository extends JpaRepository<PurchasedResources,Integer> {
     List<PurchasedResources> findByTeacherId(String teacherId);
+    List<PurchasedResources> findByTeacherIdOrderByCreateTimeDesc(String teacherId);
 }

@@ -3,16 +3,13 @@ package cn.com.szedu.service;
 import cn.com.szedu.constant.ResultCode;
 import cn.com.szedu.dao.mapper.ICourseWareMapper;
 import cn.com.szedu.entity.*;
-import cn.com.szedu.entity.IntermediateTable.CoursewareUserRelation;
-import cn.com.szedu.entity.IntermediateTable.PurchasedResources;
-import cn.com.szedu.entity.IntermediateTable.ResourceClassRelation;
+import cn.com.szedu.entity.IntermediateTable.*;
 import cn.com.szedu.exception.CourseWareException;
 import cn.com.szedu.model.*;
+import cn.com.szedu.model.teacher.BuyShareModel;
 import cn.com.szedu.model.teacher.PushResourceModel;
 import cn.com.szedu.repository.*;
-import cn.com.szedu.repository.IntermediateTableRepository.ICoursewareUserRelationRepository;
-import cn.com.szedu.repository.IntermediateTableRepository.IPurchasedResourcesRepository;
-import cn.com.szedu.repository.IntermediateTableRepository.IResourceClassRelationRepository;
+import cn.com.szedu.repository.IntermediateTableRepository.*;
 import cn.com.szedu.util.MappingEntity2ModelCoverter;
 import com.github.pagehelper.PageInfo;
 import com.github.tobato.fastdfs.domain.StorePath;
@@ -32,10 +29,7 @@ import javax.persistence.criteria.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class CourseWareConsoleService {
@@ -56,7 +50,11 @@ public class CourseWareConsoleService {
     @Resource
     private IResourceClassRelationRepository resourceClassRelationRepository;
     @Resource
+    private ICollectionCourseWareRepository collectionCourseWareRepository;
+    @Resource
     private ITeacherInfoRepository teacherInfoRepository;
+    @Resource
+    private IStudentClassRelationRepository studentClassRelationRepository;
     @Value("${file.uploadFolder}")
     private String uploadPath;
     @Value("${file.imagePath}")
@@ -313,7 +311,7 @@ public class CourseWareConsoleService {
         if (courseWare==null){
             throw  new CourseWareException(ResultCode.FILE_ISNOT_EXIST);
         }
-        courseWareRespository.updateIsShareCheckAndIntegral(resourceId,status,integral);
+        courseWareRespository.updateIsShareCheckAndIntegral(resourceId,status,integral,new Date().getTime());
     }
 
     //积分修改
@@ -660,6 +658,26 @@ public class CourseWareConsoleService {
     }
 
     /**
+     * 学生端查看推送资源
+     * @param userInfo
+     * @return
+     */
+    public List<CourseWare> getResourceByStudent(UserInfoForToken userInfo){
+        //根据学生查找班级
+        List<StudentClassRelation> studentClassRelation=studentClassRelationRepository.findByStudentId(userInfo.getUserId());
+        List<String> clssIds=new ArrayList<>();
+        studentClassRelation.forEach(studentClassRelation1 -> {
+            clssIds.add(studentClassRelation1.getClassId());
+        });
+        //根据班级查找推送资源
+        List<ResourceClassRelation> resourceClassRelations=resourceClassRelationRepository.findByClassIdInOrderByCreateTimeDesc(clssIds);
+        List<String> resouceIds=new ArrayList<>();
+        resourceClassRelations.forEach(resourceClassRelation -> {
+            resouceIds.add(resourceClassRelation.getResourceId());
+        });
+        return courseWareRespository.findByIdIn(resouceIds);
+    }
+    /**
      * 公共资源
      * @param userInfo
      * @param pageNum
@@ -763,5 +781,52 @@ public class CourseWareConsoleService {
         page.setPageSize(pageSize);
         page.setPages((count + pageSize - 1)/pageSize);
         return page;
+    }
+
+    /**
+     * 分享购买记录(根据时间排序)
+     * @param userInfo
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    public BuyShareModel getBuyShareByUser(UserInfoForToken userInfo,int pageNum,int pageSize){
+        List<PurchasedResources> purchasedResources=purchasedResourcesRepository.findByTeacherIdOrderByCreateTimeDesc(userInfo.getUserId());
+        List<CourseWare> shareCourseWare=courseWareRespository.getByTeacheridAndIsShareCheck(userInfo.getUserId(),pageNum,pageSize);
+       BuyShareModel model=new BuyShareModel();
+       model.setPurchasedResourcesList(purchasedResources);
+       model.setShareCourseList(shareCourseWare);
+       return model;
+    }
+
+    /**
+     * 用户收藏资源
+     * @param userInfo
+     * @param courseWareId
+     */
+    public void collectionCourseWare(UserInfoForToken userInfo,String courseWareId){
+        CollectionCourseWare collectionCourseWare=new CollectionCourseWare();
+        collectionCourseWare.setUserId(userInfo.getUserId());
+        collectionCourseWare.setCourseId(courseWareId);
+        collectionCourseWareRepository.save(collectionCourseWare);
+    }
+
+    /**
+     * 用户收藏记录
+     * @param userInfo
+     * @return
+     */
+    public List<CollectionCourseWare> getCollectionCourseWareByUserId(UserInfoForToken userInfo){
+        return collectionCourseWareRepository.findByUserIdOrderByCreateTimeDesc(userInfo.getUserId());
+    }
+
+    /**
+     * 取消收藏
+     * @param userInfo
+     * @param courseId
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteCollection(UserInfoForToken userInfo,String courseId){
+        collectionCourseWareRepository.deleteByCourseIdAndUserId(courseId,userInfo.getUserId());
     }
 }

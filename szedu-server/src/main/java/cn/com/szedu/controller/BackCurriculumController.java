@@ -1,6 +1,7 @@
 package cn.com.szedu.controller;
 
 import cn.com.szedu.entity.CurriculumResource;
+import cn.com.szedu.exception.CourseWareException;
 import cn.com.szedu.model.CurriculemResourceModel;
 import cn.com.szedu.model.CurriculumModel;
 import cn.com.szedu.model.ResponseModel;
@@ -145,4 +146,49 @@ public class BackCurriculumController {
             return ResponseModel.fail("", e.getMessage());
         }
     }*/
+    @ApiOperation(value = "添加学校访问课程权限", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/saveCurriculumPowerBySchool")
+    public ResponseModel saveCurriculumPowerBySchool(@ModelAttribute UserInfoForToken userInfo,@RequestParam String schoolId,@RequestParam Integer curriculumId) {
+        try {
+            curriculumConsoleService.saveSchoolCurriculumPower(userInfo,schoolId,curriculumId);
+            return ResponseModel.sucessWithEmptyData("");
+        }catch (Exception e) {
+            return ResponseModel.fail("", e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "移除学校访问课程权限", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/deleteCurriculumPowerBySchool")
+    public ResponseModel deleteCurriculumPowerBySchool(@ModelAttribute UserInfoForToken userInfo,@RequestParam String schoolId,@RequestParam Integer curriculumId) {
+        try {
+            curriculumConsoleService.deleteSchoolCurriculumPower(userInfo,curriculumId,schoolId);
+            return ResponseModel.sucessWithEmptyData("");
+        }catch (CourseWareException e) {
+            return ResponseModel.fail("", e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "后台根据学校查询全部课程", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/getAllCurriculumBySchool")
+    public ResponseModel getAllCurriculumBySchool(@ModelAttribute UserInfoForToken userInfo,@RequestParam String schoolId,@RequestParam int num,@RequestParam int size) {
+        return ResponseModel.sucess("",curriculumConsoleService.getCurriculumBySchool(userInfo, schoolId, num, size));
+    }
+
+    @ApiOperation(value = "教师查询可访问课程", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/getAllCurriculumByTeacher")
+    public ResponseModel getAllCurriculumByTeacher(@ModelAttribute UserInfoForToken userInfo,@RequestParam int num,@RequestParam int size) {
+        return ResponseModel.sucess("",curriculumConsoleService.getCurriculumByTeacherId(userInfo, num, size));
+    }
 }

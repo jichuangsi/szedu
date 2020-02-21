@@ -1,20 +1,20 @@
 package cn.com.szedu.service;
 
 import cn.com.szedu.constant.ResultCode;
-import cn.com.szedu.entity.CourseWare;
 import cn.com.szedu.entity.Curriculum;
 import cn.com.szedu.entity.CurriculumResource;
-import cn.com.szedu.entity.IntermediateTable.CurriculumKnowledges;
+import cn.com.szedu.entity.IntermediateTable.CurriculumSchoolRelation;
+import cn.com.szedu.entity.IntermediateTable.SchoolUserRelation;
 import cn.com.szedu.exception.CourseWareException;
 import cn.com.szedu.model.CurriculemResourceModel;
 import cn.com.szedu.model.CurriculumModel;
 import cn.com.szedu.model.UserInfoForToken;
-import cn.com.szedu.repository.ICurriculumKnowledgesRepository;
 import cn.com.szedu.repository.ICurriculumRepository;
 import cn.com.szedu.repository.ICurriculumResourceRepository;
+import cn.com.szedu.repository.IntermediateTableRepository.ICurriculumSchoolRelationRepository;
+import cn.com.szedu.repository.IntermediateTableRepository.ISchoolUserRelationRepository;
 import cn.com.szedu.util.MappingEntity2ModelCoverter;
 import com.github.tobato.fastdfs.domain.StorePath;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +36,10 @@ public class CurriculumConsoleService {
     private ICurriculumResourceRepository curriculumResourceRepository;
     @Resource
     private IFastDFSClientService fastDFSClientService;
+    @Resource
+    private ICurriculumSchoolRelationRepository curriculumSchoolRelationRepository;
+    @Resource
+    private ISchoolUserRelationRepository schoolUserRelationRepository;
 
     @Value("${file.uploadFolder}")
     private String uploadPath;
@@ -251,5 +255,67 @@ public class CurriculumConsoleService {
 
     public List<Curriculum> getCurriculum(){
         return curriculumRepository.findAll();
+    }
+
+    /**
+     * 给学校授权课程
+     * @param userInfo
+     * @param schoolId
+     * @param curriculumId
+     */
+    public void saveSchoolCurriculumPower(UserInfoForToken userInfo,String schoolId,Integer curriculumId){
+        CurriculumSchoolRelation curriculumSchoolRelation=new CurriculumSchoolRelation();
+        curriculumSchoolRelation.setCreatorId(userInfo.getUserId());
+        curriculumSchoolRelation.setCreatorName(userInfo.getUserName());
+        curriculumSchoolRelation.setCurriculumId(curriculumId);
+        curriculumSchoolRelation.setSchoolId(schoolId);
+        curriculumSchoolRelationRepository.save(curriculumSchoolRelation);
+    }
+
+    /**
+     * 移除学校课程权限
+     * @param userInfo
+     * @param curriculumId
+     * @param schoolId
+     */
+    public void deleteSchoolCurriculumPower(UserInfoForToken userInfo,Integer curriculumId,String schoolId)throws CourseWareException{
+        CurriculumSchoolRelation curriculumSchoolRelation=curriculumSchoolRelationRepository.findByCurriculumIdAndSchoolId(curriculumId,schoolId);
+        if (curriculumSchoolRelation!=null){
+            curriculumSchoolRelationRepository.delete(curriculumSchoolRelation);
+        }else {
+            throw  new CourseWareException(ResultCode.USERLIKE_ISNOT_EXIST);
+        }
+    }
+
+    /**
+     * 查询老师可访问的课程
+     * @param userInfo
+     * @param num
+     * @param size
+     * @return
+     */
+    public List<Curriculum> getCurriculumByTeacherId(UserInfoForToken userInfo,int num,int size){
+        SchoolUserRelation su=schoolUserRelationRepository.findByUid(userInfo.getUserId());
+        List<CurriculumSchoolRelation> csList=curriculumSchoolRelationRepository.findBySchoolId(su.getSchoolId());
+        List<Integer> curriculumIds=new ArrayList<>();
+        csList.forEach(curriculumSchoolRelation -> {
+            curriculumIds.add(curriculumSchoolRelation.getCurriculumId());
+        });
+        return curriculumRepository.findByidIn(curriculumIds,num,size);
+    }
+
+    /**
+     * 根据学校查询课程
+     * @param userInfo
+     * @param schoolId
+     * @return
+     */
+    public List<Curriculum> getCurriculumBySchool(UserInfoForToken userInfo,String schoolId,int num,int size){
+        List<CurriculumSchoolRelation> csList=curriculumSchoolRelationRepository.findBySchoolId(schoolId);
+        List<Integer> curriculumId=new ArrayList<>();
+        csList.forEach(cs->{
+            curriculumId.add(cs.getCurriculumId());
+        });
+        return  curriculumRepository.findByidIn(curriculumId,num,size);
     }
 }

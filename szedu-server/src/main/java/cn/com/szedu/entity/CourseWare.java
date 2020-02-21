@@ -25,6 +25,7 @@ public class CourseWare {
     private String describes;
     private String isCheck;//上传审核状态
     private String isShareCheck;//分享审核状态
+    private String shareTime;//分享时间
     private Integer integral=0;//积分
     private String reason;//审核不通过原因
     private String type;//资源类型
@@ -175,6 +176,14 @@ public class CourseWare {
 
     public void setBuy(Integer buy) {
         this.buy = buy;
+    }
+
+    public String getShareTime() {
+        return shareTime;
+    }
+
+    public void setShareTime(String shareTime) {
+        this.shareTime = shareTime;
     }
 
     public CourseWare(String filename, String teacherid, String filegroup, String filepath, String subject, String label, String describes, String isCheck, Integer integral, String reason, String type, String waysToget) {
