@@ -10,6 +10,11 @@
             function Close() {
                 window.Close;
             }
+            function SetFullScreen() {//全屏
+                try{
+                    document.getElementById("PageOfficeCtrl1").FullScreen = !document.getElementById("PageOfficeCtrl1").FullScreen;
+                }catch (e){ };
+            }
         </script>
        <!-- <script type="text/javascript">
          function AddSeal() {

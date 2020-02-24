@@ -11,4 +11,8 @@ public interface IMessageUserRelationRepository extends JpaRepository<MessageUse
     void deleteByMIdIn(List<Integer> mid);//根据消息id删除消息
     @Transactional
     void deleteByMIdAndUId(Integer id,String uid);
+
+    List<MessageUserRelation> findByUId(String uid);
+
+    //Integer countByAlreadyReadAndMIdIn(String read,List<Integer> mid);
 }

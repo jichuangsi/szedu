@@ -60,8 +60,8 @@ public class StudentLessonService {
     private ICoursePushWareRelationRepository coursePushWareRelationRepository;
     @Resource
     private ICourseWareRespository courseWareRespository;
-   /* @Resource
-    private MessageRepository messageRepository;*/
+    /* @Resource
+     private MessageRepository messageRepository;*/
     @Resource
     private TeacherInfoService teacherInfoService;
     @Resource
@@ -85,7 +85,7 @@ public class StudentLessonService {
                 model.setClassId(scr.getClassId());
                 model.setClassName(cinso.getClassName());
             }
-       }
+        }
         AttendanceInClass aclass=MappingEntity3ModelCoverter.CONVERTERFROMBACKATTENDANCEMODEL(info, model);
         attendanceRepository.save(aclass);
         long nowtime=System.currentTimeMillis()/1000;
@@ -249,7 +249,7 @@ public class StudentLessonService {
     }
 
 
-//课堂总数
+    //课堂总数
     public Integer allCount(UserInfoForToken userInfo)throws UserServiceException{
         if (StringUtils.isEmpty(userInfo.getUserId())){
             throw new UserServiceException(ResultCode.PARAM_MISS_MSG);
@@ -263,56 +263,58 @@ public class StudentLessonService {
      * @param model
      * @return
      */
-   public PageInfo<StudyModel> getStudy(UserInfoForToken userInfo, MyAllLessionModel model)throws TecherException{
-
-       List<StudentClassRelation> courseRelations=studentClassRelationRepository.findByStudentId(userInfo.getUserId());
+    public PageInfo<StudyModel> getStudy(UserInfoForToken userInfo, MyAllLessionModel model)throws TecherException{
+        if (StringUtils.isEmpty(userInfo) ||StringUtils.isEmpty(model)){
+            throw new TecherException(ResultCode.PARAM_MISS_MSG);
+        }
+        List<StudentClassRelation> courseRelations=studentClassRelationRepository.findByStudentId(userInfo.getUserId());
 
         List<String> classId=new ArrayList<String>();
-       for (StudentClassRelation c:courseRelations ) {
-           classId.add(c.getClassId());
-       }
-       List<CourseClassRelation> courseClassRelations=classCourseRelationRepository.findByClassIdIn(classId);
-       List<String> courseId=new ArrayList<String>();
+        for (StudentClassRelation c:courseRelations ) {
+            classId.add(c.getClassId());
+        }
+        List<CourseClassRelation> courseClassRelations=classCourseRelationRepository.findByClassIdIn(classId);
+        List<String> courseId=new ArrayList<String>();
 
-       for (CourseClassRelation cc: courseClassRelations) {
-           courseId.add(cc.getCourseId());
-       }
-       List<CoursePushResourceRelation> coursePushResourceRelations=coursePushWareRelationRepository.findByCourseIdInAndPushAndPushTime(courseId,"Y",model.getTime());
+        for (CourseClassRelation cc: courseClassRelations) {
+            courseId.add(cc.getCourseId());
+        }
+        List<CoursePushResourceRelation> coursePushResourceRelations=coursePushWareRelationRepository.findByCourseIdInAndPushAndPushTime(courseId,"Y",model.getTime());
 
-       List<String> resourseId=new ArrayList<String>();
-       for (CoursePushResourceRelation cp: coursePushResourceRelations) {
+        List<String> resourseId=new ArrayList<String>();
+        for (CoursePushResourceRelation cp: coursePushResourceRelations) {
             resourseId.add(cp.getPushresourceid());
-       }
-       List<StudyModel> course =new ArrayList<StudyModel>();
-       Integer count=0;
-          if (StringUtils.isEmpty(model.getSubjectId()) || StringUtils.isEmpty(model.getLessionType())){
-              course=classInfoMapper.listCourseWareAll(userInfo.getUserId(),(model.getPageNum()-1)*model.getPageSize(),model.getPageSize());
-              count=classInfoMapper.countCourseWareAll(userInfo.getUserId());
+        }
+        List<StudyModel> course =new ArrayList<StudyModel>();
+        Integer count=0;
+        if (StringUtils.isEmpty(model.getSubjectId()) || StringUtils.isEmpty(model.getLessionType())){
+            course=classInfoMapper.listCourseWareAll(userInfo.getUserId(),(model.getPageNum()-1)*model.getPageSize(),model.getPageSize());
+            count=classInfoMapper.countCourseWareAll(userInfo.getUserId());
 
-          }else if (!StringUtils.isEmpty(model.getLessionType()) && StringUtils.isEmpty(model.getSubjectId())){
-              course=classInfoMapper.listCourseWareSubject(userInfo.getUserId(),model.getSubjectId()
-                      ,(model.getPageNum()-1)*model.getPageSize(),model.getPageSize());
-              count=classInfoMapper.countCourseWareSubject(userInfo.getUserId(),model.getSubjectId());
+        }else if (!StringUtils.isEmpty(model.getLessionType()) && StringUtils.isEmpty(model.getSubjectId())){
+            course=classInfoMapper.listCourseWareSubject(userInfo.getUserId(),model.getSubjectId()
+                    ,(model.getPageNum()-1)*model.getPageSize(),model.getPageSize());
+            count=classInfoMapper.countCourseWareSubject(userInfo.getUserId(),model.getSubjectId());
 
-          }else if (StringUtils.isEmpty(model.getSubjectId()) && !StringUtils.isEmpty(model.getLessionType())){
-              course=classInfoMapper.listCourseWareType(userInfo.getUserId(),model.getLessionType()
-                      ,(model.getPageNum()-1)*model.getPageSize(),model.getPageSize());
-              count=classInfoMapper.countCourseWareType(userInfo.getUserId(),model.getLessionType());
+        }else if (StringUtils.isEmpty(model.getSubjectId()) && !StringUtils.isEmpty(model.getLessionType())){
+            course=classInfoMapper.listCourseWareType(userInfo.getUserId(),model.getLessionType()
+                    ,(model.getPageNum()-1)*model.getPageSize(),model.getPageSize());
+            count=classInfoMapper.countCourseWareType(userInfo.getUserId(),model.getLessionType());
 
-       }else if (!StringUtils.isEmpty(model.getSubjectId()) && !StringUtils.isEmpty(model.getSubjectId())){
-              course=classInfoMapper.listCourseWare(userInfo.getUserId(),model.getSubjectId(),model.getLessionType()
-                      ,(model.getPageNum()-1)*model.getPageSize(),model.getPageSize());
-              count=classInfoMapper.countCourseWare(userInfo.getUserId(),model.getSubjectId(),model.getLessionType());
-       }
-       PageInfo<StudyModel> pageInfo=new PageInfo<StudyModel>();
-       pageInfo.setTotal(count);
-       pageInfo.setList(course);
-       pageInfo.setPageNum(model.getPageNum());
-       pageInfo.setPageSize(model.getPageSize());
-       int totalPage= count % model.getPageSize() == 0 ?count / model.getPageSize() : count / model.getPageSize() + 1;
-       pageInfo.setSize(model.getPageSize());
-       pageInfo.setPages(totalPage);
-       return pageInfo;
+        }else if (!StringUtils.isEmpty(model.getSubjectId()) && !StringUtils.isEmpty(model.getSubjectId())){
+            course=classInfoMapper.listCourseWare(userInfo.getUserId(),model.getSubjectId(),model.getLessionType()
+                    ,(model.getPageNum()-1)*model.getPageSize(),model.getPageSize());
+            count=classInfoMapper.countCourseWare(userInfo.getUserId(),model.getSubjectId(),model.getLessionType());
+        }
+        PageInfo<StudyModel> pageInfo=new PageInfo<StudyModel>();
+        pageInfo.setTotal(count);
+        pageInfo.setList(course);
+        pageInfo.setPageNum(model.getPageNum());
+        pageInfo.setPageSize(model.getPageSize());
+        int totalPage= count % model.getPageSize() == 0 ?count / model.getPageSize() : count / model.getPageSize() + 1;
+        pageInfo.setSize(model.getPageSize());
+        pageInfo.setPages(totalPage);
+        return pageInfo;
     }
     /**
      * 课堂详情
@@ -338,7 +340,7 @@ public class StudentLessonService {
         }
         //资源
         List<CourseWare> pushcourseWares2 = courseWareRespository.findByIdIn(wareId);//推送资源资源
-       // model.setCourseWares(courseWares);
+        // model.setCourseWares(courseWares);
       /*  if (pushcourseWares2.size()<=0) {
             throw new TecherException(ResultCode.SELECT_NULL_MSG);
         }*/
@@ -380,31 +382,31 @@ public class StudentLessonService {
      * @return
      */
     public CourseWare getCourseWareDetail(UserInfoForToken userInfo,String id){
-           CourseWare courseWare=courseWareRespository.findByid(id);
-           if (!StringUtils.isEmpty(courseWare)) {
-               StudentInfo studentInfo = studentInfoRespository.findFirstById(userInfo.getUserId());//查询学生
-               Integer count = qiandao(userInfo.getUserId(), "查看资料");
-               IntegralRule integralRule = integralRuleRepository.findByRoleAndType("学生", "查看资料");
-               if (count < integralRule.getCount()) {
-                   studentInfo.setIntegral(studentInfo.getIntegral() + integralRule.getIntegral());//加积分
-                   studentInfoRespository.save(studentInfo);
-                   //积分记录
-                   IntegralRecord integralRecord = new IntegralRecord(UUID.randomUUID().toString().replaceAll("-", ""),
-                           "查看资料", "学生查看资料", userInfo.getUserId(), userInfo.getUserName(),
-                           integralRule.getIntegral(), System.currentTimeMillis());
-                   integralRecordRepository.save(integralRecord);
-                   //系统信息
-                   SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-                   String s = df.format(new Date());// new Date()为获取当前系统时间
+        CourseWare courseWare=courseWareRespository.findByid(id);
+        if (!StringUtils.isEmpty(courseWare)) {
+            StudentInfo studentInfo = studentInfoRespository.findFirstById(userInfo.getUserId());//查询学生
+            Integer count = qiandao(userInfo.getUserId(), "查看资料");
+            IntegralRule integralRule = integralRuleRepository.findByRoleAndType("学生", "查看资料");
+            if (count < integralRule.getCount()) {
+                studentInfo.setIntegral(studentInfo.getIntegral() + integralRule.getIntegral());//加积分
+                studentInfoRespository.save(studentInfo);
+                //积分记录
+                IntegralRecord integralRecord = new IntegralRecord(UUID.randomUUID().toString().replaceAll("-", ""),
+                        "查看资料", "学生查看资料", userInfo.getUserId(), userInfo.getUserName(),
+                        integralRule.getIntegral(), System.currentTimeMillis());
+                integralRecordRepository.save(integralRecord);
+                //系统信息
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+                String s = df.format(new Date());// new Date()为获取当前系统时间
 
-                   String messages = "您今日查看资料获得" + integralRule.getIntegral() + "积分。" + s;
+                String messages = "您今日查看资料获得" + integralRule.getIntegral() + "积分。" + s;
                /* Message message = new Message(studentInfo.getId(), studentInfo.getName(), messages, "N");
                 messageRepository.save(message);*/
-                   MessageModel messageModel = new MessageModel(studentInfo.getId(), studentInfo.getName(), messages, "N");
-                   teacherInfoService.addMessage(userInfo, messageModel);
-               }
-           }
-           return courseWare;
+                MessageModel messageModel = new MessageModel(studentInfo.getId(), studentInfo.getName(), messages, "N");
+                teacherInfoService.addMessage(userInfo, messageModel);
+            }
+        }
+        return courseWare;
     }
 
     /**

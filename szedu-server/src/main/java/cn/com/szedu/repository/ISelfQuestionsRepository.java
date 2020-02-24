@@ -18,4 +18,5 @@ public interface ISelfQuestionsRepository extends JpaRepository<SelfQuestions,In
     /*List<SelfQuestions> findAllByTeacherId*/
     List<SelfQuestions> findByidIn(List<Integer> questionIds);
     int countBySubjectIdAndTeacherIdAndType(String subjectId,String teacherId,String type);
+    List<SelfQuestions> findAllByTypeidAndIdIn(String typeId,List<Integer> id);
 }

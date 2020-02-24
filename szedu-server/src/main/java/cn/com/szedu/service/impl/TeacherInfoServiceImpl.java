@@ -437,23 +437,50 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
     @Override
     public boolean addInteractionMessage(UserInfoForToken userInfo, SandMessageModel model) {
         for (IDNameModel i : model.getRecipient()) {//多发
-            model.setSend("Y");
-            Message message = MappingEntity3ModelCoverter.CONVERTERFROMBACKMESSAGEMODEL(userInfo, model);
-            message.setRecipientId(i.getId());//接收者
-            message.setRecipientName(i.getName());
-            Message message1 = messageRepository.save(message);//保存信息
-            MessageUserRelation mur = new MessageUserRelation();//信息id和用户id,一条信息对应多个用户
-            mur.setmId(message1.getId());
-            mur.setuId(i.getId());//接收者
+            List<String> studentId = new ArrayList<>();
+            List<StudentClassRelation> studentClassRelations = srelationRepository.findAllByClassId(i.getId());
+            if (studentClassRelations.size() > 0) {
+                for (StudentClassRelation s : studentClassRelations) {
+                    studentId.add(s.getStudentId());
+                }
+                List<StudentInfo> studentInfos = studentInfoRespository.findByIdIn(studentId);
+                for (StudentInfo info : studentInfos) {
+                    model.setSend("Y");
+                    Message message = MappingEntity3ModelCoverter.CONVERTERFROMBACKMESSAGEMODEL(userInfo, model);
+                    message.setRecipientId(info.getId());//接收者
+                    message.setRecipientName(info.getName());
+                    Message message1 = messageRepository.save(message);//保存信息
+                    MessageUserRelation mur = new MessageUserRelation();//信息id和用户id,一条信息对应多个用户
+                    mur.setmId(message1.getId());
+                    mur.setuId(info.getId());//接收者
 
-            messageUserRelationRepository.save(mur);
+                    messageUserRelationRepository.save(mur);
+                    MessageUserRelation mur2 = new MessageUserRelation();//信息id和用户id,一条信息对应多个用户
+                    mur2.setmId(message1.getId());
+                    mur2.setuId(userInfo.getUserId());//发送者
+
+                    messageUserRelationRepository.save(mur2);
+                }
+            } else {
+                model.setSend("Y");
+                Message message = MappingEntity3ModelCoverter.CONVERTERFROMBACKMESSAGEMODEL(userInfo, model);
+                message.setRecipientId(i.getId());//接收者
+                message.setRecipientName(i.getName());
+                Message message1 = messageRepository.save(message);//保存信息
+                MessageUserRelation mur = new MessageUserRelation();//信息id和用户id,一条信息对应多个用户
+                mur.setmId(message1.getId());
+                mur.setuId(i.getId());//接收者
+
+                messageUserRelationRepository.save(mur);
                 MessageUserRelation mur2 = new MessageUserRelation();//信息id和用户id,一条信息对应多个用户
                 mur2.setmId(message1.getId());
                 mur2.setuId(userInfo.getUserId());//发送者
 
                 messageUserRelationRepository.save(mur2);
+            }
+
         }
-        if (model.getClassId() != null) {
+       /* if (model.getClassId() != null) {
             List<String> studentId = new ArrayList<>();
             List<StudentClassRelation> studentClassRelations = srelationRepository.findByClassIdIn(model.getClassId());
             for (StudentClassRelation s : studentClassRelations) {
@@ -476,8 +503,8 @@ public class TeacherInfoServiceImpl implements TeacherInfoService {
                 mur2.setuId(userInfo.getUserId());//发送者
 
                 messageUserRelationRepository.save(mur2);
-            }
-        }
+            }*/
+
         return true;
     }
 

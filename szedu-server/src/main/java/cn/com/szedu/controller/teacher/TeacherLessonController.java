@@ -171,4 +171,14 @@ public class TeacherLessonController {
     public ResponseModel<String> getMyGrade(@ModelAttribute UserInfoForToken userInfo) throws TecherException {
         return ResponseModel.sucess("", teacherLessonService.getMyGrade(userInfo));
     }*/
+
+
+    @ApiOperation(value = "上课", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/getopenLesson")
+    public ResponseModel<PageInfo<AttendanceCourseModel>> getopenLesson(@ModelAttribute UserInfoForToken userInfo, @RequestParam String couseId, @RequestParam int pageNum, @RequestParam int PageSize) throws TecherException {
+        return ResponseModel.sucess("", teacherLessonService.getAttendanceByCourse(userInfo, couseId, pageNum, PageSize));
+    }
 }

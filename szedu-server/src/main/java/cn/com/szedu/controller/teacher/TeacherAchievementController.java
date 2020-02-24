@@ -4,10 +4,9 @@ import cn.com.szedu.entity.Exam;
 import cn.com.szedu.exception.TecherException;
 import cn.com.szedu.model.ResponseModel;
 import cn.com.szedu.model.UserInfoForToken;
-import cn.com.szedu.model.teacher.ClassExamModel;
-import cn.com.szedu.model.teacher.ClassModel;
-import cn.com.szedu.model.teacher.ExamClassResultModel;
-import cn.com.szedu.model.teacher.ExamModel;
+import cn.com.szedu.model.student.AnswerSituationModel;
+import cn.com.szedu.model.student.PerformanceAnalysisModel;
+import cn.com.szedu.model.teacher.*;
 import cn.com.szedu.service.BackExamService;
 import cn.com.szedu.service.TeacherAchievementService;
 import com.github.pagehelper.Page;
@@ -66,20 +65,27 @@ public class TeacherAchievementController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
-    @PostMapping("/getClassResult")
+    @GetMapping("/getClassResult")
     public ResponseModel getClassResult(@ModelAttribute UserInfoForToken userInfo, @RequestParam String examId , @RequestParam String classId , @RequestParam int pageNum , @RequestParam int pageSize)throws TecherException {
         return  ResponseModel.sucess("",teacherAchievementService.getExamClassResult(userInfo, examId, classId, pageNum, pageSize));
     }
 
-    @ApiOperation(value = "答题情况", notes = "")
+    /*@ApiOperation(value = "答题情况", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
     @PostMapping("/getAnswerSituation")
     public ResponseModel<ExamClassResultModel> getAnswerSituation(@ModelAttribute UserInfoForToken userInfo, @RequestParam String examId , @RequestParam String classId , @RequestParam int pageNum , @RequestParam int pageSize)throws TecherException {
         return  ResponseModel.sucess("",null);
+    }*/
+    @ApiOperation(value = "答题情况", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @PostMapping("/getAnswerSituation")
+    public ResponseModel<List<AnswerSituationModel>> getAnswerSituation(@ModelAttribute UserInfoForToken userInfo, @RequestParam String examId , @RequestParam String classId)throws TecherException {
+        return  ResponseModel.sucess("",teacherAchievementService.getAnswerSitution(userInfo, examId, classId));
     }
-
     @ApiOperation(value = "根据考试id查询考试详情", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
@@ -98,8 +104,22 @@ public class TeacherAchievementController {
         return ResponseModel.sucess("",teacherAchievementService.getClassByExamId(userInfo,examId));
     }
 
+    @ApiOperation(value = "学生考试成绩分析", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/getStudnetExamAnaly")
+    public ResponseModel<List<ScoreAnalysisModel>> getStudnetExamAnaly(@ModelAttribute UserInfoForToken userInfo, @RequestParam String studentId) throws TecherException{
+        return ResponseModel.sucess("",teacherAchievementService.getStudnetExamAnaly(userInfo,studentId));
+    }
 
 
-
-
+    @ApiOperation(value = "原题", notes = "")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
+    })
+    @GetMapping("/getExam")
+    public ResponseModel<TestPaperModel> getExam(@ModelAttribute UserInfoForToken userInfo, @RequestParam String examId) throws TecherException{
+        return ResponseModel.sucess("",teacherAchievementService.getExam(userInfo,examId));
+    }
 }

@@ -17,4 +17,6 @@ public interface IStudentClassRelationRepository extends JpaRepository<StudentCl
     List<StudentClassRelation> findByStudentId(String studentId);
 
     List<StudentClassRelation> findByStudentIdIsNotAndClassIdIn(String studentId,List<String> classId);
+
+    List<StudentClassRelation> findByClassIdInAndStudentIdNotIn(List<String> classId,List<String> studenId);
 }

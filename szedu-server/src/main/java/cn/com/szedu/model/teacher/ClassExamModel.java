@@ -8,13 +8,21 @@ public class ClassExamModel {
     private String subjectId;
     private String subjiectName;//科目
     private String examType;//试卷类型
-    private String startTime;//开考时间
+    //private String startTime;//开考时间
+    private long startTime;//开考时间
     private List<String> examClass;//考试班级
     private String authorName;//出题人
     private Integer sum;//应考人数
     private Integer actual;//实考人数
     private Integer miss;//缺考人数
     private List<String> aName;//实考人
+
+    private Integer passingNumber;//及格人数
+    private Double passingRate;//及格率
+    private Double excellentRate;//优秀率
+    private Double avg;//平均分
+    private Double max;//最高分
+    private Double min;//最低分
     //private ClassGradeDistributionModel model;
     private List<ClassGradeDistributionModel> model;
 
@@ -26,7 +34,14 @@ public class ClassExamModel {
         this.model = model;
     }
 
-    /* public ClassGradeDistributionModel getModel() {
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+/* public ClassGradeDistributionModel getModel() {
         return model;
     }
 
@@ -74,13 +89,13 @@ public class ClassExamModel {
         this.examType = examType;
     }
 
-    public String getStartTime() {
+    /*public String getStartTime() {
         return startTime;
     }
 
     public void setStartTime(String startTime) {
         this.startTime = startTime;
-    }
+    }*/
 
     public List<String> getExamClass() {
         return examClass;
@@ -128,5 +143,54 @@ public class ClassExamModel {
 
     public void setaName(List<String> aName) {
         this.aName = aName;
+    }
+
+
+    public Integer getPassingNumber() {
+        return passingNumber;
+    }
+
+    public void setPassingNumber(Integer passingNumber) {
+        this.passingNumber = passingNumber;
+    }
+
+    public Double getPassingRate() {
+        return passingRate;
+    }
+
+    public void setPassingRate(Double passingRate) {
+        this.passingRate = passingRate;
+    }
+
+    public Double getExcellentRate() {
+        return excellentRate;
+    }
+
+    public void setExcellentRate(Double excellentRate) {
+        this.excellentRate = excellentRate;
+    }
+
+    public Double getAvg() {
+        return avg;
+    }
+
+    public void setAvg(Double avg) {
+        this.avg = avg;
+    }
+
+    public Double getMax() {
+        return max;
+    }
+
+    public void setMax(Double max) {
+        this.max = max;
+    }
+
+    public Double getMin() {
+        return min;
+    }
+
+    public void setMin(Double min) {
+        this.min = min;
     }
 }

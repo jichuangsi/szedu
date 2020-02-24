@@ -10,6 +10,9 @@ public interface IClassExamRelationRepository extends JpaRepository<ExamClassRel
 
 
     List<ExamClassRelation> findByClassId(String calssId);
+    List<ExamClassRelation> findByClassIdIn(List<String> calssId);
 
     List<ExamClassRelation> findByExamId(String examId);
+
+    ExamClassRelation findByClassIdAndExamId(String calssId,String examId);
 }
