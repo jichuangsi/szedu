@@ -111,7 +111,7 @@ public class OnlinePageController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "header", name = "accessToken", value = "用户token", required = true, dataType = "String")
     })
-    @PostMapping("/getDoc")
+    @PostMapping("/getindex")
     public ModelAndView index(@ModelAttribute UserInfoForToken userInfo, @RequestParam String path, @RequestParam String type) throws TecherException {
         ModelAndView mv = new ModelAndView("Index");
         TeacherInfo teacherInfo=teacherInfoRepository.findExsitById(userInfo.getUserId());
